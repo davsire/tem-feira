@@ -1,1 +1,3 @@
 resources/.gitignore
+.venv/
+.idea/

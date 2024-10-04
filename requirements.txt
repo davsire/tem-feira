@@ -1,0 +1,3 @@
+customtkinter==0.3
+tkintermapview==1.29
+pillow==10.4.0

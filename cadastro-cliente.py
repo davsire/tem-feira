@@ -1,7 +1,6 @@
 from tkinter import *
 import customtkinter
 from PIL import Image
-import os
 from tkintermapview import TkinterMapView
 
 customtkinter.set_appearance_mode("light")
@@ -177,7 +176,7 @@ login_label.bind("<Button-1>", ir_para_login)
 
 # Carregar e exibir a foto no frame direito
 try:
-    image_path = "/home/ale-vasco/ale/UFSC/APS/tem-feira/resources/tem-feira/tem-feira.png"  # Verifique se o caminho está correto
+    image_path = "./assets/tem-feira.png"  # Verifique se o caminho está correto
     image = Image.open(image_path)
     photo = customtkinter.CTkImage(light_image=image, dark_image=image, size=(333, 800))  # 1/3 da largura da tela
     image_label = customtkinter.CTkLabel(frame_direita, image=photo)
