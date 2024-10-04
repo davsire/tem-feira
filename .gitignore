@@ -1,2 +1,2 @@
 resources/.gitignore
-.venv/
+.env/
