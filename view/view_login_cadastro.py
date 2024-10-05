@@ -32,6 +32,7 @@ class FrameCadastro(ctk.CTkFrame):
             text_color='white',
         )
         tabview.grid(row=1, column=0, columnspan=2, padx=20, sticky='nsew')
+        tabview._segmented_button.configure(font=('system', 22, 'bold'), corner_radius=20)
         tabview.add("Cliente")
         tabview.add("Feirante")
         tabview.set("Feirante")
