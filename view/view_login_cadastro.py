@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from PIL import Image
 from view.view_utils import ViewUtils
+from view.frame_dados_feirante import FrameDadosFeirante
 
 
 class FrameLogin(ctk.CTkFrame):
@@ -12,7 +13,7 @@ class FrameCadastro(ctk.CTkFrame):
 
     def __init__(self, master):
         super().__init__(master)
-        self.configure(fg_color='white', height=720)
+        self.configure(fg_color='white')
         self.grid_rowconfigure(0)
         self.grid_rowconfigure(1)
         self.grid_rowconfigure(2, weight=1)
@@ -28,6 +29,13 @@ class FrameCadastro(ctk.CTkFrame):
         self.botao_cliente.grid(row=1, column=0, padx=(0, 20), sticky='e')
         self.botao_feirante = ViewUtils.obter_botao(self, 'Feirante')
         self.botao_feirante.grid(row=1, column=1, sticky='w')
+
+        # seção de dados
+
+        self.frame_feirante = FrameDadosFeirante(self)
+        self.frame_feirante.grid(row=2, column=0, columnspan=2, sticky="nsew", padx=(60,30), pady=20)
+
+        # seção de dados
 
         self.botao_cadastrar = ViewUtils.obter_botao(self, 'Cadastrar')
         self.botao_cadastrar.grid(row=3, column=0, columnspan=2, pady=(0, 15))

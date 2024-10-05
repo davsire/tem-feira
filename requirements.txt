@@ -2,3 +2,4 @@ customtkinter==5.2.2
 tkintermapview==1.29
 pillow==10.4.0
 setuptools==75.1.0
+folium==0.17.0

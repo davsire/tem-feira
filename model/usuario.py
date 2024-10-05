@@ -1,5 +1,5 @@
 from abc import ABC
-from localizacao import Localizacao
+from model.localizacao import Localizacao
 
 
 class Usuario(ABC):

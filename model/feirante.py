@@ -1,13 +1,13 @@
-from usuario import Usuario
+from model.usuario import Usuario
 from enum import Enum
-from localizacao import Localizacao
-from dia_funcionamento import DiaFuncionamento
+from model.localizacao import Localizacao
+from model.dia_funcionamento import DiaFuncionamento
 
 
 class FormaContato(Enum):
-    INSTAGRAM = 'INSTAGRAM',
-    WHATSAPP = 'WHATSAPP',
-    FACEBOOK = 'FACEBOOK',
+    WHATSAPP = 'WHATSAPP'
+    INSTAGRAM = 'INSTAGRAM'
+    FACEBOOK = 'FACEBOOK'
 
 
 class Feirante(Usuario):
