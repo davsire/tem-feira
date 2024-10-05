@@ -15,33 +15,35 @@ class FrameCadastro(ctk.CTkFrame):
         super().__init__(master)
         self.configure(fg_color='white')
         self.grid_rowconfigure(0)
-        self.grid_rowconfigure(1)
-        self.grid_rowconfigure(2, weight=1)
+        self.grid_rowconfigure(1, weight=1)
+        self.grid_rowconfigure(2)
         self.grid_rowconfigure(3)
-        self.grid_rowconfigure(4)
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
 
         self.label_cadastro = ctk.CTkLabel(self, text='Cadastro', text_color='black', font=('system', 35, 'bold'))
-        self.label_cadastro.grid(row=0, column=0, padx=10, pady=10, sticky='w')
+        self.label_cadastro.grid(row=0, column=0, padx=20, pady=(20, 10), sticky='w')
 
-        self.botao_cliente = ViewUtils.obter_botao(self, 'Cliente')
-        self.botao_cliente.grid(row=1, column=0, padx=(0, 20), sticky='e')
-        self.botao_feirante = ViewUtils.obter_botao(self, 'Feirante')
-        self.botao_feirante.grid(row=1, column=1, sticky='w')
+        tabview = ctk.CTkTabview(
+            self,
+            fg_color='white',
+            segmented_button_fg_color='white',
+            segmented_button_selected_color='#00bf63',
+            text_color='white',
+        )
+        tabview.grid(row=1, column=0, columnspan=2, sticky='nsew')
+        tabview.add("Cliente")
+        tabview.add("Feirante")
+        tabview.set("Feirante")
 
-        # seção de dados
-
-        self.frame_feirante = FrameDadosFeirante(self)
-        self.frame_feirante.grid(row=2, column=0, columnspan=2, sticky="nsew", padx=(60,30), pady=20)
-
-        # seção de dados
+        self.frame_feirante = FrameDadosFeirante(tabview.tab("Feirante"))
+        self.frame_feirante.pack(padx=0, pady=0)
 
         self.botao_cadastrar = ViewUtils.obter_botao(self, 'Cadastrar')
-        self.botao_cadastrar.grid(row=3, column=0, columnspan=2, pady=(0, 15))
+        self.botao_cadastrar.grid(row=2, column=0, columnspan=2, pady=(0, 15))
 
         self.label_tem_conta = ctk.CTkLabel(self, text='Já Tem conta? Faça login!', text_color='#38b6ff', font=('system', 18, 'bold'))
-        self.label_tem_conta.grid(row=4, column=0, columnspan=2, pady=(0, 15))
+        self.label_tem_conta.grid(row=3, column=0, columnspan=2, pady=(0, 20))
 
 
 class ViewLoginCadastro(ctk.CTkFrame):
@@ -50,6 +52,7 @@ class ViewLoginCadastro(ctk.CTkFrame):
         super().__init__(master)
         self.configure(fg_color='white')
         self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
 
         tem_feira_img = Image.open('./assets/tem_feira.png')
         self.tem_feira_img = ctk.CTkImage(light_image=tem_feira_img, size=(400, 720))

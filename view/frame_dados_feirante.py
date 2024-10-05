@@ -28,7 +28,7 @@ class FrameDiaFuncionamento(ctk.CTkFrame):
             var_abertura = ctk.CTkEntry(self, height=40, placeholder_text='HH:mm')
             var_fechamento = ctk.CTkEntry(self, height=40, placeholder_text='HH:mm')
             var.grid(row=idx+2, column=0, sticky='w', pady=10)
-            var_abertura.grid(row=idx+2, column=1, sticky='w', pady=10)
+            var_abertura.grid(row=idx+2, column=1, sticky='w', pady=10, padx=(0, 10))
             var_fechamento.grid(row=idx+2, column=2, sticky='w', pady=10)
 
 
@@ -46,29 +46,29 @@ class FrameDadosFeirante(ctk.CTkFrame):
         self.nome_feira_label = ctk.CTkLabel(self, text='Nome da feira', font=('system', 20))
         self.nome_feira_entry = ctk.CTkEntry(self, height=40, placeholder_text='Digite o nome da feira')
         self.nome_feira_label.grid(row=0, column=0, columnspan=2, sticky='w')
-        self.nome_feira_entry.grid(row=1, column=0, columnspan=2, sticky='ew')
+        self.nome_feira_entry.grid(row=1, column=0, columnspan=2, sticky='new')
 
         self.contato_label = ctk.CTkLabel(self, text='Contato', font=('system', 20))
         self.forma_contato_entry = ctk.CTkComboBox(self, values=[fc.value for fc in FormaContato], width=150, height=40)
         self.contato_entry = ctk.CTkEntry(self, width=150, height=40, placeholder_text='Digite o contato')
         self.contato_label.grid(row=2, column=0, columnspan=2, sticky='w')
-        self.forma_contato_entry.grid(row=3, column=0, sticky='ew', padx=(0, 10))
-        self.contato_entry.grid(row=3, column=1, sticky='ew', padx=(10, 0))
+        self.forma_contato_entry.grid(row=3, column=0, sticky='new', padx=(0, 10))
+        self.contato_entry.grid(row=3, column=1, sticky='new', padx=(10, 0))
 
         self.localizacao_label = ctk.CTkLabel(self, text='Localização', font=('system', 20))
         self.localizacao_entry = ctk.CTkButton(self, height=40, text='Selecione sua localização no mapa', fg_color='#00bf63', text_color='white', command=self.abrir_popup)
         self.localizacao_label.grid(row=4, column=0, columnspan=2, sticky='w')
-        self.localizacao_entry.grid(row=5, column=0, columnspan=2, sticky='ew')
+        self.localizacao_entry.grid(row=5, column=0, columnspan=2, sticky='new')
 
         self.email_label = ctk.CTkLabel(self, text='E-mail', font=('system', 20))
         self.email_entry = ctk.CTkEntry(self, height=40, placeholder_text='Digite seu e-mail')
         self.email_label.grid(row=6, column=0, columnspan=2, sticky='w')
-        self.email_entry.grid(row=7, column=0, columnspan=2, sticky='ew')
+        self.email_entry.grid(row=7, column=0, columnspan=2, sticky='new')
 
         self.senha_label = ctk.CTkLabel(self, text='Senha', font=('system', 20))
         self.senha_entry = ctk.CTkEntry(self, height=40, placeholder_text='Digite sua senha', show='*')
         self.senha_label.grid(row=8, column=0, columnspan=2, sticky='w')
-        self.senha_entry.grid(row=9, column=0, columnspan=2, sticky='ew')
+        self.senha_entry.grid(row=9, column=0, columnspan=2, sticky='new')
 
         self.dias_funcionamento = FrameDiaFuncionamento(self)
         self.dias_funcionamento.grid(column=2, row=0, rowspan=10, padx=30, sticky='ew')
