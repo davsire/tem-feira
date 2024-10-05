@@ -1,0 +1,4 @@
+resources/.gitignore
+.venv/
+.idea/
+__pycache__/
