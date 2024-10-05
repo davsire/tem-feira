@@ -58,12 +58,12 @@
               "description": "must be a string and is required"
             },
             "horario_abertura": {
-              "bsonType": "timestamp",
-              "description": "must be a timestamp and is required"
+              "bsonType": "string",
+              "description": "must be a string and is required"
             },
             "horario_fechamento": {
-              "bsonType": "timestamp",
-              "description": "must be a timestamp and is required"
+              "bsonType": "string",
+              "description": "must be a string and is required"
             }
           }
         }

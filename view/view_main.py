@@ -20,7 +20,7 @@ class ViewMain(ctk.CTk):
             'base': ViewBase,
         }
 
-        self.frame = ViewBase(self)
+        self.frame = ViewLoginCadastro(self)
         self.frame.grid(sticky='nsew')
 
     def alternar_telas(self, tela: str):

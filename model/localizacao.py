@@ -30,3 +30,10 @@ class Localizacao:
     @endereco.setter
     def endereco(self, endereco: str):
         self.__endereco = endereco
+
+    def to_dict(self):
+        return {
+            'latitude': self.latitude,
+            'longitude': self.longitude,
+            'endereco': self.endereco
+        }

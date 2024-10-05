@@ -15,6 +15,8 @@ class FrameDiaFuncionamento(ctk.CTkFrame):
         self.grid_columnconfigure(1, weight=1)
         self.grid_columnconfigure(2, weight=1)
 
+        self.map_dias_funcionamento = {}
+
         self.label_dias_funcionamento = ctk.CTkLabel(self, text='Dias de funcionamento', text_color='black', font=('system', 22))
         self.label_dias_funcionamento.grid(row=0, column=0, columnspan=3, pady=(0, 15), sticky='ew')
 
@@ -24,12 +26,28 @@ class FrameDiaFuncionamento(ctk.CTkFrame):
         self.label_fechamento.grid(row=1, column=2, pady=(0, 5))
 
         for idx, dia_semana in enumerate(DiaSemana):
-            var = ctk.CTkCheckBox(self, text=dia_semana.value, fg_color='#00bf63')
-            var_abertura = ctk.CTkEntry(self, height=40, placeholder_text='HH:mm')
-            var_fechamento = ctk.CTkEntry(self, height=40, placeholder_text='HH:mm')
-            var.grid(row=idx+2, column=0, sticky='w', pady=10)
-            var_abertura.grid(row=idx+2, column=1, sticky='ew', pady=10, padx=(0, 10))
-            var_fechamento.grid(row=idx+2, column=2, sticky='ew', pady=10)
+            self.map_dias_funcionamento[dia_semana.name] = ctk.CTkCheckBox(self, text=dia_semana.value, fg_color='#00bf63')
+            self.map_dias_funcionamento[dia_semana.name + '_abertura'] = ctk.CTkEntry(self, height=40, placeholder_text='HH:mm')
+            self.map_dias_funcionamento[dia_semana.name + '_fechamento'] = ctk.CTkEntry(self, height=40, placeholder_text='HH:mm')
+            self.map_dias_funcionamento[dia_semana.name].grid(row=idx+2, column=0, sticky='w', pady=10)
+            self.map_dias_funcionamento[dia_semana.name + '_abertura'].grid(row=idx+2, column=1, sticky='ew', pady=10, padx=(0, 10))
+            self.map_dias_funcionamento[dia_semana.name + '_fechamento'].grid(row=idx+2, column=2, sticky='ew', pady=10)
+            self.map_dias_funcionamento[dia_semana.name + '_abertura'].bind('<KeyRelease>', lambda e: self.aplicar_mascara_horario(e))
+            self.map_dias_funcionamento[dia_semana.name + '_fechamento'].bind('<KeyRelease>', lambda e: self.aplicar_mascara_horario(e))
+
+
+    def aplicar_mascara_horario(self, event):
+        entry = event.widget
+        conteudo = entry.get()
+        conteudo = ''.join([char for char in conteudo if char.isdigit()])
+
+        if len(conteudo) >= 3:
+            conteudo = conteudo[:2] + ':' + conteudo[2:4]
+        elif len(conteudo) > 2:
+            conteudo = conteudo[:2] + ':' + conteudo[2:]
+
+        entry.delete(0, ctk.END)
+        entry.insert(0, conteudo)
 
 
 class FrameDadosFeirante(ctk.CTkFrame):

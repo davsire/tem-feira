@@ -59,3 +59,14 @@ class Feirante(Usuario):
     @dias_funcionamento.setter
     def dias_funcionamento(self, dias_funcionamento: list[DiaFuncionamento]):
         self.__dias_funcionamento = dias_funcionamento
+
+    def to_dict(self):
+        return  {
+            'email': self.email,
+            'senha': self.senha,
+            'nome_feira': self.nome_feira,
+            'forma_contato': self.forma_contato,
+            'contato': self.contato,
+            'localizacao': self.localizacao.to_dict(),
+            'dias_funcionamento': [dia.to_dict() for dia in self.dias_funcionamento],
+        }
