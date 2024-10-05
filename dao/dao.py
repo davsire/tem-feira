@@ -7,54 +7,56 @@ load_dotenv(find_dotenv())
 password = os.environ.get("MONGODB_PWD")
 
 connection_string = f"mongodb+srv://temfeira:{password}@cluster0.nyra0.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-
 client = MongoClient(connection_string)
-
 db = client.TemFeira
 collection_clientes = db.clientes
 collection_feirantes = db.feirantes
 
-doc = {"_id": 0,"nome": "davi", "Tem": "Feira"}
 
 def insert_clientes_doc(doc):
-    inserted_id = collection_clientes.insert_one(doc).inserted_id
-    print("Cliente criado!")
+    if achar_usuario(doc["email"]) is None:
+        return collection_clientes.insert_one(doc).inserted_id
 
 def insert_feirantes_doc(doc):
-    inserted_id = collection_feirantes.insert_one(doc).inserted_id
-    print("Feirante criado!")
+    if achar_usuario(doc["email"]) is None:
+        return collection_feirantes.insert_one(doc).inserted_id
 
 def achar_cliente_id(cliente_id):
-    _id = ObjectId(cliente_id)
-    cliente = collection_clientes.find_one({"_id": _id})
-    return cliente
+    return collection_clientes.find_one({"_id": ObjectId(cliente_id)})
 
 def achar_feirante_id(feirante_id):
-    _id = ObjectId(feirante_id)
-    feirante = collection_feirantes.find_one({"_id": _id})
-    return feirante
+    return collection_feirantes.find_one({"_id": ObjectId(feirante_id)})
 
-def update_cliente_id(cliente_id):
-    _id = ObjectId(cliente_id)
+def achar_usuario(email):
+    return collection_clientes.find_one({"email": email}) or collection_feirantes.find_one({"email": email})
+
+def update_cliente(cliente_id, info):
 
     update = {
-        "$set": {"": ""}
+        "$set": { "email": info["email"], 
+                  "senha": info["senha"], 
+                  "nome": info["nome"], 
+                  "localizacao": info["localizacao"]
+                }
     }
-    collection_clientes.update_one({"_id": _id}, update)
+    collection_clientes.update_one({"_id": ObjectId(cliente_id)}, update)
 
-def replace_cliente(cliente_id):
-    _id = ObjectId(cliente_id)
+def update_feirante(feirante_id, info):
 
-    new_doc = {
-        "": ""
+    update = {
+        "$set": { "email": info["email"], 
+                  "senha": info["senha"], 
+                  "nome": info["nome"], 
+                  "localizacao": info["localizacao"]
+                }
     }
-
-    collection_clientes.replace_one({"_id": _id}, new_doc)
+    collection_feirantes.update_one({"_id": ObjectId(feirante_id)}, update)
 
 def delete_cliente(cliente_id):
-    _id = ObjectId(cliente_id)
+    collection_clientes.delete_one({"_id": ObjectId(cliente_id)})
 
-    collection_clientes.delete_one({"_id": _id})
+def delete_feirante(feirante_id):
+    collection_feirantes.delete_one({"_id": ObjectId(feirante_id)})
 
 def create_feirantes_collection():
     feirante_validator = {
@@ -211,5 +213,3 @@ def create_clientes_collection():
         print(e)
     
     db.command("collMod", "clientes", validator=clientes_validator)
-
-insert_clientes_doc({"email": "davitorino@gmail.com", "senha": "123", "nome": "Davi", "localizacao": "feira"})
