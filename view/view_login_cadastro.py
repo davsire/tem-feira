@@ -43,8 +43,9 @@ class FrameCadastro(ctk.CTkFrame):
         self.botao_cadastrar = ViewUtils.obter_botao(self, 'Cadastrar')
         self.botao_cadastrar.grid(row=2, column=0, columnspan=2, pady=(0, 15))
 
-        self.label_tem_conta = ctk.CTkLabel(self, text='Já Tem conta? Faça login!', text_color='#38b6ff', font=('system', 18, 'bold'))
+        self.label_tem_conta = ctk.CTkLabel(self, text='Já Tem conta? Clique para fazer login!', text_color='#38b6ff', font=('system', 18, 'bold'))
         self.label_tem_conta.grid(row=3, column=0, columnspan=2, pady=(0, 20))
+        self.label_tem_conta.bind('<Button-1>', lambda e: master.alternar_tela('login'))
 
 
 class ViewLoginCadastro(ctk.CTkFrame):
@@ -55,6 +56,11 @@ class ViewLoginCadastro(ctk.CTkFrame):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
 
+        self.map_telas = {
+            'login': FrameLogin,
+            'cadastro': FrameCadastro,
+        }
+
         tem_feira_img = Image.open('./assets/tem_feira.png')
         self.tem_feira_img = ctk.CTkImage(light_image=tem_feira_img, size=(400, 720))
         self.tem_feira_img_lbl = ctk.CTkLabel(self, image=self.tem_feira_img, text='')
@@ -62,3 +68,9 @@ class ViewLoginCadastro(ctk.CTkFrame):
 
         self.frame = FrameCadastro(self)
         self.frame.grid(row=0, column=0, sticky="nsew")
+
+    def alternar_tela(self, tela: str):
+        self.frame.grid_forget()
+        if self.map_telas[tela]:
+            self.frame = self.map_telas[tela](self)
+            self.frame.grid(row=0, column=0, sticky="nsew")

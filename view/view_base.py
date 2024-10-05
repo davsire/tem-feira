@@ -28,7 +28,7 @@ class FrameNavegacao(ctk.CTkFrame):
             fg_color='#00bf63',
             width=80,
             height=80,
-            command=lambda: self.alterar_tela('home')
+            command=lambda: self.alternar_tela('home')
         )
         self.botao_home.grid(row=0, column=0, sticky="ew")
 
@@ -40,7 +40,7 @@ class FrameNavegacao(ctk.CTkFrame):
             fg_color='#00bf63',
             width=80,
             height=80,
-            command=lambda: self.alterar_tela('usuario')
+            command=lambda: self.alternar_tela('usuario')
         )
         self.botao_usuario.grid(row=1, column=0, sticky="ew")
 
@@ -52,11 +52,11 @@ class FrameNavegacao(ctk.CTkFrame):
             fg_color='#00bf63',
             width=80,
             height=80,
-            command=lambda: self.alterar_tela('cestas')
+            command=lambda: self.alternar_tela('cestas')
         )
         self.botao_cesta.grid(row=2, column=0, sticky="ew")
 
-    def alterar_tela(self, tela: str):
+    def alternar_tela(self, tela: str):
         self.master.frame.grid_forget()
         if self.map_telas[tela]:
             self.master.frame = self.map_telas[tela](self.master)
