@@ -8,6 +8,7 @@ from view.frame_dados_login import FrameDadosLogin
 class FrameLogin(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
+        self.configure(fg_color='white')
         self.grid_rowconfigure(0)
         self.grid_rowconfigure(1, weight=1)
         self.grid_rowconfigure(2)
@@ -19,13 +20,14 @@ class FrameLogin(ctk.CTkFrame):
         self.label_login.grid(row=0, column=0, padx=20, pady=(20, 10), sticky='w')
 
         self.frame_login = FrameDadosLogin(self)
-        self.frame_login.pack(fill="both", expand=True)
+        self.frame_login.grid(row=1, column=0, columnspan=2, padx=300, stick='ew')
 
         self.botao_login = ViewUtils.obter_botao(self, 'Login')
         self.botao_login.grid(row=2, column=0, columnspan=2, pady=(0, 15))
 
-        self.label_nao_tem_conta = ctk.CTkLabel(self, text='Não Tem conta? Cadastre-se!', text_color='#38b6ff', font=('system', 18, 'bold'))
+        self.label_nao_tem_conta = ctk.CTkLabel(self, text='Não Tem conta? Clique para se cadastrar!', text_color='#38b6ff', font=('system', 18, 'bold'))
         self.label_nao_tem_conta.grid(row=3, column=0, columnspan=2, pady=(0, 20))
+        self.label_nao_tem_conta.bind('<Button-1>', lambda e: master.alternar_tela('cadastro'))
 
 class FrameCadastro(ctk.CTkFrame):
 
