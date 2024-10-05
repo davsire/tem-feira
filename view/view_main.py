@@ -11,7 +11,7 @@ class ViewMain(ctk.CTk):
         self.configure(fg_color='white')
         self.resizable(False, False)
         self.grid_columnconfigure(0, weight=1)
-        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
 
         self.frame = ViewLoginCadastro(self)
         self.frame.grid(sticky='nsew')
