@@ -6,7 +6,7 @@ class ViewMain(ctk.CTk):
     def __init__(self):
         super().__init__()
         ctk.set_appearance_mode("light")
-        self.geometry('1280x720')
+        self.geometry('1280x760')
         self.title('Tem Feira?')
         self.configure(fg_color='white')
         self.resizable(False, False)

@@ -3,13 +3,13 @@ from enum import Enum
 
 
 class DiaSemana(Enum):
-    DOM = 'DOMINGO',
-    SEG = 'SEGUNDA',
-    TER = 'TERCA',
-    QUA = 'QUARTA',
-    QUI = 'QUINTA',
-    SEX = 'SEXTA',
-    SAB = 'SABADO'
+    DOM = 'Domingo'
+    SEG = 'Segunda'
+    TER = 'Terça'
+    QUA = 'Quarta'
+    QUI = 'Quinta'
+    SEX = 'Sexta'
+    SAB = 'Sábado'
 
 
 class DiaFuncionamento:
