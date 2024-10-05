@@ -1,7 +1,7 @@
 import customtkinter as ctk
-from tkintermapview import TkinterMapView
 from model.dia_funcionamento import DiaSemana
 from model.feirante import FormaContato
+from view.view_utils import ViewUtils
 
 
 class FrameDiaFuncionamento(ctk.CTkFrame):
@@ -28,7 +28,7 @@ class FrameDiaFuncionamento(ctk.CTkFrame):
             var_abertura = ctk.CTkEntry(self, height=40, placeholder_text='HH:mm')
             var_fechamento = ctk.CTkEntry(self, height=40, placeholder_text='HH:mm')
             var.grid(row=idx+2, column=0, sticky='w', pady=10)
-            var_abertura.grid(row=idx+2, column=1, sticky='w', pady=10, padx=(0, 10))
+            var_abertura.grid(row=idx+2, column=1, sticky='w', pady=10)
             var_fechamento.grid(row=idx+2, column=2, sticky='w', pady=10)
 
 
@@ -56,7 +56,7 @@ class FrameDadosFeirante(ctk.CTkFrame):
         self.contato_entry.grid(row=3, column=1, sticky='new', padx=(10, 0))
 
         self.localizacao_label = ctk.CTkLabel(self, text='Localização', font=('system', 20))
-        self.localizacao_entry = ctk.CTkButton(self, height=40, text='Selecione sua localização no mapa', fg_color='#00bf63', text_color='white', command=self.abrir_popup)
+        self.localizacao_entry = ctk.CTkButton(self, height=40, text='Selecione sua localização no mapa', fg_color='#00bf63', text_color='white', command=ViewUtils.abrir_popup_mapa)
         self.localizacao_label.grid(row=4, column=0, columnspan=2, sticky='w')
         self.localizacao_entry.grid(row=5, column=0, columnspan=2, sticky='new')
 
@@ -72,37 +72,3 @@ class FrameDadosFeirante(ctk.CTkFrame):
 
         self.dias_funcionamento = FrameDiaFuncionamento(self)
         self.dias_funcionamento.grid(column=2, row=0, rowspan=10, padx=30, sticky='ew')
-
-    def abrir_popup(self):
-
-        def on_click(event):
-            x, y = event.x, event.y
-            latitude, longitude = mapa.convert_canvas_coords_to_lat_lon(x, y)
-            mapa.set_marker(latitude, longitude, text=f"Coordenadas: {latitude:.5f}, {longitude:.5f}")
-
-
-        def add_marker_event(coords):
-            print("Coordenadas:", coords)
-            new_marker = mapa.set_marker(coords[0], coords[1], text="Feira")
-
-        popup = ctk.CTkToplevel(self)
-        popup.title("Localização")
-        popup.geometry("800x600")
-        label_popup = ctk.CTkLabel(popup, text="Selecione sua localização", font=('system', 24))
-        label_popup.pack(pady=20, padx=20)
-
-        mapa = TkinterMapView(popup, width=400, height=400, corner_radius=0)
-        mapa.set_position(-27.595378, -48.548050)  # Coordenadas de Florianópolis
-        mapa.set_zoom(12)
-
-
-        mapa.pack(fill="both", expand=True)
-        mapa.bind("<Button-1>", on_click)
-
-        # Adiciona o comando de clique direito para adicionar marcador
-        mapa.add_right_click_menu_command(label="Adicionar Marcador",
-                                        command=add_marker_event,
-                                        pass_coords=True)
-
-        botao_fechar = ctk.CTkButton(popup, text="Fechar", fg_color='#00bf63', text_color='white', command=popup.destroy)
-        botao_fechar.pack(pady=10)
