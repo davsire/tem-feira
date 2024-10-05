@@ -6,7 +6,9 @@
       "senha",
       "nome_feira",
       "localizacao",
-      "dias_funcionamento"
+      "dias_funcionamento",
+      "forma_contato",
+      "contato"
     ],
     "properties": {
       "email": {
