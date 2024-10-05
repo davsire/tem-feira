@@ -2,12 +2,32 @@ import customtkinter as ctk
 from PIL import Image
 from view.view_utils import ViewUtils
 from view.frame_dados_feirante import FrameDadosFeirante
+from view.frame_dados_login import FrameDadosLogin
 
 
 class FrameLogin(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
+        self.configure(fg_color='white')
+        self.grid_rowconfigure(0)
+        self.grid_rowconfigure(1, weight=1)
+        self.grid_rowconfigure(2)
+        self.grid_rowconfigure(3)
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
 
+        self.label_login = ctk.CTkLabel(self, text='Login', text_color='black', font=('system', 35, 'bold'))
+        self.label_login.grid(row=0, column=0, padx=20, pady=(20, 10), sticky='w')
+
+        self.frame_login = FrameDadosLogin(self)
+        self.frame_login.grid(row=1, column=0, columnspan=2, padx=300, stick='ew')
+
+        self.botao_login = ViewUtils.obter_botao(self, 'Login')
+        self.botao_login.grid(row=2, column=0, columnspan=2, pady=(0, 15))
+
+        self.label_nao_tem_conta = ctk.CTkLabel(self, text='Não Tem conta? Clique para se cadastrar!', text_color='#38b6ff', font=('system', 18, 'bold'))
+        self.label_nao_tem_conta.grid(row=3, column=0, columnspan=2, pady=(0, 20))
+        self.label_nao_tem_conta.bind('<Button-1>', lambda e: master.alternar_tela('cadastro'))
 
 class FrameCadastro(ctk.CTkFrame):
 
@@ -66,7 +86,7 @@ class ViewLoginCadastro(ctk.CTkFrame):
         self.tem_feira_img_lbl = ctk.CTkLabel(self, image=self.tem_feira_img, text='')
         self.tem_feira_img_lbl.grid(column=1)
 
-        self.frame = FrameCadastro(self)
+        self.frame = FrameLogin(self)
         self.frame.grid(row=0, column=0, sticky="nsew")
 
     def alternar_tela(self, tela: str):
