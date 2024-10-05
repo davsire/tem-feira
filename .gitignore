@@ -2,3 +2,5 @@ resources/.gitignore
 .venv/
 .idea/
 __pycache__/
+.tem-feira/
+tem-feira/
