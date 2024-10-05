@@ -80,6 +80,11 @@ class FrameDadosFeirante(ctk.CTkFrame):
             latitude, longitude = mapa.convert_canvas_coords_to_lat_lon(x, y)
             mapa.set_marker(latitude, longitude, text=f"Coordenadas: {latitude:.5f}, {longitude:.5f}")
 
+
+        def add_marker_event(coords):
+            print("Coordenadas:", coords)
+            new_marker = mapa.set_marker(coords[0], coords[1], text="Feira")
+
         popup = ctk.CTkToplevel(self)
         popup.title("Localização")
         popup.geometry("800x600")
@@ -87,11 +92,17 @@ class FrameDadosFeirante(ctk.CTkFrame):
         label_popup.pack(pady=20, padx=20)
 
         mapa = TkinterMapView(popup, width=400, height=400, corner_radius=0)
-        mapa.set_position(-23.55052, -46.633308)
+        mapa.set_position(-27.595378, -48.548050)  # Coordenadas de Florianópolis
         mapa.set_zoom(12)
-        mapa.set_marker(-23.55052, -46.633308, text="São Paulo")
+
+
         mapa.pack(fill="both", expand=True)
         mapa.bind("<Button-1>", on_click)
+
+        # Adiciona o comando de clique direito para adicionar marcador
+        mapa.add_right_click_menu_command(label="Adicionar Marcador",
+                                        command=add_marker_event,
+                                        pass_coords=True)
 
         botao_fechar = ctk.CTkButton(popup, text="Fechar", fg_color='#00bf63', text_color='white', command=popup.destroy)
         botao_fechar.pack(pady=10)
