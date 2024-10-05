@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from view.view_login_cadastro import ViewLoginCadastro
 
+
 class ViewMain(ctk.CTk):
 
     def __init__(self):

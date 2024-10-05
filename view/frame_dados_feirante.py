@@ -28,8 +28,8 @@ class FrameDiaFuncionamento(ctk.CTkFrame):
             var_abertura = ctk.CTkEntry(self, height=40, placeholder_text='HH:mm')
             var_fechamento = ctk.CTkEntry(self, height=40, placeholder_text='HH:mm')
             var.grid(row=idx+2, column=0, sticky='w', pady=10)
-            var_abertura.grid(row=idx+2, column=1, sticky='w', pady=10)
-            var_fechamento.grid(row=idx+2, column=2, sticky='w', pady=10)
+            var_abertura.grid(row=idx+2, column=1, sticky='ew', pady=10, padx=(0, 10))
+            var_fechamento.grid(row=idx+2, column=2, sticky='ew', pady=10)
 
 
 class FrameDadosFeirante(ctk.CTkFrame):
