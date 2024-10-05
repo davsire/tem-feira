@@ -4,3 +4,4 @@ resources/.gitignore
 __pycache__/
 .tem-feira/
 tem-feira/
+.env
