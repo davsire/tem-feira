@@ -31,13 +31,13 @@ class FrameCadastro(ctk.CTkFrame):
             segmented_button_selected_color='#00bf63',
             text_color='white',
         )
-        tabview.grid(row=1, column=0, columnspan=2, sticky='nsew')
+        tabview.grid(row=1, column=0, columnspan=2, padx=20, sticky='nsew')
         tabview.add("Cliente")
         tabview.add("Feirante")
         tabview.set("Feirante")
 
         self.frame_feirante = FrameDadosFeirante(tabview.tab("Feirante"))
-        self.frame_feirante.pack(padx=0, pady=0)
+        self.frame_feirante.pack(fill="both", expand=True)
 
         self.botao_cadastrar = ViewUtils.obter_botao(self, 'Cadastrar')
         self.botao_cadastrar.grid(row=2, column=0, columnspan=2, pady=(0, 15))
