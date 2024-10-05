@@ -1,0 +1,81 @@
+{
+  "$jsonSchema": {
+    "bsonType": "object",
+    "required": [
+      "email",
+      "senha",
+      "nome_feira",
+      "localizacao",
+      "dias_funcionamento"
+    ],
+    "properties": {
+      "email": {
+        "bsonType": "string",
+        "description": "must be a string and is required"
+      },
+      "senha": {
+        "bsonType": "string",
+        "description": "must be a string and is required"
+      },
+      "nome_feira": {
+        "bsonType": "string",
+        "description": "must be a string and is required"
+      },
+      "localizacao": {
+        "bsonType": "object",
+        "required": [
+          "latitude",
+          "longitude"
+        ],
+        "properties": {
+          "latitude": {
+            "bsonType": "double",
+            "description": "must be a double and is required"
+          },
+          "longitude": {
+            "bsonType": "double",
+            "description": "must be a double and is required"
+          },
+          "endereco": {
+            "bsonType": "string",
+            "description": "must be a string"
+          }
+        }
+      },
+      "dias_funcionamento": {
+        "bsonType": "array",
+        "description": "must be an array and is required",
+        "items": {
+          "bsonType": "object",
+          "required": [
+            "dia_semana",
+            "horario_abertura",
+            "horario_fechamento"
+          ],
+          "properties": {
+            "dia_semana": {
+              "bsonType": "string",
+              "description": "must be a string and is required"
+            },
+            "horario_abertura": {
+              "bsonType": "timestamp",
+              "description": "must be a timestamp and is required"
+            },
+            "horario_fechamento": {
+              "bsonType": "timestamp",
+              "description": "must be a timestamp and is required"
+            }
+          }
+        }
+      },
+      "forma_contato": {
+        "bsonType": "string",
+        "description": "must be a string"
+      },
+      "contato": {
+        "bsonType": "string",
+        "description": "must be a string"
+      }
+    }
+  }
+}

@@ -1,5 +1,4 @@
-from view.view_main import ViewMain
+from controller.controller_main import ControllerMain
 
 if __name__ == "__main__":
-    app = ViewMain()
-    app.mainloop()
+    ControllerMain().iniciar_app()

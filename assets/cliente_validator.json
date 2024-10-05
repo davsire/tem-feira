@@ -1,0 +1,50 @@
+{
+  "$jsonSchema": {
+    "bsonType": "object",
+    "required": [
+      "email",
+      "senha",
+      "nome",
+      "localizacao"
+    ],
+    "properties": {
+      "email": {
+        "bsonType": "string",
+        "description": "must be a string and is required"
+      },
+      "senha": {
+        "bsonType": "string",
+        "description": "must be a string and is required"
+      },
+      "nome": {
+        "bsonType": "string",
+        "description": "must be a string and is required"
+      },
+      "data_nascimento": {
+        "bsonType": "timestamp",
+        "description": "must be a timestamp"
+      },
+      "localizacao": {
+        "bsonType": "object",
+        "required": [
+          "latitude",
+          "longitude"
+        ],
+        "properties": {
+          "latitude": {
+            "bsonType": "double",
+            "description": "must be a double and is required"
+          },
+          "longitude": {
+            "bsonType": "double",
+            "description": "must be a double and is required"
+          },
+          "endereco": {
+            "bsonType": "string",
+            "description": "must be a string"
+          }
+        }
+      }
+    }
+  }
+}
