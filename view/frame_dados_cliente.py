@@ -89,3 +89,6 @@ class FrameDadosCliente(ctk.CTkFrame):
 
         botao_selecao = ctk.CTkButton(popup, text="Selecionar", fg_color='#00bf63', text_color='white', command=selecionar_data)
         botao_selecao.pack(pady=20)
+
+    def obter_dados_cliente(self):
+        print('Obtendo dados cliente')

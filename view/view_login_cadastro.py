@@ -1,9 +1,11 @@
 import customtkinter as ctk
 from PIL import Image
+from model.usuario import TipoUsuario
 from view.view_utils import ViewUtils
 from view.frame_dados_feirante import FrameDadosFeirante
 from view.frame_dados_login import FrameDadosLogin
 from view.frame_dados_cliente import FrameDadosCliente
+
 
 class FrameLogin(ctk.CTkFrame):
     def __init__(self, master):
@@ -53,17 +55,18 @@ class FrameCadastro(ctk.CTkFrame):
         )
         tabview.grid(row=1, column=0, columnspan=2, padx=20, sticky='nsew')
         tabview._segmented_button.configure(font=('system', 22, 'bold'), corner_radius=20)
-        tabview.add("Cliente")
-        tabview.add("Feirante")
-        tabview.set("Cliente")
+        tabview.add(TipoUsuario.CLIENTE.value)
+        tabview.add(TipoUsuario.FEIRANTE.value)
+        tabview.set(TipoUsuario.CLIENTE.value)
 
-        self.frame_feirante = FrameDadosFeirante(tabview.tab("Feirante"))
+        self.frame_feirante = FrameDadosFeirante(tabview.tab(TipoUsuario.FEIRANTE.value))
         self.frame_feirante.pack(fill="both", expand=True)
 
-        self.frame_cliente = FrameDadosCliente(tabview.tab("Cliente"))
+        self.frame_cliente = FrameDadosCliente(tabview.tab(TipoUsuario.CLIENTE.value))
         self.frame_cliente.pack(fill="both", expand=True)
 
         self.botao_cadastrar = ViewUtils.obter_botao(self, 'Cadastrar')
+        self.botao_cadastrar.configure(command=lambda: master.cadastrar_usuario(tabview.get()))
         self.botao_cadastrar.grid(row=2, column=0, columnspan=2, pady=(0, 15))
 
         self.label_tem_conta = ctk.CTkLabel(self, text='Já Tem conta? Clique para fazer login!', text_color='#38b6ff', font=('system', 18, 'bold'))
@@ -73,8 +76,9 @@ class FrameCadastro(ctk.CTkFrame):
 
 class ViewLoginCadastro(ctk.CTkFrame):
 
-    def __init__(self, master):
+    def __init__(self, master, controller_main):
         super().__init__(master)
+        self.__controller_main = controller_main
         self.configure(fg_color='white')
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
@@ -89,7 +93,7 @@ class ViewLoginCadastro(ctk.CTkFrame):
         self.tem_feira_img_lbl = ctk.CTkLabel(self, image=self.tem_feira_img, text='')
         self.tem_feira_img_lbl.grid(column=1)
 
-        self.frame = FrameLogin(self)
+        self.frame: FrameLogin | FrameCadastro = FrameLogin(self)
         self.frame.grid(row=0, column=0, sticky="nsew")
 
     def alternar_tela(self, tela: str):
@@ -97,3 +101,11 @@ class ViewLoginCadastro(ctk.CTkFrame):
         if self.map_telas[tela]:
             self.frame = self.map_telas[tela](self)
             self.frame.grid(row=0, column=0, sticky="nsew")
+
+    def cadastrar_usuario(self, tipo: str):
+        dados = None
+        if tipo == TipoUsuario.FEIRANTE.value:
+            dados = self.frame.frame_feirante.obter_dados_feirante()
+        if tipo == TipoUsuario.CLIENTE.value:
+            dados = self.frame.frame_cliente.obter_dados_cliente()
+        self.__controller_main.cadastrar_usuario(dados, tipo)

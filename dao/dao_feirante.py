@@ -4,9 +4,15 @@ from model.feirante import Feirante
 
 
 class DaoFeirante(DaoMain):
+    __instancia = None
 
     def __init__(self):
         super().__init__()
+
+    def __new__(cls):
+        if DaoFeirante.__instancia is None:
+            DaoFeirante.__instancia = object.__new__(cls)
+        return DaoFeirante.__instancia
 
     def obter_nome_collection(self) -> str:
         return 'feirantes'

@@ -5,8 +5,9 @@ from view.view_base import ViewBase
 
 class ViewMain(ctk.CTk):
 
-    def __init__(self):
+    def __init__(self, controller_main):
         super().__init__()
+        self.__controller_main = controller_main
         ctk.set_appearance_mode("light")
         self.geometry('1280x760')
         self.title('Tem Feira?')
@@ -20,11 +21,11 @@ class ViewMain(ctk.CTk):
             'base': ViewBase,
         }
 
-        self.frame = ViewLoginCadastro(self)
+        self.frame = ViewLoginCadastro(self, self.__controller_main)
         self.frame.grid(sticky='nsew')
 
     def alternar_telas(self, tela: str):
         self.frame.grid_forget()
         if self.map_telas[tela]:
-            self.frame = self.map_telas[tela](self)
+            self.frame = self.map_telas[tela](self, self.__controller_main)
             self.frame.grid(sticky='nsew')

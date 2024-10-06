@@ -65,7 +65,7 @@ class FrameNavegacao(ctk.CTkFrame):
 
 class ViewBase(ctk.CTkFrame):
 
-    def __init__(self, master):
+    def __init__(self, master, controller_main):
         super().__init__(master)
         self.configure(fg_color='white')
         self.grid_columnconfigure(0)

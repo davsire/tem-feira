@@ -119,3 +119,6 @@ class FrameDadosFeirante(ctk.CTkFrame):
 
         botao_fechar = ctk.CTkButton(popup, text="Confirmar", fg_color='#00bf63', text_color='white', command=popup.destroy)
         botao_fechar.pack(pady=10)
+
+    def obter_dados_feirante(self):
+        print('Obtendo dados feirante')

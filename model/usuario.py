@@ -1,5 +1,11 @@
 from abc import ABC
+from enum import Enum
 from model.localizacao import Localizacao
+
+
+class TipoUsuario(Enum):
+    FEIRANTE = 'Feirante'
+    CLIENTE = 'Cliente'
 
 
 class Usuario(ABC):
