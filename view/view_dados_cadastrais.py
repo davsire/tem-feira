@@ -28,4 +28,4 @@ class DadosCadastrais(ctk.CTkFrame):
         self.botao_excluir_conta.grid(column=0, row=2, padx=(140,0), pady=20, sticky='w')
 
     def excluir_conta(self):
-        self.__controller_main.excluir_conta()
+        self.__controller_main.confirmar_exclusao_conta()

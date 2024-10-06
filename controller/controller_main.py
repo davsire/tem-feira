@@ -45,6 +45,14 @@ class ControllerMain:
         except CampoObrigatorioException as e:
             ViewUtils.abrir_popup_mensagem(str(e), 'red')
 
+    def confirmar_exclusao_conta(self):
+        ViewUtils.abrir_popup_confirmacao(
+            'Tem certeza que deseja excluir sua conta?',
+            'Excluir',
+            self.excluir_conta,
+            '#e21515'
+        )
+
     def excluir_conta(self):
         if self.__tipo_usuario_logado == TipoUsuario.FEIRANTE:
             self.__controller_feirante.excluir_feirante(self.__usuario_logado)
