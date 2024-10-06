@@ -76,7 +76,11 @@ class FrameDadosFeirante(ctk.CTkFrame):
         self.contato_entry.grid(row=3, column=1, sticky='new', padx=(10, 0))
 
         self.localizacao_label = ctk.CTkLabel(self, text='Localização', font=('system', 20))
-        self.localizacao_entry = ctk.CTkButton(self, height=40, text='Selecione sua localização no mapa', fg_color='#00bf63', text_color='white', command=self.abrir_popup_mapa)
+        self.localizacao_entry = ctk.CTkButton(
+            self, height=40, text='Selecione sua localização no mapa',
+            fg_color='#00bf63', text_color='white',
+            command=self.abrir_popup_mapa
+        )
         self.localizacao_label.grid(row=4, column=0, columnspan=2, sticky='w')
         self.localizacao_entry.grid(row=5, column=0, columnspan=2, sticky='new')
 
@@ -101,7 +105,7 @@ class FrameDadosFeirante(ctk.CTkFrame):
             mapa.set_marker(self.__latitude, self.__longitude, text="Sua feira")
             print(f'Coordenadas: lat {self.__latitude}, long {self.__longitude}')
 
-        popup = ctk.CTkToplevel()
+        popup = ctk.CTkToplevel(self)
         popup.title("Localização")
         popup.geometry("800x600")
         label_popup = ctk.CTkLabel(popup, text="Selecione sua localização", font=('system', 24))
@@ -113,5 +117,5 @@ class FrameDadosFeirante(ctk.CTkFrame):
         mapa.set_zoom(12)
         mapa.add_left_click_map_command(adicionar_marcador)
 
-        botao_fechar = ctk.CTkButton(popup, text="Fechar", fg_color='#00bf63', text_color='white', command=popup.destroy)
+        botao_fechar = ctk.CTkButton(popup, text="Confirmar", fg_color='#00bf63', text_color='white', command=popup.destroy)
         botao_fechar.pack(pady=10)
