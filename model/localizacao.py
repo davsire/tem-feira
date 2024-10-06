@@ -1,8 +1,10 @@
+from exception.campo_obrigatorio_exception import CampoObrigatorioException
 
 
 class Localizacao:
 
     def __init__(self, latitude: float, longitude: float):
+        self.__validar_campos(latitude, longitude)
         self.__latitude = latitude
         self.__longitude = longitude
         self.__endereco = None
@@ -37,3 +39,7 @@ class Localizacao:
             'longitude': self.longitude,
             'endereco': self.endereco
         }
+
+    def __validar_campos(self, latitude: float, longitude: float):
+        if not latitude or not longitude:
+            raise CampoObrigatorioException('Localização')

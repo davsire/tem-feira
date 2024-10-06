@@ -1,3 +1,4 @@
+from exception.campo_obrigatorio_exception import CampoObrigatorioException
 from model.usuario import Usuario
 from enum import Enum
 from model.localizacao import Localizacao
@@ -23,6 +24,7 @@ class Feirante(Usuario):
             dias_funcionamento: list[DiaFuncionamento]
     ):
         super().__init__(email, senha, localizacao)
+        self.__validar_campos(email, senha, localizacao, nome_feira, forma_contato, contato, dias_funcionamento)
         self.__nome_feira = nome_feira
         self.__forma_contato = forma_contato
         self.__contato = contato
@@ -70,3 +72,25 @@ class Feirante(Usuario):
             'localizacao': self.localizacao.to_dict(),
             'dias_funcionamento': [dia.to_dict() for dia in self.dias_funcionamento],
         }
+
+    def __validar_campos(self,
+            email: str,
+            senha: str,
+            localizacao: Localizacao,
+            nome_feira: str,
+            forma_contato: FormaContato,
+            contato: str,
+            dias_funcionamento: list[DiaFuncionamento]
+    ):
+        if not nome_feira:
+            raise CampoObrigatorioException('Nome da feira')
+        if not forma_contato or not contato:
+            raise CampoObrigatorioException('Contato')
+        if not localizacao:
+            raise CampoObrigatorioException('Localização')
+        if not email:
+            raise CampoObrigatorioException('E-mail')
+        if not senha:
+            raise CampoObrigatorioException('Senha')
+        if not dias_funcionamento:
+            raise CampoObrigatorioException('Dias de funcionamento')

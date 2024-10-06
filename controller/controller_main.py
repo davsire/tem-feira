@@ -1,6 +1,8 @@
 from controller.controller_feirante import ControllerFeirante
+from exception.campo_obrigatorio_exception import CampoObrigatorioException
 from model.usuario import TipoUsuario
 from view.view_main import ViewMain
+from view.view_utils import ViewUtils
 
 
 class ControllerMain:
@@ -29,12 +31,15 @@ class ControllerMain:
         self.__app.mainloop()
 
     def cadastrar_usuario(self, dados, tipo: TipoUsuario):
-        usuario = None
-        if tipo == TipoUsuario.FEIRANTE:
-            usuario = self.__controller_feirante.cadastrar_feirante(dados)
-        if tipo == TipoUsuario.CLIENTE:
-            pass
-        if usuario:
-            self.__usuario_logado = usuario
-            self.__tipo_usuario = tipo
-            self.__app.alternar_telas('base')
+        try:
+            usuario = None
+            if tipo == TipoUsuario.FEIRANTE:
+                usuario = self.__controller_feirante.cadastrar_feirante(dados)
+            if tipo == TipoUsuario.CLIENTE:
+                pass
+            if usuario:
+                self.__usuario_logado = usuario
+                self.__tipo_usuario = tipo
+                self.__app.alternar_telas('base')
+        except CampoObrigatorioException as e:
+            ViewUtils.abrir_popup_mensagem(str(e), 'red')
