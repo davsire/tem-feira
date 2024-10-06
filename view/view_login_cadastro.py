@@ -60,7 +60,7 @@ class FrameCadastro(ctk.CTkFrame):
         tabview.add(TipoUsuario.FEIRANTE.value)
         tabview.set(TipoUsuario.CLIENTE.value)
 
-        self.frame_feirante = FrameDadosFeirante(tabview.tab(TipoUsuario.FEIRANTE.value))
+        self.frame_feirante = FrameDadosFeirante(tabview.tab(TipoUsuario.FEIRANTE.value), None)
         self.frame_feirante.pack(fill="both", expand=True)
 
         self.frame_cliente = FrameDadosCliente(tabview.tab(TipoUsuario.CLIENTE.value))

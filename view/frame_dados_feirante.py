@@ -1,7 +1,7 @@
 import customtkinter as ctk
 from tkintermapview import TkinterMapView
 from model.dia_funcionamento import DiaSemana
-from model.feirante import FormaContato
+from model.feirante import FormaContato, Feirante
 
 
 class FrameDiaFuncionamento(ctk.CTkFrame):
@@ -63,7 +63,7 @@ class FrameDiaFuncionamento(ctk.CTkFrame):
 
 class FrameDadosFeirante(ctk.CTkFrame):
 
-    def __init__(self, master):
+    def __init__(self, master, feirante_logado: Feirante | None):
         super().__init__(master)
         self.__latitude = None
         self.__longitude = None
@@ -108,6 +108,9 @@ class FrameDadosFeirante(ctk.CTkFrame):
         self.dias_funcionamento = FrameDiaFuncionamento(self)
         self.dias_funcionamento.grid(column=2, row=0, rowspan=10, padx=30, sticky='ew')
 
+        if feirante_logado:
+            self.__preencher_dados_edicao(feirante_logado)
+
     def abrir_popup_mapa(self):
 
         def adicionar_marcador(coords):
@@ -144,3 +147,17 @@ class FrameDadosFeirante(ctk.CTkFrame):
             },
             'dias_funcionamento': self.dias_funcionamento.obter_dias_funcionamento()
         }
+
+    def __preencher_dados_edicao(self, feirante_logado: Feirante):
+        self.nome_feira_entry.insert(0, feirante_logado.nome_feira)
+        self.forma_contato_entry.set(feirante_logado.forma_contato.name)
+        self.contato_entry.insert(0, feirante_logado.contato)
+        self.email_entry.insert(0, feirante_logado.email)
+        self.__latitude = feirante_logado.localizacao.latitude
+        self.__longitude = feirante_logado.localizacao.longitude
+        self.localizacao_entry.configure(text=f'Coordenadas: lat {self.__latitude:.3f}, lng {self.__longitude:.3f}')
+        for dia_funcionamento in feirante_logado.dias_funcionamento:
+            dia_semana = dia_funcionamento.dia_semana.name
+            self.dias_funcionamento.map_dias_funcionamento[dia_semana].select()
+            self.dias_funcionamento.map_dias_funcionamento[dia_semana + '_abertura'].insert(0, dia_funcionamento.horario_abertura)
+            self.dias_funcionamento.map_dias_funcionamento[dia_semana + '_fechamento'].insert(0, dia_funcionamento.horario_fechamento)

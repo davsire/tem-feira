@@ -21,6 +21,12 @@ class ControllerFeirante:
         feirante.id = res.inserted_id
         return feirante
 
+    def atualizar_feirante(self, id_feirante, dados):
+        feirante = self.criar_feirante(dados)
+        feirante.id = id_feirante
+        self.__dao_feirante.atualizar_feirante(feirante)
+        return feirante
+
     def criar_feirante(self, dados) -> Feirante:
         localizacao = Localizacao(dados['localizacao']['latitude'], dados['localizacao']['longitude'])
         dias_funcionamento = [

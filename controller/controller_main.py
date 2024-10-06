@@ -45,6 +45,16 @@ class ControllerMain:
         except CampoObrigatorioException as e:
             ViewUtils.abrir_popup_mensagem(str(e), 'red')
 
+    def atualizar_usuario(self, dados):
+        try:
+            if self.__tipo_usuario_logado == TipoUsuario.FEIRANTE:
+                self.__usuario_logado = self.__controller_feirante.atualizar_feirante(self.__usuario_logado.id, dados)
+            if self.__tipo_usuario_logado == TipoUsuario.CLIENTE:
+                pass
+            ViewUtils.abrir_popup_mensagem('Dados atualizados com sucesso!', 'green')
+        except CampoObrigatorioException as e:
+            ViewUtils.abrir_popup_mensagem(str(e), 'red')
+
     def confirmar_exclusao_conta(self):
         ViewUtils.abrir_popup_confirmacao(
             'Tem certeza que deseja excluir sua conta?',
