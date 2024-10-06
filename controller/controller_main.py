@@ -1,5 +1,4 @@
 from controller.controller_feirante import ControllerFeirante
-from exception.campo_obrigatorio_exception import CampoObrigatorioException
 from model.feirante import Feirante
 from model.usuario import TipoUsuario
 from view.view_main import ViewMain
@@ -42,7 +41,7 @@ class ControllerMain:
                 self.__usuario_logado = usuario
                 self.__tipo_usuario_logado = tipo
                 self.__app.alternar_telas('base')
-        except CampoObrigatorioException as e:
+        except Exception as e:
             ViewUtils.abrir_popup_mensagem(str(e), 'red')
 
     def atualizar_usuario(self, dados):
@@ -52,7 +51,7 @@ class ControllerMain:
             if self.__tipo_usuario_logado == TipoUsuario.CLIENTE:
                 pass
             ViewUtils.abrir_popup_mensagem('Dados atualizados com sucesso!', 'green')
-        except CampoObrigatorioException as e:
+        except Exception as e:
             ViewUtils.abrir_popup_mensagem(str(e), 'red')
 
     def confirmar_exclusao_conta(self):
