@@ -16,8 +16,8 @@
         "description": "must be a string and is required"
       },
       "senha": {
-        "bsonType": "string",
-        "description": "must be a string and is required"
+        "bsonType": "binData",
+        "description": "must be a binData and is required"
       },
       "nome_feira": {
         "bsonType": "string",
