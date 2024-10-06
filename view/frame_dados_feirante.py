@@ -120,6 +120,7 @@ class FrameDadosFeirante(ctk.CTkFrame):
             self.localizacao_entry.configure(text=f'Coordenadas: lat {self.__latitude:.3f}, lng {self.__longitude:.3f}')
 
         popup = ctk.CTkToplevel(self)
+        popup.attributes('-topmost', True)
         popup.title("Localização")
         popup.geometry("800x600")
         label_popup = ctk.CTkLabel(popup, text="Selecione sua localização", font=('system', 24))

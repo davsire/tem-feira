@@ -1,4 +1,5 @@
 from enum import Enum
+from datetime import datetime
 from exception.campo_obrigatorio_exception import CampoObrigatorioException
 
 
@@ -58,3 +59,12 @@ class DiaFuncionamento:
             raise CampoObrigatorioException('Horário de abertura')
         if not horario_fechamento:
             raise CampoObrigatorioException('Horário de fechamento')
+        try:
+            if len(horario_abertura) != 5 or len(horario_fechamento) != 5:
+                raise Exception
+            time_abertura = datetime.strptime(horario_abertura, "%H:%M").time()
+            time_fechamento = datetime.strptime(horario_fechamento, "%H:%M").time()
+        except Exception:
+            raise Exception('Informe um horário válido!')
+        if time_abertura >= time_fechamento:
+            raise Exception('O horário de abertura deve ser anterior ao de fechamento!')
