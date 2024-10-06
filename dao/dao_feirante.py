@@ -26,5 +26,5 @@ class DaoFeirante(DaoMain):
     def atualizar_feirante(self, feirante: Feirante):
         self.update_one({ '_id': ObjectId(feirante.id) }, feirante.to_dict())
 
-    def remover_feirante(self, feirante: Feirante):
+    def excluir_feirante(self, feirante: Feirante):
         self.delete_one({ '_id': ObjectId(feirante.id) })
