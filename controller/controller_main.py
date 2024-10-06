@@ -43,6 +43,19 @@ class ControllerMain:
                 self.__app.alternar_telas('base')
         except Exception as e:
             ViewUtils.abrir_popup_mensagem(str(e), 'red')
+    
+    def logar_usuario(self, dados):
+        try:
+            feirante = self.__controller_feirante.logar_feirante(dados)
+            cliente = None # self.__controller_cliente.logar_cliente(dados)
+            if feirante or cliente:
+                self.__usuario_logado = feirante or cliente
+                self.__tipo_usuario_logado = TipoUsuario.FEIRANTE if feirante else TipoUsuario.CLIENTE
+                self.__app.alternar_telas('base')
+                return
+            ViewUtils.abrir_popup_mensagem('E-mail ou senha incorretos!', 'red')
+        except Exception as e:
+            ViewUtils.abrir_popup_mensagem(str(e), 'red')
 
     def atualizar_usuario(self, dados):
         try:
@@ -62,11 +75,14 @@ class ControllerMain:
             '#e21515'
         )
 
+    def logout(self):
+        self.__usuario_logado = None
+        self.__tipo_usuario_logado = None
+        self.__app.alternar_telas('login_cadastro')
+
     def excluir_conta(self):
         if self.__tipo_usuario_logado == TipoUsuario.FEIRANTE:
             self.__controller_feirante.excluir_feirante(self.__usuario_logado)
         if self.__tipo_usuario_logado == TipoUsuario.CLIENTE:
             pass
-        self.__usuario_logado = None
-        self.__tipo_usuario_logado = None
-        self.__app.alternar_telas('login_cadastro')
+        self.logout()

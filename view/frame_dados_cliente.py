@@ -84,6 +84,7 @@ class FrameDadosCliente(ctk.CTkFrame):
 
         # Criação do popup
         popup = ctk.CTkToplevel(self)
+        popup.attributes('-topmost', True)
         popup.title("Localização")
         popup.geometry("800x600")
         label_popup = ctk.CTkLabel(popup, text="Selecione sua localização", font=('system', 24))
@@ -116,6 +117,7 @@ class FrameDadosCliente(ctk.CTkFrame):
 
         # Criação do popup
         popup = ctk.CTkToplevel(self)
+        popup.attributes('-topmost', True)
         popup.title("Calendário")
         popup.geometry("500x500")
         cal = tkcal.Calendar(popup, selectmode='day', date_pattern='dd/mm/yyyy', year=2000, month=6)
