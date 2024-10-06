@@ -9,9 +9,9 @@ class FrameNavegacao(ctk.CTkFrame):
         super().__init__(master)
         self.configure(fg_color='#00bf63', corner_radius=0)
         self.grid_columnconfigure(0)
-        for i in range(5):
+        for i in range(4):
             self.grid_rowconfigure(i)
-        self.grid_rowconfigure(4, weight=1)
+        self.grid_rowconfigure(3, weight=1)
 
         icone_home = ctk.CTkImage(light_image=Image.open("./assets/icone_home.png"), size=(40, 40))
         self.botao_home = ctk.CTkButton(
@@ -59,7 +59,7 @@ class FrameNavegacao(ctk.CTkFrame):
             width=80,
             height=80
         )
-        self.botao_logout.grid(row=3, column=0, sticky="ew")
+        self.botao_logout.grid(row=3, column=0, pady=10, sticky="sew")
 
 
 class ViewBase(ctk.CTkFrame):
