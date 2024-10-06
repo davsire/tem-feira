@@ -9,6 +9,8 @@ class FrameDadosCliente(ctk.CTkFrame):
 
         super().__init__(master)
         self.configure(fg_color='white')
+        self.__latitude = None
+        self.__longitude = None
         for i in range(10):
             self.grid_rowconfigure(i, weight=i%2)
         self.grid_columnconfigure(0, weight=1)
