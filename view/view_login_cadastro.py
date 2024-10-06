@@ -3,7 +3,7 @@ from PIL import Image
 from view.view_utils import ViewUtils
 from view.frame_dados_feirante import FrameDadosFeirante
 from view.frame_dados_login import FrameDadosLogin
-
+from view.frame_dados_cliente import FrameDadosCliente
 
 class FrameLogin(ctk.CTkFrame):
     def __init__(self, master):
@@ -55,10 +55,13 @@ class FrameCadastro(ctk.CTkFrame):
         tabview._segmented_button.configure(font=('system', 22, 'bold'), corner_radius=20)
         tabview.add("Cliente")
         tabview.add("Feirante")
-        tabview.set("Feirante")
+        tabview.set("Cliente")
 
         self.frame_feirante = FrameDadosFeirante(tabview.tab("Feirante"))
         self.frame_feirante.pack(fill="both", expand=True)
+
+        self.frame_cliente = FrameDadosCliente(tabview.tab("Cliente"))
+        self.frame_cliente.pack(fill="both", expand=True)
 
         self.botao_cadastrar = ViewUtils.obter_botao(self, 'Cadastrar')
         self.botao_cadastrar.grid(row=2, column=0, columnspan=2, pady=(0, 15))
