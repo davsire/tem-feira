@@ -43,4 +43,3 @@ class ViewUtils:
 
         botao_fechar = ctk.CTkButton(popup, text="Fechar", fg_color='#00bf63', text_color='white', command=popup.destroy)
         botao_fechar.pack(pady=10)
-        
