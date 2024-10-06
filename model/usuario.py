@@ -17,11 +17,11 @@ class Usuario(ABC):
         self.__localizacao = localizacao
 
     @property
-    def id(self):
+    def id(self) -> str:
         return self.__id
 
     @id.setter
-    def id(self, id):
+    def id(self, id: str):
         if self.__id is None:
             self.__id = id
 

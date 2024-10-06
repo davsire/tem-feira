@@ -17,7 +17,8 @@ class ControllerFeirante:
 
     def cadastrar_feirante(self, dados):
         feirante = self.criar_feirante(dados)
-        self.__dao_feirante.inserir_feirante(feirante)
+        res = self.__dao_feirante.inserir_feirante(feirante)
+        feirante.id = res.inserted_id
         return feirante
 
     def criar_feirante(self, dados) -> Feirante:
