@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from tkintermapview import TkinterMapView
 import tkcalendar as tkcal
+from model.cliente import Cliente
 
 
 class FrameDadosCliente(ctk.CTkFrame):
@@ -9,13 +10,7 @@ class FrameDadosCliente(ctk.CTkFrame):
     """
 
     def __init__(self, master):
-        """
-        Inicializa o frame com widgets para entrada de dados do cliente.
-        
-        Args:
-            master: O widget pai.
-        """
-        super().__init__(master)
+        super().__init__(self, master, cliente_logado: Cliente | None)
         self.configure(fg_color='white')
         self.__latitude = None
         self.__longitude = None
@@ -64,6 +59,9 @@ class FrameDadosCliente(ctk.CTkFrame):
         self.senha_entry = ctk.CTkEntry(self, height=40, placeholder_text='Digite sua senha', show='*')
         self.senha_label.grid(row=8, column=1, sticky='w')
         self.senha_entry.grid(row=9, column=1, sticky='new')
+        
+        if cliente_logado:
+            self.__preencher_dados_edicao(cliente_logado)
         
     def abrir_popup_mapa(self):
         """
@@ -126,4 +124,24 @@ class FrameDadosCliente(ctk.CTkFrame):
         botao_selecao.pack(pady=20)
 
     def obter_dados_cliente(self):
-        print('Obtendo dados cliente')
+ 
+        return {
+            'nome': self.nome_entry.get(),
+            'data_nascimento': self.data_nascimento_button.cget('text'),
+            'localizacao': {
+                'latitude': self.__latitude,
+                'longitude': self.__longitude,
+            },
+            'email': self.email_entry.get(),
+            'senha': self.senha_entry.get()
+        }
+
+    def __preencher_dados_edicao(self, cliente_logado: Cliente):
+    
+        self.nome_entry.insert(0, cliente_logado.nome)
+        self.data_nascimento_button.configure(text=cliente_logado.data_nascimento)
+        self.__latitude = cliente_logado.localizacao.latitude
+        self.__longitude = cliente_logado.localizacao.longitude
+        self.localizacao_entry.configure(text=f'Coordenadas: lat {self.__latitude:.3f}, lng {self.__longitude:.3f}')
+        self.email_entry.insert(0, cliente_logado.email)
+        self.senha_entry.insert(0, cliente_logado.senha)
