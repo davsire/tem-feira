@@ -36,3 +36,6 @@ class ControllerFeirante:
             dados['contato'],
             dias_funcionamento,
         )
+
+    def excluir_feirante(self, feirante: Feirante):
+        self.__dao_feirante.excluir_feirante(feirante)

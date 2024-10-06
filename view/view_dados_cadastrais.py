@@ -5,8 +5,9 @@ from view.view_utils import ViewUtils
 
 class DadosCadastrais(ctk.CTkFrame):
 
-    def __init__(self, master):
+    def __init__(self, master, controller_main):
         super().__init__(master)
+        self.__controller_main = controller_main
         self.configure(fg_color='white', corner_radius=0)
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0)
@@ -23,4 +24,8 @@ class DadosCadastrais(ctk.CTkFrame):
         self.botao_salvar.grid(column=0, row=2, sticky='w')
 
         self.botao_excluir_conta = ViewUtils.obter_botao(self, 'Excluir conta', '#e21515')
+        self.botao_excluir_conta.configure(command=self.excluir_conta)
         self.botao_excluir_conta.grid(column=0, row=2, padx=(140,0), pady=20, sticky='w')
+
+    def excluir_conta(self):
+        self.__controller_main.excluir_conta()
