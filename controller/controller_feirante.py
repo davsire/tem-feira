@@ -45,5 +45,12 @@ class ControllerFeirante:
             dias_funcionamento,
         )
 
+    def logar_feirante(self, dados) -> Feirante:
+        feirante = self.__dao_feirante.obter_feirante_por_email(dados["email"])
+        if feirante is None:
+            return
+        if bcrypt.checkpw(bytes(dados["senha"], 'utf-8'), feirante["senha"]):
+            return self.criar_feirante(feirante)
+
     def excluir_feirante(self, feirante: Feirante):
         self.__dao_feirante.excluir_feirante(feirante)

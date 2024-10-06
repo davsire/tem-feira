@@ -17,8 +17,8 @@ class DaoFeirante(DaoMain):
     def obter_nome_collection(self) -> str:
         return 'feirantes'
 
-    def obter_feirante_por_email_senha(self, email: str, senha: str) -> Feirante:
-        return self.find_one({'email': email, 'senha': senha})
+    def obter_feirante_por_email(self, email: str) -> Feirante:
+        return self.find_one({'email': email})
 
     def inserir_feirante(self, feirante: Feirante):
         return self.insert_one(feirante.to_dict())

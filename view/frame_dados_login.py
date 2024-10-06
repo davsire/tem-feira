@@ -19,3 +19,9 @@ class FrameDadosLogin(ctk.CTkFrame):
         self.senha_entry = ctk.CTkEntry(self, height=50, placeholder_text='Digite sua senha', show='*')
         self.senha_label.grid(row=2, column=0, sticky='w')
         self.senha_entry.grid(row=3, column=0, sticky='new')
+
+    def obter_dados_login(self):
+        return {
+            'email': self.email_entry.get(),
+            'senha': self.senha_entry.get(),
+        }

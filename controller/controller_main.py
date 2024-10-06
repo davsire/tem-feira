@@ -44,6 +44,16 @@ class ControllerMain:
                 self.__app.alternar_telas('base')
         except CampoObrigatorioException as e:
             ViewUtils.abrir_popup_mensagem(str(e), 'red')
+    
+    def logar_usuario(self, dados):
+        try:
+            usuario = self.__controller_feirante.logar_feirante(dados)
+            # or self.__controller_cliente.cadastrar_cliente(dados)
+            if usuario:
+                self.__usuario_logado = usuario
+                self.__app.alternar_telas('base')
+        except CampoObrigatorioException as e:
+            ViewUtils.abrir_popup_mensagem(str(e), 'red')
 
     def atualizar_usuario(self, dados):
         try:
@@ -63,11 +73,14 @@ class ControllerMain:
             '#e21515'
         )
 
+    def logout(self):
+        self.__usuario_logado = None
+        self.__tipo_usuario_logado = None
+        self.__app.alternar_telas('login_cadastro')
+
     def excluir_conta(self):
         if self.__tipo_usuario_logado == TipoUsuario.FEIRANTE:
             self.__controller_feirante.excluir_feirante(self.__usuario_logado)
         if self.__tipo_usuario_logado == TipoUsuario.CLIENTE:
             pass
-        self.__tipo_usuario_logado = None
-        self.__tipo_usuario_logado = None
-        self.__app.alternar_telas('login_cadastro')
+        self.logout()

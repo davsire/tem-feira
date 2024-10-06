@@ -25,6 +25,7 @@ class FrameLogin(ctk.CTkFrame):
         self.frame_login.grid(row=1, column=0, columnspan=2, padx=300, stick='ew')
 
         self.botao_login = ViewUtils.obter_botao(self, 'Login')
+        self.botao_login.configure(command=lambda: master.logar_usuario())
         self.botao_login.grid(row=2, column=0, columnspan=2, pady=(0, 15))
 
         self.label_nao_tem_conta = ctk.CTkLabel(self, text='Não Tem conta? Clique para se cadastrar!', text_color='#38b6ff', font=('system', 18, 'bold'))
@@ -114,3 +115,7 @@ class ViewLoginCadastro(ctk.CTkFrame):
         if tipo_usuario == TipoUsuario.CLIENTE:
             dados = self.frame.frame_cliente.obter_dados_cliente()
         self.__controller_main.cadastrar_usuario(dados, tipo_usuario)
+
+    def logar_usuario(self):
+        dados = self.frame.frame_login.obter_dados_login()
+        self.__controller_main.logar_usuario(dados)

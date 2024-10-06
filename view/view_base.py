@@ -57,7 +57,8 @@ class FrameNavegacao(ctk.CTkFrame):
             compound="left",
             fg_color='#00bf63',
             width=80,
-            height=80
+            height=80,
+            command=lambda: master.logout()
         )
         self.botao_logout.grid(row=3, column=0, pady=10, sticky="sew")
 
@@ -95,3 +96,6 @@ class ViewBase(ctk.CTkFrame):
         if self.map_telas[tela]:
             self.frame = self.map_telas[tela](self, self.__controller_main)
             self.frame.grid(column=1, row=0, padx=25, pady=25, sticky="nsew")
+
+    def logout(self):
+        self.__controller_main.logout()
