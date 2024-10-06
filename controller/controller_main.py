@@ -8,6 +8,7 @@ class ControllerMain:
 
     def __init__(self):
         self.__usuario_logado = None
+        self.__tipo_usuario: TipoUsuario | None = None
         self.__controller_feirante = ControllerFeirante()
         self.__app = ViewMain(self)
 
@@ -20,14 +21,19 @@ class ControllerMain:
     def usuario_logado(self):
         return self.__usuario_logado
 
+    @property
+    def tipo_usuario(self):
+        return self.__tipo_usuario
+
     def iniciar_app(self):
         self.__app.mainloop()
 
-    def cadastrar_usuario(self, dados, tipo: str):
+    def cadastrar_usuario(self, dados, tipo: TipoUsuario):
         usuario = None
-        if tipo == TipoUsuario.FEIRANTE.value:
+        if tipo == TipoUsuario.FEIRANTE:
             usuario = self.__controller_feirante.cadastrar_feirante(dados)
-        if tipo == TipoUsuario.CLIENTE.value:
+        if tipo == TipoUsuario.CLIENTE:
             pass
         self.__usuario_logado = usuario
+        self.__tipo_usuario = tipo
         self.__app.alternar_telas('base')

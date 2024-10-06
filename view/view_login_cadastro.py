@@ -104,8 +104,9 @@ class ViewLoginCadastro(ctk.CTkFrame):
 
     def cadastrar_usuario(self, tipo: str):
         dados = None
-        if tipo == TipoUsuario.FEIRANTE.value:
+        tipo_usuario = TipoUsuario[tipo.upper()]
+        if tipo_usuario == TipoUsuario.FEIRANTE:
             dados = self.frame.frame_feirante.obter_dados_feirante()
-        if tipo == TipoUsuario.CLIENTE.value:
+        if tipo_usuario == TipoUsuario.CLIENTE:
             dados = self.frame.frame_cliente.obter_dados_cliente()
-        self.__controller_main.cadastrar_usuario(dados, tipo)
+        self.__controller_main.cadastrar_usuario(dados, tipo_usuario)
