@@ -56,7 +56,8 @@ class FrameDadosFeirante(ctk.CTkFrame):
         self.contato_entry.grid(row=3, column=1, sticky='new', padx=(10, 0))
 
         self.localizacao_label = ctk.CTkLabel(self, text='Localização', font=('system', 20))
-        self.localizacao_entry = ctk.CTkButton(self, height=40, text='Selecione sua localização no mapa', fg_color='#00bf63', text_color='white', command=ViewUtils.abrir_popup_mapa)
+        self.localizacao_entry = ctk.CTkButton(self, height=40, text='Selecione sua localização no mapa', fg_color='#00bf63', 
+                                               text_color='white', command=ViewUtils.abrir_popup_mapa)
         self.localizacao_label.grid(row=4, column=0, columnspan=2, sticky='w')
         self.localizacao_entry.grid(row=5, column=0, columnspan=2, sticky='new')
 
