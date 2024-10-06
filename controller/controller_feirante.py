@@ -17,15 +17,15 @@ class ControllerFeirante:
         return ControllerFeirante.__instancia
 
     def cadastrar_feirante(self, dados):
-        dados["senha"] = bcrypt.hashpw(bytes(dados["senha"], 'utf-8'), bcrypt.gensalt())
         feirante = self.criar_feirante(dados)
+        feirante.senha = bcrypt.hashpw(bytes(dados["senha"], 'utf-8'), bcrypt.gensalt())
         res = self.__dao_feirante.inserir_feirante(feirante)
         feirante.id = res.inserted_id
         return feirante
 
     def atualizar_feirante(self, id_feirante, dados):
-        dados["senha"] = bcrypt.hashpw(bytes(dados["senha"], 'utf-8'), bcrypt.gensalt())
         feirante = self.criar_feirante(dados)
+        feirante.senha = bcrypt.hashpw(bytes(dados["senha"], 'utf-8'), bcrypt.gensalt())
         feirante.id = id_feirante
         self.__dao_feirante.atualizar_feirante(feirante)
         return feirante
