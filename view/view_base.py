@@ -9,9 +9,9 @@ class FrameNavegacao(ctk.CTkFrame):
         super().__init__(master)
         self.configure(fg_color='#00bf63', corner_radius=0)
         self.grid_columnconfigure(0)
-        for i in range(4):
+        for i in range(5):
             self.grid_rowconfigure(i)
-        self.grid_rowconfigure(3, weight=1)
+        self.grid_rowconfigure(4, weight=1)
 
         self.map_telas = {
             'home': None,
@@ -56,6 +56,17 @@ class FrameNavegacao(ctk.CTkFrame):
         )
         self.botao_cesta.grid(row=2, column=0, sticky="ew")
 
+        icone_logout = ctk.CTkImage(light_image=Image.open("./assets/icone_logout.png"), size=(40, 40))
+        self.botao_logout = ctk.CTkButton(self,
+            image=icone_logout,
+            text="",
+            compound="left",
+            fg_color='#00bf63',
+            width=80,
+            height=80
+        )
+        self.botao_logout.grid(row=3, column=0, sticky="ew")
+
     def alternar_tela(self, tela: str):
         self.master.frame.grid_forget()
         if self.map_telas[tela]:
@@ -65,7 +76,7 @@ class FrameNavegacao(ctk.CTkFrame):
 
 class ViewBase(ctk.CTkFrame):
 
-    def __init__(self, master):
+    def __init__(self, master, controller_main):
         super().__init__(master)
         self.configure(fg_color='white')
         self.grid_columnconfigure(0)

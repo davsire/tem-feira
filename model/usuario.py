@@ -1,5 +1,11 @@
 from abc import ABC
+from enum import Enum
 from model.localizacao import Localizacao
+
+
+class TipoUsuario(Enum):
+    FEIRANTE = 'Feirante'
+    CLIENTE = 'Cliente'
 
 
 class Usuario(ABC):
@@ -13,6 +19,11 @@ class Usuario(ABC):
     @property
     def id(self):
         return self.__id
+
+    @id.setter
+    def id(self, id):
+        if self.__id is None:
+            self.__id = id
 
     @property
     def email(self) -> str:

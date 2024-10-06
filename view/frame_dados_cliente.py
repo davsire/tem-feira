@@ -28,13 +28,13 @@ class FrameDadosCliente(ctk.CTkFrame):
         self.grid_columnconfigure(2, weight=1)
 
         # Widget para entrada do nome
-        self.nome_label = ctk.CTkLabel(self, text='Nome', font=('system', 20))
+        self.nome_label = ctk.CTkLabel(self, text='Nome *', font=('system', 20))
         self.nome_entry = ctk.CTkEntry(self, height=40, placeholder_text='Digite seu nome')
         self.nome_label.grid(row=0, column=1, sticky='w')
         self.nome_entry.grid(row=1, column=1, sticky='new')
 
         # Widget para seleção da data de nascimento
-        self.data_nascimento_label = ctk.CTkLabel(self, text='Data de Nascimento', font=('system', 20))
+        self.data_nascimento_label = ctk.CTkLabel(self, text='Data de Nascimento *', font=('system', 20))
         self.data_nascimento_button = ctk.CTkButton(
             self, height=40, text='Selecione a data',
             fg_color='#00bf63', text_color='white',
@@ -44,7 +44,7 @@ class FrameDadosCliente(ctk.CTkFrame):
         self.data_nascimento_button.grid(row=3, column=1, sticky='new')
 
         # Widget para seleção da localização
-        self.localizacao_label = ctk.CTkLabel(self, text='Localização', font=('system', 20))
+        self.localizacao_label = ctk.CTkLabel(self, text='Localização *', font=('system', 20))
         self.localizacao_entry = ctk.CTkButton(
             self, height=40, text='Selecione sua localização no mapa',
             fg_color='#00bf63', text_color='white',
@@ -54,13 +54,13 @@ class FrameDadosCliente(ctk.CTkFrame):
         self.localizacao_entry.grid(row=5, column=1, sticky='new')
 
         # Widget para entrada do e-mail
-        self.email_label = ctk.CTkLabel(self, text='E-mail', font=('system', 20))
+        self.email_label = ctk.CTkLabel(self, text='E-mail *', font=('system', 20))
         self.email_entry = ctk.CTkEntry(self, height=40, placeholder_text='Digite seu e-mail')
         self.email_label.grid(row=6, column=1, sticky='w')
         self.email_entry.grid(row=7, column=1, sticky='new')
 
         # Widget para entrada da senha
-        self.senha_label = ctk.CTkLabel(self, text='Senha', font=('system', 20))
+        self.senha_label = ctk.CTkLabel(self, text='Senha *', font=('system', 20))
         self.senha_entry = ctk.CTkEntry(self, height=40, placeholder_text='Digite sua senha', show='*')
         self.senha_label.grid(row=8, column=1, sticky='w')
         self.senha_entry.grid(row=9, column=1, sticky='new')
@@ -124,3 +124,6 @@ class FrameDadosCliente(ctk.CTkFrame):
         # Botão para selecionar a data
         botao_selecao = ctk.CTkButton(popup, text="Selecionar", fg_color='#00bf63', text_color='white', command=selecionar_data)
         botao_selecao.pack(pady=20)
+
+    def obter_dados_cliente(self):
+        print('Obtendo dados cliente')
