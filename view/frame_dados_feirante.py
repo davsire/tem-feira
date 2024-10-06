@@ -17,7 +17,7 @@ class FrameDiaFuncionamento(ctk.CTkFrame):
 
         self.map_dias_funcionamento = {}
 
-        self.label_dias_funcionamento = ctk.CTkLabel(self, text='Dias de funcionamento', text_color='black', font=('system', 22))
+        self.label_dias_funcionamento = ctk.CTkLabel(self, text='Dias de funcionamento *', text_color='black', font=('system', 22))
         self.label_dias_funcionamento.grid(row=0, column=0, columnspan=3, pady=(0, 15), sticky='ew')
 
         self.label_abertura = ctk.CTkLabel(self, text='Abertura', text_color='black', font=('system', 16))
@@ -49,6 +49,17 @@ class FrameDiaFuncionamento(ctk.CTkFrame):
         entry.delete(0, ctk.END)
         entry.insert(0, conteudo)
 
+    def obter_dias_funcionamento(self):
+        dias_funcionamento = []
+        for dia_semana in DiaSemana:
+            if self.map_dias_funcionamento[dia_semana.name].get():
+                dias_funcionamento.append({
+                    'dia_semana': dia_semana.name,
+                    'horario_abertura': self.map_dias_funcionamento[dia_semana.name + '_abertura'].get(),
+                    'horario_fechamento': self.map_dias_funcionamento[dia_semana.name + '_fechamento'].get(),
+                })
+        return dias_funcionamento
+
 
 class FrameDadosFeirante(ctk.CTkFrame):
 
@@ -63,19 +74,19 @@ class FrameDadosFeirante(ctk.CTkFrame):
         self.grid_columnconfigure(1, weight=1)
         self.grid_columnconfigure(2, weight=10)
 
-        self.nome_feira_label = ctk.CTkLabel(self, text='Nome da feira', font=('system', 20))
+        self.nome_feira_label = ctk.CTkLabel(self, text='Nome da feira *', font=('system', 20))
         self.nome_feira_entry = ctk.CTkEntry(self, height=40, placeholder_text='Digite o nome da feira')
         self.nome_feira_label.grid(row=0, column=0, columnspan=2, sticky='w')
         self.nome_feira_entry.grid(row=1, column=0, columnspan=2, sticky='new')
 
-        self.contato_label = ctk.CTkLabel(self, text='Contato', font=('system', 20))
+        self.contato_label = ctk.CTkLabel(self, text='Contato *', font=('system', 20))
         self.forma_contato_entry = ctk.CTkComboBox(self, values=[fc.value for fc in FormaContato], width=150, height=40)
         self.contato_entry = ctk.CTkEntry(self, width=150, height=40, placeholder_text='Digite o contato')
         self.contato_label.grid(row=2, column=0, columnspan=2, sticky='w')
         self.forma_contato_entry.grid(row=3, column=0, sticky='new', padx=(0, 10))
         self.contato_entry.grid(row=3, column=1, sticky='new', padx=(10, 0))
 
-        self.localizacao_label = ctk.CTkLabel(self, text='Localização', font=('system', 20))
+        self.localizacao_label = ctk.CTkLabel(self, text='Localização *', font=('system', 20))
         self.localizacao_entry = ctk.CTkButton(
             self, height=40, text='Selecione sua localização no mapa',
             fg_color='#00bf63', text_color='white',
@@ -84,12 +95,12 @@ class FrameDadosFeirante(ctk.CTkFrame):
         self.localizacao_label.grid(row=4, column=0, columnspan=2, sticky='w')
         self.localizacao_entry.grid(row=5, column=0, columnspan=2, sticky='new')
 
-        self.email_label = ctk.CTkLabel(self, text='E-mail', font=('system', 20))
+        self.email_label = ctk.CTkLabel(self, text='E-mail *', font=('system', 20))
         self.email_entry = ctk.CTkEntry(self, height=40, placeholder_text='Digite seu e-mail')
         self.email_label.grid(row=6, column=0, columnspan=2, sticky='w')
         self.email_entry.grid(row=7, column=0, columnspan=2, sticky='new')
 
-        self.senha_label = ctk.CTkLabel(self, text='Senha', font=('system', 20))
+        self.senha_label = ctk.CTkLabel(self, text='Senha *', font=('system', 20))
         self.senha_entry = ctk.CTkEntry(self, height=40, placeholder_text='Digite sua senha', show='*')
         self.senha_label.grid(row=8, column=0, columnspan=2, sticky='w')
         self.senha_entry.grid(row=9, column=0, columnspan=2, sticky='new')
@@ -103,7 +114,7 @@ class FrameDadosFeirante(ctk.CTkFrame):
             self.__latitude, self.__longitude = coords
             mapa.delete_all_marker()
             mapa.set_marker(self.__latitude, self.__longitude, text="Sua feira")
-            print(f'Coordenadas: lat {self.__latitude}, long {self.__longitude}')
+            self.localizacao_entry.configure(text=f'Coordenadas: lat {self.__latitude:.3f}, lng {self.__longitude:.3f}')
 
         popup = ctk.CTkToplevel(self)
         popup.title("Localização")
@@ -121,4 +132,15 @@ class FrameDadosFeirante(ctk.CTkFrame):
         botao_fechar.pack(pady=10)
 
     def obter_dados_feirante(self):
-        print('Obtendo dados feirante')
+        return {
+            'email': self.email_entry.get(),
+            'senha': self.senha_entry.get(),
+            'nome_feira': self.nome_feira_entry.get(),
+            'forma_contato': self.forma_contato_entry.get(),
+            'contato': self.contato_entry.get(),
+            'localizacao': {
+                'latitude': self.__latitude,
+                'longitude': self.__longitude,
+            },
+            'dias_funcionamento': self.dias_funcionamento.obter_dias_funcionamento()
+        }

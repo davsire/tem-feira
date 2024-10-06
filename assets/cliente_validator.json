@@ -5,6 +5,7 @@
       "email",
       "senha",
       "nome",
+      "data_nascimento",
       "localizacao"
     ],
     "properties": {
@@ -40,8 +41,8 @@
             "description": "must be a double and is required"
           },
           "endereco": {
-            "bsonType": "string",
-            "description": "must be a string"
+            "bsonType": ["string", "null"],
+            "description": "must be a string or null"
           }
         }
       }

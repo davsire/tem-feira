@@ -17,12 +17,12 @@ class FrameDadosCliente(ctk.CTkFrame):
         self.grid_columnconfigure(1, weight=1)
         self.grid_columnconfigure(2, weight=1)
 
-        self.nome_label = ctk.CTkLabel(self, text='Nome', font=('system', 20))
+        self.nome_label = ctk.CTkLabel(self, text='Nome *', font=('system', 20))
         self.nome_entry = ctk.CTkEntry(self, height=40, placeholder_text='Digite seu nome')
         self.nome_label.grid(row=0, column=1, sticky='w')
         self.nome_entry.grid(row=1, column=1, sticky='new')
 
-        self.data_nascimento_label = ctk.CTkLabel(self, text='Data de Nascimento', font=('system', 20))
+        self.data_nascimento_label = ctk.CTkLabel(self, text='Data de Nascimento *', font=('system', 20))
         self.data_nascimento_button = ctk.CTkButton(
             self, height=40, text='Selecione a data',
             fg_color='#00bf63', text_color='white',
@@ -31,7 +31,7 @@ class FrameDadosCliente(ctk.CTkFrame):
         self.data_nascimento_label.grid(row=2, column=1, sticky='w')
         self.data_nascimento_button.grid(row=3, column=1, sticky='new')
 
-        self.localizacao_label = ctk.CTkLabel(self, text='Localização', font=('system', 20))
+        self.localizacao_label = ctk.CTkLabel(self, text='Localização *', font=('system', 20))
         self.localizacao_entry = ctk.CTkButton(
             self, height=40, text='Selecione sua localização no mapa',
            fg_color='#00bf63', text_color='white',
@@ -40,12 +40,12 @@ class FrameDadosCliente(ctk.CTkFrame):
         self.localizacao_label.grid(row=4, column=1, sticky='w')
         self.localizacao_entry.grid(row=5, column=1, sticky='new')
 
-        self.email_label = ctk.CTkLabel(self, text='E-mail', font=('system', 20))
+        self.email_label = ctk.CTkLabel(self, text='E-mail *', font=('system', 20))
         self.email_entry = ctk.CTkEntry(self, height=40, placeholder_text='Digite seu e-mail')
         self.email_label.grid(row=6, column=1, sticky='w')
         self.email_entry.grid(row=7, column=1, sticky='new')
 
-        self.senha_label = ctk.CTkLabel(self, text='Senha', font=('system', 20))
+        self.senha_label = ctk.CTkLabel(self, text='Senha *', font=('system', 20))
         self.senha_entry = ctk.CTkEntry(self, height=40, placeholder_text='Digite sua senha', show='*')
         self.senha_label.grid(row=8, column=1, sticky='w')
         self.senha_entry.grid(row=9, column=1, sticky='new')

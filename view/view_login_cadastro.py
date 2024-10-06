@@ -40,11 +40,12 @@ class FrameCadastro(ctk.CTkFrame):
         self.grid_rowconfigure(1, weight=1)
         self.grid_rowconfigure(2)
         self.grid_rowconfigure(3)
+        self.grid_rowconfigure(4)
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
 
         self.label_cadastro = ctk.CTkLabel(self, text='Cadastro', text_color='black', font=('system', 35, 'bold'))
-        self.label_cadastro.grid(row=0, column=0, padx=20, pady=(20, 10), sticky='w')
+        self.label_cadastro.grid(row=0, column=0, padx=20, pady=(20, 0), sticky='w')
 
         tabview = ctk.CTkTabview(
             self,
@@ -65,12 +66,15 @@ class FrameCadastro(ctk.CTkFrame):
         self.frame_cliente = FrameDadosCliente(tabview.tab(TipoUsuario.CLIENTE.value))
         self.frame_cliente.pack(fill="both", expand=True)
 
+        self.label_tem_conta = ctk.CTkLabel(self, text='* Campos obrigatórios', text_color='black', font=('system', 12, 'bold'))
+        self.label_tem_conta.grid(row=2, column=0, columnspan=2, padx=(30, 0), sticky='w')
+
         self.botao_cadastrar = ViewUtils.obter_botao(self, 'Cadastrar')
         self.botao_cadastrar.configure(command=lambda: master.cadastrar_usuario(tabview.get()))
-        self.botao_cadastrar.grid(row=2, column=0, columnspan=2, pady=(0, 15))
+        self.botao_cadastrar.grid(row=3, column=0, columnspan=2, pady=(0, 15))
 
         self.label_tem_conta = ctk.CTkLabel(self, text='Já Tem conta? Clique para fazer login!', text_color='#38b6ff', font=('system', 18, 'bold'))
-        self.label_tem_conta.grid(row=3, column=0, columnspan=2, pady=(0, 20))
+        self.label_tem_conta.grid(row=4, column=0, columnspan=2, pady=(0, 20))
         self.label_tem_conta.bind('<Button-1>', lambda e: master.alternar_tela('login'))
 
 

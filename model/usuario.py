@@ -20,6 +20,11 @@ class Usuario(ABC):
     def id(self):
         return self.__id
 
+    @id.setter
+    def id(self, id):
+        if self.__id is None:
+            self.__id = id
+
     @property
     def email(self) -> str:
         return self.__email

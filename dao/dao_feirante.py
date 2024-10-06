@@ -21,7 +21,7 @@ class DaoFeirante(DaoMain):
         return self.find_one({'email': email, 'senha': senha})
 
     def inserir_feirante(self, feirante: Feirante):
-        self.insert_one(feirante.to_dict())
+        return self.insert_one(feirante.to_dict())
 
     def atualizar_feirante(self, feirante: Feirante):
         self.update_one({ '_id': ObjectId(feirante.id) }, feirante.to_dict())

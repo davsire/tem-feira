@@ -65,7 +65,7 @@ class Feirante(Usuario):
             'email': self.email,
             'senha': self.senha,
             'nome_feira': self.nome_feira,
-            'forma_contato': self.forma_contato,
+            'forma_contato': self.forma_contato.name,
             'contato': self.contato,
             'localizacao': self.localizacao.to_dict(),
             'dias_funcionamento': [dia.to_dict() for dia in self.dias_funcionamento],

@@ -2,10 +2,10 @@
 
 class Localizacao:
 
-    def __init__(self, latitude: float, longitude: float, endereco: str):
+    def __init__(self, latitude: float, longitude: float):
         self.__latitude = latitude
         self.__longitude = longitude
-        self.__endereco = endereco
+        self.__endereco = None
 
     @property
     def latitude(self) -> float:

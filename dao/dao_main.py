@@ -19,13 +19,13 @@ class DaoMain(ABC):
         pass
 
     def find(self, query):
-        self.db.get_collection(self.obter_nome_collection()).find(query)
+        return self.db.get_collection(self.obter_nome_collection()).find(query)
 
     def find_one(self, query):
-        self.db.get_collection(self.obter_nome_collection()).find_one(query)
+        return self.db.get_collection(self.obter_nome_collection()).find_one(query)
 
     def insert_one(self, documento):
-        self.db.get_collection(self.obter_nome_collection()).insert_one(documento)
+        return self.db.get_collection(self.obter_nome_collection()).insert_one(documento)
 
     def update_one(self, query, documento):
         update = {
