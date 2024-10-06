@@ -22,6 +22,7 @@ class ViewUtils:
     @staticmethod
     def abrir_popup_mensagem(mensagem: str, cor_mensagem: str = 'black'):
         popup = ctk.CTkToplevel()
+        popup.attributes('-topmost', True)
         popup.configure(fg_color='white')
         popup.title("Aviso!")
         mensagem = ctk.CTkLabel(popup, text=mensagem, text_color=cor_mensagem, font=('system', 20))
@@ -32,6 +33,7 @@ class ViewUtils:
     @staticmethod
     def abrir_popup_confirmacao(mensagem: str, texto_acao: str, acao, cor_botao_acao: str = '#00bf63'):
         popup = ctk.CTkToplevel()
+        popup.attributes('-topmost', True)
         popup.configure(fg_color='white')
         popup.title("Confirmar ação")
         mensagem = ctk.CTkLabel(popup, text=mensagem, text_color='black', font=('system', 20))

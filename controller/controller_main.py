@@ -46,12 +46,15 @@ class ControllerMain:
     
     def logar_usuario(self, dados):
         try:
-            usuario = self.__controller_feirante.logar_feirante(dados)
-            # or self.__controller_cliente.cadastrar_cliente(dados)
-            if usuario:
-                self.__usuario_logado = usuario
+            feirante = self.__controller_feirante.logar_feirante(dados)
+            cliente = None # self.__controller_cliente.logar_cliente(dados)
+            if feirante or cliente:
+                self.__usuario_logado = feirante or cliente
+                self.__tipo_usuario_logado = TipoUsuario.FEIRANTE if feirante else TipoUsuario.CLIENTE
                 self.__app.alternar_telas('base')
-        except CampoObrigatorioException as e:
+                return
+            ViewUtils.abrir_popup_mensagem('E-mail ou senha incorretos!', 'red')
+        except Exception as e:
             ViewUtils.abrir_popup_mensagem(str(e), 'red')
 
     def atualizar_usuario(self, dados):

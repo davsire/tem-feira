@@ -10,7 +10,7 @@ class TipoUsuario(Enum):
 
 class Usuario(ABC):
 
-    def __init__(self, email: str, senha: str, localizacao: Localizacao):
+    def __init__(self, email: str, senha: bytes, localizacao: Localizacao):
         self.__id = None
         self.__email = email
         self.__senha = senha
@@ -34,11 +34,11 @@ class Usuario(ABC):
         self.__email = email
 
     @property
-    def senha(self) -> str:
+    def senha(self) -> bytes:
         return self.__senha
 
     @senha.setter
-    def senha(self, senha: str):
+    def senha(self, senha: bytes):
         self.__senha = senha
 
     @property
