@@ -1,5 +1,6 @@
 from controller.controller_feirante import ControllerFeirante
 from exception.campo_obrigatorio_exception import CampoObrigatorioException
+from model.feirante import Feirante
 from model.usuario import TipoUsuario
 from view.view_main import ViewMain
 from view.view_utils import ViewUtils
@@ -9,8 +10,8 @@ class ControllerMain:
     __instancia = None
 
     def __init__(self):
-        self.__usuario_logado = None
-        self.__tipo_usuario: TipoUsuario | None = None
+        self.__usuario_logado: Feirante | None = None
+        self.__tipo_usuario_logado: TipoUsuario | None = None
         self.__controller_feirante = ControllerFeirante()
         self.__app = ViewMain(self)
 
@@ -24,8 +25,8 @@ class ControllerMain:
         return self.__usuario_logado
 
     @property
-    def tipo_usuario(self):
-        return self.__tipo_usuario
+    def tipo_usuario_logado(self):
+        return self.__tipo_usuario_logado
 
     def iniciar_app(self):
         self.__app.mainloop()
@@ -39,7 +40,34 @@ class ControllerMain:
                 pass
             if usuario:
                 self.__usuario_logado = usuario
-                self.__tipo_usuario = tipo
+                self.__tipo_usuario_logado = tipo
                 self.__app.alternar_telas('base')
         except CampoObrigatorioException as e:
             ViewUtils.abrir_popup_mensagem(str(e), 'red')
+
+    def atualizar_usuario(self, dados):
+        try:
+            if self.__tipo_usuario_logado == TipoUsuario.FEIRANTE:
+                self.__usuario_logado = self.__controller_feirante.atualizar_feirante(self.__usuario_logado.id, dados)
+            if self.__tipo_usuario_logado == TipoUsuario.CLIENTE:
+                pass
+            ViewUtils.abrir_popup_mensagem('Dados atualizados com sucesso!', 'green')
+        except CampoObrigatorioException as e:
+            ViewUtils.abrir_popup_mensagem(str(e), 'red')
+
+    def confirmar_exclusao_conta(self):
+        ViewUtils.abrir_popup_confirmacao(
+            'Tem certeza que deseja excluir sua conta?',
+            'Excluir',
+            self.excluir_conta,
+            '#e21515'
+        )
+
+    def excluir_conta(self):
+        if self.__tipo_usuario_logado == TipoUsuario.FEIRANTE:
+            self.__controller_feirante.excluir_feirante(self.__usuario_logado)
+        if self.__tipo_usuario_logado == TipoUsuario.CLIENTE:
+            pass
+        self.__tipo_usuario_logado = None
+        self.__tipo_usuario_logado = None
+        self.__app.alternar_telas('login_cadastro')
