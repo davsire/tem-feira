@@ -1,7 +1,7 @@
 import customtkinter as ctk
+from tkintermapview import TkinterMapView
 from model.dia_funcionamento import DiaSemana
 from model.feirante import FormaContato
-from view.view_utils import ViewUtils
 
 
 class FrameDiaFuncionamento(ctk.CTkFrame):
@@ -54,6 +54,8 @@ class FrameDadosFeirante(ctk.CTkFrame):
 
     def __init__(self, master):
         super().__init__(master)
+        self.__latitude = None
+        self.__longitude = None
         self.configure(fg_color='white')
         for i in range(10):
             self.grid_rowconfigure(i, weight=i%2)
@@ -74,7 +76,7 @@ class FrameDadosFeirante(ctk.CTkFrame):
         self.contato_entry.grid(row=3, column=1, sticky='new', padx=(10, 0))
 
         self.localizacao_label = ctk.CTkLabel(self, text='Localização', font=('system', 20))
-        self.localizacao_entry = ctk.CTkButton(self, height=40, text='Selecione sua localização no mapa', fg_color='#00bf63', text_color='white', command=ViewUtils.abrir_popup_mapa)
+        self.localizacao_entry = ctk.CTkButton(self, height=40, text='Selecione sua localização no mapa', fg_color='#00bf63', text_color='white', command=self.abrir_popup_mapa)
         self.localizacao_label.grid(row=4, column=0, columnspan=2, sticky='w')
         self.localizacao_entry.grid(row=5, column=0, columnspan=2, sticky='new')
 
@@ -90,3 +92,26 @@ class FrameDadosFeirante(ctk.CTkFrame):
 
         self.dias_funcionamento = FrameDiaFuncionamento(self)
         self.dias_funcionamento.grid(column=2, row=0, rowspan=10, padx=30, sticky='ew')
+
+    def abrir_popup_mapa(self):
+
+        def adicionar_marcador(coords):
+            self.__latitude, self.__longitude = coords
+            mapa.delete_all_marker()
+            mapa.set_marker(self.__latitude, self.__longitude, text="Sua feira")
+            print(f'Coordenadas: lat {self.__latitude}, long {self.__longitude}')
+
+        popup = ctk.CTkToplevel()
+        popup.title("Localização")
+        popup.geometry("800x600")
+        label_popup = ctk.CTkLabel(popup, text="Selecione sua localização", font=('system', 24))
+        label_popup.pack(pady=20, padx=20)
+
+        mapa = TkinterMapView(popup, width=400, height=400, corner_radius=0)
+        mapa.pack(fill="both", expand=True)
+        mapa.set_position(-27.595378, -48.548050) # Coordenadas de Florianópolis
+        mapa.set_zoom(12)
+        mapa.add_left_click_map_command(adicionar_marcador)
+
+        botao_fechar = ctk.CTkButton(popup, text="Fechar", fg_color='#00bf63', text_color='white', command=popup.destroy)
+        botao_fechar.pack(pady=10)
