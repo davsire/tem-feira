@@ -34,6 +34,7 @@ class ControllerMain:
             usuario = self.__controller_feirante.cadastrar_feirante(dados)
         if tipo == TipoUsuario.CLIENTE:
             pass
-        self.__usuario_logado = usuario
-        self.__tipo_usuario = tipo
-        self.__app.alternar_telas('base')
+        if usuario:
+            self.__usuario_logado = usuario
+            self.__tipo_usuario = tipo
+            self.__app.alternar_telas('base')
