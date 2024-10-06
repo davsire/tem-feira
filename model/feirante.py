@@ -1,6 +1,7 @@
+import re
+from enum import Enum
 from exception.campo_obrigatorio_exception import CampoObrigatorioException
 from model.usuario import Usuario
-from enum import Enum
 from model.localizacao import Localizacao
 from model.dia_funcionamento import DiaFuncionamento
 
@@ -12,6 +13,7 @@ class FormaContato(Enum):
 
 
 class Feirante(Usuario):
+    email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
 
     def __init__(
             self,
@@ -90,6 +92,8 @@ class Feirante(Usuario):
             raise CampoObrigatorioException('Localização')
         if not email:
             raise CampoObrigatorioException('E-mail')
+        if not re.match(Feirante.email_regex, email):
+            raise Exception('Informe um e-mail válido!')
         if not senha:
             raise CampoObrigatorioException('Senha')
         if not dias_funcionamento:
