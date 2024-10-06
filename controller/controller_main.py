@@ -68,6 +68,6 @@ class ControllerMain:
             self.__controller_feirante.excluir_feirante(self.__usuario_logado)
         if self.__tipo_usuario_logado == TipoUsuario.CLIENTE:
             pass
-        self.__tipo_usuario_logado = None
+        self.__usuario_logado = None
         self.__tipo_usuario_logado = None
         self.__app.alternar_telas('login_cadastro')
