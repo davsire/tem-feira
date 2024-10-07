@@ -84,14 +84,8 @@ class FrameDadosCliente(ctk.CTkFrame):
         botao_fechar.pack(pady=10)
 
     def abrir_calendario(self):
-        """
-        Abre um popup com um calendário para selecionar a data de nascimento.
-        """
-
+        
         def selecionar_data():
-            """
-            Seleciona a data do calendário e atualiza o botão de data de nascimento.
-            """
             data_selecionada = cal.get_date()
             self.__data_nascimento = data_selecionada
             self.data_nascimento_button.configure(text=data_selecionada)

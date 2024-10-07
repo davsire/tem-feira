@@ -1,3 +1,4 @@
+import re
 from exception.campo_obrigatorio_exception import CampoObrigatorioException
 from model.usuario import Usuario
 from model.localizacao import Localizacao
@@ -57,5 +58,7 @@ class Cliente(Usuario):
             raise CampoObrigatorioException('Localização')
         if not email:
             raise CampoObrigatorioException('E-mail')
+        if not re.match(Cliente.email_regex, email):
+            raise Exception('Informe um e-mail válido!')
         if not senha:
             raise CampoObrigatorioException('Senha')
