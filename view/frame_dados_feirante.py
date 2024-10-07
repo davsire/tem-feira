@@ -132,6 +132,10 @@ class FrameDadosFeirante(ctk.CTkFrame):
         mapa.set_zoom(12)
         mapa.add_left_click_map_command(adicionar_marcador)
 
+        if self.__latitude and self.__longitude:
+            adicionar_marcador((self.__latitude, self.__longitude))
+            mapa.set_position(self.__latitude, self.__longitude)
+
         botao_fechar = ctk.CTkButton(popup, text="Confirmar", fg_color='#00bf63', text_color='white', command=popup.destroy)
         botao_fechar.pack(pady=10)
 
