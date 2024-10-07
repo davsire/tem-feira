@@ -1,22 +1,16 @@
 from exception.campo_obrigatorio_exception import CampoObrigatorioException
 from model.usuario import Usuario
-from enum import Enum
 from model.localizacao import Localizacao
 
-class FormaContato(Enum):
-    WHATSAPP = 'WHATSAPP'
-    INSTAGRAM = 'INSTAGRAM'
-    FACEBOOK = 'FACEBOOK'
 
 class Cliente(Usuario):
-
     def __init__(
             self,
             email: str,
-            senha: str,
-            data_nascimento: str,
+            senha: bytes,
             localizacao: Localizacao,
             nome: str,
+            data_nascimento: str,
     ):
         super().__init__(email, senha, localizacao)
         self.__validar_campos(email, senha, localizacao, nome, data_nascimento)
@@ -44,24 +38,24 @@ class Cliente(Usuario):
             'email': self.email,
             'senha': self.senha,
             'nome': self.nome,
-            'localizacao': self.localizacao.to_dict(),
-            'data_nascimento': self.data_nascimento
+            'data_nascimento': self.data_nascimento,
+            'localizacao': self.localizacao.to_dict()
         }
 
     def __validar_campos(self,
             email: str,
-            senha: str,
+            senha: bytes,
             localizacao: Localizacao,
             nome: str,
             data_nascimento: str
     ):
         if not nome:
             raise CampoObrigatorioException('Nome')
+        if not data_nascimento:
+            raise CampoObrigatorioException('Data de nascimento')
         if not localizacao:
             raise CampoObrigatorioException('Localização')
         if not email:
             raise CampoObrigatorioException('E-mail')
         if not senha:
             raise CampoObrigatorioException('Senha')
-        if not data_nascimento:
-            raise CampoObrigatorioException('Data de Nascimento')

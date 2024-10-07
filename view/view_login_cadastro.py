@@ -64,7 +64,7 @@ class FrameCadastro(ctk.CTkFrame):
         self.frame_feirante = FrameDadosFeirante(tabview.tab(TipoUsuario.FEIRANTE.value), None)
         self.frame_feirante.pack(fill="both", expand=True)
 
-        self.frame_cliente = FrameDadosCliente(tabview.tab(TipoUsuario.CLIENTE.value))
+        self.frame_cliente = FrameDadosCliente(tabview.tab(TipoUsuario.CLIENTE.value), None)
         self.frame_cliente.pack(fill="both", expand=True)
 
         self.label_tem_conta = ctk.CTkLabel(self, text='* Campos obrigatórios', text_color='black', font=('system', 12, 'bold'))

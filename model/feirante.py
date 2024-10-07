@@ -18,7 +18,7 @@ class Feirante(Usuario):
     def __init__(
             self,
             email: str,
-            senha: str,
+            senha: bytes,
             localizacao: Localizacao,
             nome_feira: str,
             forma_contato: FormaContato,
@@ -77,7 +77,7 @@ class Feirante(Usuario):
 
     def __validar_campos(self,
             email: str,
-            senha: str,
+            senha: bytes,
             localizacao: Localizacao,
             nome_feira: str,
             forma_contato: FormaContato,

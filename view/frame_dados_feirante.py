@@ -162,4 +162,3 @@ class FrameDadosFeirante(ctk.CTkFrame):
             self.dias_funcionamento.map_dias_funcionamento[dia_semana].select()
             self.dias_funcionamento.map_dias_funcionamento[dia_semana + '_abertura'].insert(0, dia_funcionamento.horario_abertura)
             self.dias_funcionamento.map_dias_funcionamento[dia_semana + '_fechamento'].insert(0, dia_funcionamento.horario_fechamento)
-            

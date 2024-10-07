@@ -1,4 +1,6 @@
+from controller.controller_cliente import ControllerCliente
 from controller.controller_feirante import ControllerFeirante
+from model.cliente import Cliente
 from model.feirante import Feirante
 from model.usuario import TipoUsuario
 from view.view_main import ViewMain
@@ -9,9 +11,10 @@ class ControllerMain:
     __instancia = None
 
     def __init__(self):
-        self.__usuario_logado: Feirante | None = None
+        self.__usuario_logado: Feirante | Cliente | None = None
         self.__tipo_usuario_logado: TipoUsuario | None = None
         self.__controller_feirante = ControllerFeirante()
+        self.__controller_cliente = ControllerCliente()
         self.__app = ViewMain(self)
 
     def __new__(cls):
@@ -20,11 +23,11 @@ class ControllerMain:
         return ControllerMain.__instancia
 
     @property
-    def usuario_logado(self):
+    def usuario_logado(self) -> Feirante | Cliente:
         return self.__usuario_logado
 
     @property
-    def tipo_usuario_logado(self):
+    def tipo_usuario_logado(self) -> TipoUsuario:
         return self.__tipo_usuario_logado
 
     def iniciar_app(self):
@@ -36,18 +39,18 @@ class ControllerMain:
             if tipo == TipoUsuario.FEIRANTE:
                 usuario = self.__controller_feirante.cadastrar_feirante(dados)
             if tipo == TipoUsuario.CLIENTE:
-                pass
+                usuario = self.__controller_cliente.cadastrar_cliente(dados)
             if usuario:
                 self.__usuario_logado = usuario
                 self.__tipo_usuario_logado = tipo
                 self.__app.alternar_telas('base')
         except Exception as e:
             ViewUtils.abrir_popup_mensagem(str(e), 'red')
-    
+
     def logar_usuario(self, dados):
         try:
             feirante = self.__controller_feirante.logar_feirante(dados)
-            cliente = None # self.__controller_cliente.logar_cliente(dados)
+            cliente = self.__controller_cliente.logar_cliente(dados)
             if feirante or cliente:
                 self.__usuario_logado = feirante or cliente
                 self.__tipo_usuario_logado = TipoUsuario.FEIRANTE if feirante else TipoUsuario.CLIENTE
@@ -62,7 +65,7 @@ class ControllerMain:
             if self.__tipo_usuario_logado == TipoUsuario.FEIRANTE:
                 self.__usuario_logado = self.__controller_feirante.atualizar_feirante(self.__usuario_logado.id, dados)
             if self.__tipo_usuario_logado == TipoUsuario.CLIENTE:
-                pass
+                self.__usuario_logado = self.__controller_cliente.atualizar_cliente(self.__usuario_logado.id, dados)
             ViewUtils.abrir_popup_mensagem('Dados atualizados com sucesso!', 'green')
         except Exception as e:
             ViewUtils.abrir_popup_mensagem(str(e), 'red')
@@ -84,5 +87,6 @@ class ControllerMain:
         if self.__tipo_usuario_logado == TipoUsuario.FEIRANTE:
             self.__controller_feirante.excluir_feirante(self.__usuario_logado)
         if self.__tipo_usuario_logado == TipoUsuario.CLIENTE:
-            pass
+            self.__controller_cliente.excluir_cliente(self.__usuario_logado)
         self.logout()
+        ViewUtils.abrir_popup_mensagem('Conta excluída com sucesso!', 'green')

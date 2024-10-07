@@ -14,16 +14,16 @@
         "description": "must be a string and is required"
       },
       "senha": {
-        "bsonType": "string",
-        "description": "must be a string and is required"
+        "bsonType": "binData",
+        "description": "must be a binData and is required"
       },
       "nome": {
         "bsonType": "string",
         "description": "must be a string and is required"
       },
       "data_nascimento": {
-        "bsonType": "timestamp",
-        "description": "must be a timestamp"
+        "bsonType": "string",
+        "description": "must be a string and is required"
       },
       "localizacao": {
         "bsonType": "object",

@@ -17,8 +17,8 @@ class DaoCliente(DaoMain):
     def obter_nome_collection(self) -> str:
         return 'clientes'
 
-    def obter_cliente_por_email_senha(self, email: str, senha: str) -> Cliente:
-        return self.find_one({'email': email, 'senha': senha})
+    def obter_cliente_por_email(self, email: str) -> dict:
+        return self.find_one({'email': email})
 
     def inserir_cliente(self, cliente: Cliente):
         return self.insert_one(cliente.to_dict())
