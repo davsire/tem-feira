@@ -19,7 +19,7 @@ class DadosCadastrais(ctk.CTkFrame):
         self.label_cadastro = ctk.CTkLabel(self, text='Dados cadastrais', text_color='black', font=('system', 35, 'bold'))
         self.label_cadastro.grid(row=0, column=0, pady=(0, 30), sticky='w')
 
-        self.frame_dados: FrameDadosFeirante | FrameDadosCliente = FrameDadosFeirante(self, self.__controller_main.usuario_logado)
+        self.frame_dados: FrameDadosFeirante | FrameDadosCliente = self.obter_frame_dados()
         self.frame_dados.grid(row=1, column=0, columnspan=2, sticky='new')
 
         self.botao_salvar = ViewUtils.obter_botao(self, 'Salvar')
@@ -30,12 +30,18 @@ class DadosCadastrais(ctk.CTkFrame):
         self.botao_excluir_conta.configure(command=self.excluir_conta)
         self.botao_excluir_conta.grid(column=0, row=2, padx=(140,0), pady=20, sticky='w')
 
+    def obter_frame_dados(self) -> FrameDadosFeirante | FrameDadosCliente:
+        if self.__controller_main.tipo_usuario_logado == TipoUsuario.FEIRANTE:
+            return FrameDadosFeirante(self, self.__controller_main.usuario_logado)
+        if self.__controller_main.tipo_usuario_logado == TipoUsuario.CLIENTE:
+            return FrameDadosCliente(self, self.__controller_main.usuario_logado)
+
     def atualizar_conta(self):
         dados = None
         if self.__controller_main.tipo_usuario_logado == TipoUsuario.FEIRANTE:
             dados = self.frame_dados.obter_dados_feirante()
         if self.__controller_main.tipo_usuario_logado == TipoUsuario.CLIENTE:
-            pass
+            dados = self.frame_dados.obter_dados_cliente()
         self.__controller_main.atualizar_usuario(dados)
 
     def excluir_conta(self):

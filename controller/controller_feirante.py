@@ -1,8 +1,8 @@
+import bcrypt
 from dao.dao_feirante import DaoFeirante
 from model.dia_funcionamento import DiaFuncionamento, DiaSemana
 from model.feirante import Feirante, FormaContato
 from model.localizacao import Localizacao
-import bcrypt
 
 
 class ControllerFeirante:
@@ -16,14 +16,14 @@ class ControllerFeirante:
             ControllerFeirante.__instancia = object.__new__(cls)
         return ControllerFeirante.__instancia
 
-    def cadastrar_feirante(self, dados):
+    def cadastrar_feirante(self, dados) -> Feirante:
         feirante = self.criar_feirante(dados)
         feirante.senha = bcrypt.hashpw(bytes(dados["senha"], 'utf-8'), bcrypt.gensalt())
         res = self.__dao_feirante.inserir_feirante(feirante)
         feirante.id = res.inserted_id
         return feirante
 
-    def atualizar_feirante(self, id_feirante, dados):
+    def atualizar_feirante(self, id_feirante, dados) -> Feirante:
         feirante = self.criar_feirante(dados)
         feirante.senha = bcrypt.hashpw(bytes(dados["senha"], 'utf-8'), bcrypt.gensalt())
         feirante.id = id_feirante
