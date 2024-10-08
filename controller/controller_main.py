@@ -1,5 +1,6 @@
 from controller.controller_cliente import ControllerCliente
 from controller.controller_feirante import ControllerFeirante
+from controller.controller_mapa import ControllerMapa
 from model.cliente import Cliente
 from model.feirante import Feirante
 from model.usuario import TipoUsuario
@@ -90,3 +91,11 @@ class ControllerMain:
             self.__controller_cliente.excluir_cliente(self.__usuario_logado)
         self.logout()
         ViewUtils.abrir_popup_mensagem('Conta excluída com sucesso!', 'green')
+ 
+    def obter_coordenada_usuario_logado(self):
+        if self.__usuario_logado and hasattr(self.__usuario_logado, 'localizacao'):
+            print(self.__usuario_logado)
+            localizacao = self.__usuario_logado.localizacao
+            
+            return (localizacao.latitude, localizacao.longitude)
+        return None
