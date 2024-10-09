@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from view.view_login_cadastro import ViewLoginCadastro
 from view.view_base import ViewBase
+from view.view_mapa import ViewMapa
 
 
 class ViewMain(ctk.CTk):
@@ -19,6 +20,7 @@ class ViewMain(ctk.CTk):
         self.map_telas = {
             'login_cadastro': ViewLoginCadastro,
             'base': ViewBase,
+
         }
 
         self.frame = ViewLoginCadastro(self, self.__controller_main)
