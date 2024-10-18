@@ -55,5 +55,11 @@ class ControllerFeirante:
             feirante.id = feirante_mongo['_id']
             return feirante
 
+    def obter_feirante_por_email(self, email: str) -> Feirante | None:
+        feirante_mongo = self.__dao_feirante.obter_feirante_por_email(email)
+        if feirante_mongo is None:
+            return None
+        return self.criar_feirante(feirante_mongo)
+
     def excluir_feirante(self, feirante: Feirante):
         self.__dao_feirante.excluir_feirante(feirante)

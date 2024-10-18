@@ -1,3 +1,4 @@
+from datetime import datetime
 import customtkinter as ctk
 from tkintermapview import TkinterMapView
 import tkcalendar as tkcal
@@ -95,7 +96,7 @@ class FrameDadosCliente(ctk.CTkFrame):
         popup.attributes('-topmost', True)
         popup.title("Calendário")
         popup.geometry("500x500")
-        cal = tkcal.Calendar(popup, selectmode='day', date_pattern='dd/mm/yyyy', year=2000, month=6)
+        cal = tkcal.Calendar(popup, selectmode='day', date_pattern='dd/mm/yyyy', year=2000, month=6, maxdate=datetime.now())
         cal.pack(pady=40, padx=40, expand=True, fill='both')
 
         botao_selecao = ctk.CTkButton(popup, text="Selecionar", fg_color='#00bf63', text_color='white', command=selecionar_data)
