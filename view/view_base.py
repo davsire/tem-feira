@@ -76,20 +76,12 @@ class ViewBase(ctk.CTkFrame):
         self.grid_columnconfigure(1, weight=1)
         self.grid_columnconfigure(2)
         self.grid_rowconfigure(0, weight=1)
-        
-        
-        if self.__controller_main.tipo_usuario_logado == TipoUsuario.CLIENTE:
-            self.map_telas = {
-            'home': ViewMapa,
+
+        self.map_telas = {
+            'home': ViewMapa if self.__controller_main.tipo_usuario_logado == TipoUsuario.CLIENTE else None,
             'usuario': DadosCadastrais,
             'cestas': None,
-            }
-        else:
-            self.map_telas = {
-            'home': None,
-            'usuario': DadosCadastrais,
-            'cestas': None,
-            }
+        }
 
         self.navegacao = FrameNavegacao(self)
         self.navegacao.grid(column=0, row=0, sticky="nsew")

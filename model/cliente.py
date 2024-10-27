@@ -17,7 +17,6 @@ class Cliente(Usuario):
         self.__validar_campos(email, senha, localizacao, nome, data_nascimento)
         self.__nome = nome
         self.__data_nascimento = data_nascimento
-        self.__localizacao = localizacao
 
     @property
     def nome(self) -> str:
@@ -34,10 +33,6 @@ class Cliente(Usuario):
     @data_nascimento.setter
     def data_nascimento(self, data_nascimento: str):
         self.__data_nascimento = data_nascimento
-        
-    @property
-    def localizacao(self) -> Localizacao:
-        return self.__localizacao
 
     def to_dict(self):
         return {

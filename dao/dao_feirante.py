@@ -28,8 +28,8 @@ class DaoFeirante(DaoMain):
 
     def excluir_feirante(self, feirante: Feirante):
         self.delete_one({ '_id': ObjectId(feirante.id) })
-        
-    def buscar_latitudes_longitudes(self):
+
+    def obter_localizacoes_feirantes(self):
         feirantes = self.find({})
         localizacoes = []
         for feirante in feirantes:
