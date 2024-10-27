@@ -1,0 +1,38 @@
+{
+  "$jsonSchema": {
+    "bsonType": "object",
+    "required": [
+      "nome",
+      "preco",
+      "quantidade",
+      "unidade",
+      "feirante"
+    ],
+    "properties": {
+      "nome": {
+        "bsonType": "string",
+        "description": "must be a string and is required"
+      },
+      "preco": {
+        "bsonType": "double",
+        "description": "must be a double and is required"
+      },
+      "imagem": {
+        "bsonType": "string",
+        "description": "must be a string"
+      },
+      "quantidade": {
+        "bsonType": "double",
+        "description": "must be a double and is required"
+      },
+      "unidade": {
+        "bsonType": "string",
+        "description": "must be a string and is required"
+      },
+      "feirante": {
+        "bsonType": "objectId",
+        "description": "must be a objectId and is required"
+      }
+    }
+  }
+}

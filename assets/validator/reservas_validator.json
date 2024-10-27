@@ -1,0 +1,42 @@
+{
+  "$jsonSchema": {
+    "bsonType": "object",
+    "required": [
+      "cesta",
+      "cliente",
+      "status",
+      "data_reserva",
+      "disponivel_ate"
+    ],
+    "properties": {
+      "cesta": {
+        "bsonType": "objectId",
+        "description": "must be a objectId and is required"
+      },
+      "cliente": {
+        "bsonType": "objectId",
+        "description": "must be a objectId and is required"
+      },
+      "status": {
+        "bsonType": "string",
+        "description": "must be a string and is required"
+      },
+      "data_reserva": {
+        "bsonType": "timestamp",
+        "description": "must be a timestamp and is required"
+      },
+      "data_entrega": {
+        "bsonType": "timestamp",
+        "description": "must be a timestamp"
+      },
+      "data_cancelamento": {
+        "bsonType": "timestamp",
+        "description": "must be a timestamp"
+      },
+      "disponivel_ate": {
+        "bsonType": "timestamp",
+        "description": "must be a timestamp and is required"
+      }
+    }
+  }
+}
