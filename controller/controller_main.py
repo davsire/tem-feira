@@ -35,7 +35,7 @@ class ControllerMain:
 
     def cadastrar_usuario(self, dados, tipo: TipoUsuario):
         if dados['email'] and self.__validar_email_existente(dados['email']):
-            ViewUtils.abrir_popup_mensagem('E-mail já cadastrado no sistema!', 'red')
+            ViewUtils.abrir_popup_mensagem('E-mail já cadastrado no sistema!', '#bf1900')
             return
         try:
             usuario = None
@@ -48,7 +48,7 @@ class ControllerMain:
                 self.__tipo_usuario_logado = tipo
                 self.__app.alternar_telas('base')
         except Exception as e:
-            ViewUtils.abrir_popup_mensagem(str(e), 'red')
+            ViewUtils.abrir_popup_mensagem(str(e), '#bf1900')
 
     def logar_usuario(self, dados):
         try:
@@ -59,9 +59,9 @@ class ControllerMain:
                 self.__tipo_usuario_logado = TipoUsuario.FEIRANTE if feirante else TipoUsuario.CLIENTE
                 self.__app.alternar_telas('base')
                 return
-            ViewUtils.abrir_popup_mensagem('E-mail ou senha incorretos!', 'red')
+            ViewUtils.abrir_popup_mensagem('E-mail ou senha incorretos!', '#bf1900')
         except Exception as e:
-            ViewUtils.abrir_popup_mensagem(str(e), 'red')
+            ViewUtils.abrir_popup_mensagem(str(e), '#bf1900')
 
     def atualizar_usuario(self, dados):
         try:
@@ -71,7 +71,7 @@ class ControllerMain:
                 self.__usuario_logado = self.__controller_cliente.atualizar_cliente(self.__usuario_logado.id, dados)
             ViewUtils.abrir_popup_mensagem('Dados atualizados com sucesso!', 'green')
         except Exception as e:
-            ViewUtils.abrir_popup_mensagem(str(e), 'red')
+            ViewUtils.abrir_popup_mensagem(str(e), '#bf1900')
 
     def confirmar_exclusao_conta(self):
         ViewUtils.abrir_popup_confirmacao(

@@ -28,7 +28,7 @@ class ViewMapa(ctk.CTkFrame):
     def plotar_feiras(self):
         localizacoes = self.__controller_main.obter_localizacoes_feirantes()
         for nome_feira, latitude, longitude in localizacoes:
-            self.mapa.set_marker(latitude, longitude, text=nome_feira, marker_color_circle='red', marker_color_outside='darkred')
+            self.mapa.set_marker(latitude, longitude, text=nome_feira, marker_color_circle='red', marker_color_outside='#bf1900')
         
     def plotar_usuario_logado(self):
         localizacao_usuario = self.__controller_main.obter_localizacao_usuario_logado()
@@ -54,7 +54,7 @@ class ViewMapa(ctk.CTkFrame):
         feira_legenda = ctk.CTkLabel(
             legenda_frame,
             text="Feira",
-            fg_color='red',
+            fg_color='#bf1900',
             corner_radius=5,
             width=10,
             text_color='white',
