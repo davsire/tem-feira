@@ -3,6 +3,7 @@ from dao.dao_feirante import DaoFeirante
 from model.dia_funcionamento import DiaFuncionamento, DiaSemana
 from model.feirante import Feirante, FormaContato
 from model.localizacao import Localizacao
+from services.service_geoapify import ServiceGeoapify
 
 
 class ControllerFeirante:
@@ -10,6 +11,7 @@ class ControllerFeirante:
 
     def __init__(self):
         self.__dao_feirante = DaoFeirante()
+        self.__service_geoapify = ServiceGeoapify()
 
     def __new__(cls):
         if ControllerFeirante.__instancia is None:
@@ -18,6 +20,8 @@ class ControllerFeirante:
 
     def cadastrar_feirante(self, dados) -> Feirante:
         feirante = self.criar_feirante(dados)
+        endereco = self.__service_geoapify.obter_endereco_por_lat_long(feirante.localizacao.latitude, feirante.localizacao.longitude)
+        feirante.localizacao.endereco = endereco
         feirante.senha = bcrypt.hashpw(bytes(dados["senha"], 'utf-8'), bcrypt.gensalt())
         res = self.__dao_feirante.inserir_feirante(feirante)
         feirante.id = res.inserted_id
