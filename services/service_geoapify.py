@@ -19,6 +19,6 @@ class ServiceGeoapify:
     def obter_endereco_por_lat_long(self, latitude: float, longitude: float) -> str | None:
         try:
             data = requests.get(f'{self.__base_url}/geocode/reverse?lat={latitude}&lon={longitude}&format=json&lang=pt&apiKey={self.__api_key}').json()
-            return data['results'][0]['address_line2']
+            return data['results'][0]['formatted']
         except:
             return None

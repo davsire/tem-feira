@@ -17,7 +17,7 @@ class FrameNavegacao(ctk.CTkFrame):
         self.grid_rowconfigure(3, weight=1)
         self.botoes = {}
 
-        icone_home = ctk.CTkImage(light_image=Image.open("./assets/icone_home.png"), size=(40, 40))
+        icone_home = ctk.CTkImage(light_image=Image.open("./assets/img/icone_home.png"), size=(40, 40))
         self.botoes['home'] = ctk.CTkButton(
             self,
             image=icone_home,
@@ -30,7 +30,7 @@ class FrameNavegacao(ctk.CTkFrame):
         )
         self.botoes['home'].grid(row=0, column=0, sticky="ew")
 
-        icone_usuario = ctk.CTkImage(light_image=Image.open("./assets/icone_usuario.png"), size=(40, 40))
+        icone_usuario = ctk.CTkImage(light_image=Image.open("./assets/img/icone_usuario.png"), size=(40, 40))
         self.botoes['usuario'] = ctk.CTkButton(self,
             image=icone_usuario,
             text="",
@@ -42,7 +42,7 @@ class FrameNavegacao(ctk.CTkFrame):
         )
         self.botoes['usuario'].grid(row=1, column=0, sticky="ew")
 
-        icone_cesta = ctk.CTkImage(light_image=Image.open("./assets/icone_cesta.png"), size=(40, 40))
+        icone_cesta = ctk.CTkImage(light_image=Image.open("./assets/img/icone_cesta.png"), size=(40, 40))
         self.botoes['cestas'] = ctk.CTkButton(self,
             image=icone_cesta,
             text="",
@@ -54,7 +54,7 @@ class FrameNavegacao(ctk.CTkFrame):
         )
         self.botoes['cestas'].grid(row=2, column=0, sticky="ew")
 
-        icone_logout = ctk.CTkImage(light_image=Image.open("./assets/icone_logout.png"), size=(40, 40))
+        icone_logout = ctk.CTkImage(light_image=Image.open("./assets/img/icone_logout.png"), size=(40, 40))
         self.botoes['logout'] = ctk.CTkButton(self,
             image=icone_logout,
             text="",
@@ -95,7 +95,7 @@ class ViewBase(ctk.CTkFrame):
         self.frame = DadosCadastrais(self, self.__controller_main)
         self.frame.grid(column=1, row=0, padx=25, pady=25, sticky="nsew")
 
-        tem_feira_logo = Image.open('./assets/logo_tem_feira.png')
+        tem_feira_logo = Image.open('./assets/img/logo_tem_feira.png')
         self.tem_feira_logo = ctk.CTkImage(light_image=tem_feira_logo, size=(90, 60))
         self.tem_feira_logo_lbl = ctk.CTkLabel(self, image=self.tem_feira_logo, text='')
         self.tem_feira_logo_lbl.grid(column=2, row=0, padx=(0, 15), pady=15, sticky="new")

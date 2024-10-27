@@ -36,24 +36,13 @@ class DaoMain(ABC):
     def delete_one(self, query):
         self.db.get_collection(self.obter_nome_collection()).delete_one(query)
 
-    def criar_collection_feirantes(self):
-        with open('./assets/feirante_validator.json') as feirante_validator_file:
-            feirante_validator = json.load(feirante_validator_file)
+    def criar_collection(self, nome_collection: str):
+        with open(f'./assets/validator/{nome_collection}_validator.json') as collection_validator_file:
+            collection_validator = json.load(collection_validator_file)
 
         try:
-            self.db.create_collection("feirantes")
+            self.db.create_collection(nome_collection)
         except Exception as e:
             print(e)
 
-        self.db.command("collMod", "feirantes", validator=feirante_validator)
-
-    def criar_collection_clientes(self):
-        with open('./assets/cliente_validator.json') as cliente_validator_file:
-            cliente_validator = json.load(cliente_validator_file)
-
-        try:
-            self.db.create_collection("clientes")
-        except Exception as e:
-            print(e)
-
-        self.db.command("collMod", "clientes", validator=cliente_validator)
+        self.db.command("collMod", nome_collection, validator=collection_validator)
