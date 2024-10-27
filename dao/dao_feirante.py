@@ -33,9 +33,15 @@ class DaoFeirante(DaoMain):
         feirantes = self.find({})
         localizacoes = []
         for feirante in feirantes:
+            id_feira = feirante.get('_id')
             nome_feira = feirante.get('nome_feira')
             latitude = feirante.get('localizacao', {}).get('latitude')
             longitude = feirante.get('localizacao', {}).get('longitude')
-            if nome_feira and latitude is not None and longitude is not None:
-                localizacoes.append((nome_feira, latitude, longitude))
+            if id_feira and nome_feira and latitude and longitude:
+                localizacoes.append({
+                    'id_feira': id_feira,
+                    'nome_feira': nome_feira,
+                    'latitude': latitude,
+                    'longitude': longitude
+                })
         return localizacoes
