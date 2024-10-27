@@ -94,6 +94,15 @@ class ControllerMain:
         self.logout()
         ViewUtils.abrir_popup_mensagem('Conta excluída com sucesso!', 'green')
 
+    def obter_localizacao_usuario_logado(self):
+        if self.__usuario_logado and hasattr(self.__usuario_logado, 'localizacao'):
+            localizacao = self.__usuario_logado.localizacao
+            return localizacao.latitude, localizacao.longitude
+        return None
+
+    def obter_localizacoes_feirantes(self):
+        return self.__controller_feirante.obter_localizacoes_feirantes()
+
     def __validar_email_existente(self, email: str) -> bool:
         feirante = self.__controller_feirante.obter_feirante_por_email(email)
         cliente = self.__controller_cliente.obter_cliente_por_email(email)

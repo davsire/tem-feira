@@ -63,3 +63,6 @@ class ControllerFeirante:
 
     def excluir_feirante(self, feirante: Feirante):
         self.__dao_feirante.excluir_feirante(feirante)
+
+    def obter_localizacoes_feirantes(self):
+        return self.__dao_feirante.obter_localizacoes_feirantes()

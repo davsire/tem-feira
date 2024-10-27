@@ -1,6 +1,9 @@
 import customtkinter as ctk
 from PIL import Image
 from view.view_dados_cadastrais import DadosCadastrais
+from view.view_mapa import ViewMapa
+from model.usuario import TipoUsuario
+
 
 
 class FrameNavegacao(ctk.CTkFrame):
@@ -12,9 +15,10 @@ class FrameNavegacao(ctk.CTkFrame):
         for i in range(4):
             self.grid_rowconfigure(i)
         self.grid_rowconfigure(3, weight=1)
+        self.botoes = {}
 
         icone_home = ctk.CTkImage(light_image=Image.open("./assets/icone_home.png"), size=(40, 40))
-        self.botao_home = ctk.CTkButton(
+        self.botoes['home'] = ctk.CTkButton(
             self,
             image=icone_home,
             text="",
@@ -24,22 +28,22 @@ class FrameNavegacao(ctk.CTkFrame):
             height=80,
             command=lambda: master.alternar_tela('home')
         )
-        self.botao_home.grid(row=0, column=0, sticky="ew")
+        self.botoes['home'].grid(row=0, column=0, sticky="ew")
 
         icone_usuario = ctk.CTkImage(light_image=Image.open("./assets/icone_usuario.png"), size=(40, 40))
-        self.botao_usuario = ctk.CTkButton(self,
+        self.botoes['usuario'] = ctk.CTkButton(self,
             image=icone_usuario,
             text="",
             compound="left",
-            fg_color='#00bf63',
+            fg_color='#bf1900',
             width=80,
             height=80,
             command=lambda: master.alternar_tela('usuario')
         )
-        self.botao_usuario.grid(row=1, column=0, sticky="ew")
+        self.botoes['usuario'].grid(row=1, column=0, sticky="ew")
 
         icone_cesta = ctk.CTkImage(light_image=Image.open("./assets/icone_cesta.png"), size=(40, 40))
-        self.botao_cesta = ctk.CTkButton(self,
+        self.botoes['cestas'] = ctk.CTkButton(self,
             image=icone_cesta,
             text="",
             compound="left",
@@ -48,10 +52,10 @@ class FrameNavegacao(ctk.CTkFrame):
             height=80,
             command=lambda: master.alternar_tela('cestas')
         )
-        self.botao_cesta.grid(row=2, column=0, sticky="ew")
+        self.botoes['cestas'].grid(row=2, column=0, sticky="ew")
 
         icone_logout = ctk.CTkImage(light_image=Image.open("./assets/icone_logout.png"), size=(40, 40))
-        self.botao_logout = ctk.CTkButton(self,
+        self.botoes['logout'] = ctk.CTkButton(self,
             image=icone_logout,
             text="",
             compound="left",
@@ -60,7 +64,12 @@ class FrameNavegacao(ctk.CTkFrame):
             height=80,
             command=lambda: master.logout()
         )
-        self.botao_logout.grid(row=3, column=0, pady=10, sticky="sew")
+        self.botoes['logout'].grid(row=3, column=0, pady=10, sticky="sew")
+
+    def selecionar_botao(self, botao: str):
+        for b in list(self.botoes.values()):
+            b.configure(fg_color='#00bf63')
+        self.botoes[botao].configure(fg_color='#bf1900')
 
 
 class ViewBase(ctk.CTkFrame):
@@ -75,7 +84,7 @@ class ViewBase(ctk.CTkFrame):
         self.grid_rowconfigure(0, weight=1)
 
         self.map_telas = {
-            'home': None,
+            'home': ViewMapa if self.__controller_main.tipo_usuario_logado == TipoUsuario.CLIENTE else None,
             'usuario': DadosCadastrais,
             'cestas': None,
         }
@@ -93,6 +102,7 @@ class ViewBase(ctk.CTkFrame):
 
     def alternar_tela(self, tela: str):
         self.frame.grid_forget()
+        self.navegacao.selecionar_botao(tela)
         if self.map_telas[tela]:
             self.frame = self.map_telas[tela](self, self.__controller_main)
             self.frame.grid(column=1, row=0, padx=25, pady=25, sticky="nsew")
