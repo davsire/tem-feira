@@ -48,5 +48,11 @@ class ControllerCliente:
             cliente.id = cliente_mongo['_id']
             return cliente
 
+    def obter_cliente_por_email(self, email: str) -> Cliente | None:
+        cliente_mongo = self.__dao_cliente.obter_cliente_por_email(email)
+        if cliente_mongo is None:
+            return None
+        return self.criar_cliente(cliente_mongo)
+
     def excluir_cliente(self, cliente: Cliente):
         self.__dao_cliente.excluir_cliente(cliente)

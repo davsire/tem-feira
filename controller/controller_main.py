@@ -35,6 +35,9 @@ class ControllerMain:
         self.__app.mainloop()
 
     def cadastrar_usuario(self, dados, tipo: TipoUsuario):
+        if dados['email'] and self.__validar_email_existente(dados['email']):
+            ViewUtils.abrir_popup_mensagem('E-mail já cadastrado no sistema!', 'red')
+            return
         try:
             usuario = None
             if tipo == TipoUsuario.FEIRANTE:
@@ -99,3 +102,8 @@ class ControllerMain:
             
             return (localizacao.latitude, localizacao.longitude)
         return None
+
+    def __validar_email_existente(self, email: str) -> bool:
+        feirante = self.__controller_feirante.obter_feirante_por_email(email)
+        cliente = self.__controller_cliente.obter_cliente_por_email(email)
+        return bool(feirante or cliente)
