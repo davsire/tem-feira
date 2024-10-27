@@ -3,7 +3,7 @@ from dao.dao_feirante import DaoFeirante
 from model.dia_funcionamento import DiaFuncionamento, DiaSemana
 from model.feirante import Feirante, FormaContato
 from model.localizacao import Localizacao
-from services.service_geoapify import ServiceGeoapify
+from service.service_geoapify import ServiceGeoapify
 
 
 class ControllerFeirante:
