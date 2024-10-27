@@ -26,7 +26,7 @@ class DadosCadastrais(ctk.CTkFrame):
         self.botao_salvar.configure(command=self.atualizar_conta)
         self.botao_salvar.grid(column=0, row=2, sticky='w')
 
-        self.botao_excluir_conta = ViewUtils.obter_botao(self, 'Excluir conta', '#e21515')
+        self.botao_excluir_conta = ViewUtils.obter_botao(self, 'Excluir conta', '#bf1900')
         self.botao_excluir_conta.configure(command=self.excluir_conta)
         self.botao_excluir_conta.grid(column=0, row=2, padx=(140,0), pady=20, sticky='w')
 

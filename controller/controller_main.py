@@ -78,7 +78,7 @@ class ControllerMain:
             'Tem certeza que deseja excluir sua conta?',
             'Excluir',
             self.excluir_conta,
-            '#e21515'
+            '#bf1900'
         )
 
     def logout(self):
