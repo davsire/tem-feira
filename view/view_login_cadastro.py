@@ -93,7 +93,7 @@ class ViewLoginCadastro(ctk.CTkFrame):
             'cadastro': FrameCadastro,
         }
 
-        tem_feira_img = Image.open('./assets/tem_feira.png')
+        tem_feira_img = Image.open('./assets/img/tem_feira.png')
         self.tem_feira_img = ctk.CTkImage(light_image=tem_feira_img, size=(400, 720))
         self.tem_feira_img_lbl = ctk.CTkLabel(self, image=self.tem_feira_img, text='')
         self.tem_feira_img_lbl.grid(column=1)

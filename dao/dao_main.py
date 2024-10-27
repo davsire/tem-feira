@@ -37,7 +37,7 @@ class DaoMain(ABC):
         self.db.get_collection(self.obter_nome_collection()).delete_one(query)
 
     def criar_collection_feirantes(self):
-        with open('./assets/feirante_validator.json') as feirante_validator_file:
+        with open('./assets/validator/feirante_validator.json') as feirante_validator_file:
             feirante_validator = json.load(feirante_validator_file)
 
         try:
@@ -48,7 +48,7 @@ class DaoMain(ABC):
         self.db.command("collMod", "feirantes", validator=feirante_validator)
 
     def criar_collection_clientes(self):
-        with open('./assets/cliente_validator.json') as cliente_validator_file:
+        with open('./assets/validator/cliente_validator.json') as cliente_validator_file:
             cliente_validator = json.load(cliente_validator_file)
 
         try:
