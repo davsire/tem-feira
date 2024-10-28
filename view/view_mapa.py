@@ -19,6 +19,7 @@ class ViewMapa(ctk.CTkFrame):
 
         self.busca_input = ctk.CTkEntry(self, placeholder_text='Buscar feira pelo nome...', height=35)
         self.busca_input.grid(row=0, column=0, sticky='ew', pady=(0, 15))
+        self.busca_input.bind('<Return>', command=lambda e: self.buscar_feirante())
         self.busca_botao = ViewUtils.obter_botao(self, 'Buscar')
         self.busca_botao.grid(row=0, column=1, sticky='ew', pady=(0, 15), padx=(10, 0))
         self.busca_botao.configure(height=35, command=self.buscar_feirante)
