@@ -70,3 +70,9 @@ class ControllerFeirante:
 
     def obter_localizacoes_feirantes(self):
         return self.__dao_feirante.obter_localizacoes_feirantes()
+
+    def obter_feirante_por_nome(self, nome: str) -> Feirante | None:
+        feirante_mongo = self.__dao_feirante.obter_feirante_por_nome(nome)
+        if feirante_mongo is None:
+            return None
+        return self.criar_feirante(feirante_mongo)

@@ -103,6 +103,9 @@ class ControllerMain:
     def obter_localizacoes_feirantes(self):
         return self.__controller_feirante.obter_localizacoes_feirantes()
 
+    def obter_feirante_por_nome(self, nome: str) -> Feirante | None:
+        return self.__controller_feirante.obter_feirante_por_nome(nome)
+
     def __validar_email_existente(self, email: str) -> bool:
         feirante = self.__controller_feirante.obter_feirante_por_email(email)
         cliente = self.__controller_cliente.obter_cliente_por_email(email)

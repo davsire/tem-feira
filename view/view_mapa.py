@@ -1,21 +1,30 @@
 import customtkinter as ctk
 from tkintermapview import TkinterMapView
+from view.view_utils import ViewUtils
+
 
 class ViewMapa(ctk.CTkFrame):
-    
+
     def __init__(self, master, controller_main):
         super().__init__(master)
         self.__controller_main = controller_main
-        
+
         self.configure(fg_color='white', corner_radius=0)
-        
+
         self.grid_columnconfigure(0, weight=1)
-        self.grid_rowconfigure(0, weight=1)
-        self.grid_rowconfigure(1, weight=0)
+        self.grid_columnconfigure(1, weight=0)
+        self.grid_rowconfigure(0, weight=0)
+        self.grid_rowconfigure(1, weight=1)
         self.grid_rowconfigure(2, weight=0)
-        
+
+        self.busca_input = ctk.CTkEntry(self, placeholder_text='Buscar feira pelo nome...', height=35)
+        self.busca_input.grid(row=0, column=0, sticky='ew', pady=(0, 15))
+        self.busca_botao = ViewUtils.obter_botao(self, 'Buscar')
+        self.busca_botao.grid(row=0, column=1, sticky='ew', pady=(0, 15), padx=(10, 0))
+        self.busca_botao.configure(height=35, command=self.buscar_feirante)
+
         self.mapa = TkinterMapView(self, width=800, height=600, corner_radius=0)
-        self.mapa.grid(row=0, column=0, sticky='nsew')
+        self.mapa.grid(row=1, column=0, columnspan=2, sticky='nsew')
 
         latitude, longitude = self.__controller_main.obter_localizacao_usuario_logado()
         self.mapa.set_position(latitude, longitude)
@@ -54,7 +63,7 @@ class ViewMapa(ctk.CTkFrame):
             text_color='white',
             font=('system', 18, 'bold')
         )
-        casa_legenda.grid(row=2, column=0, padx=5)
+        casa_legenda.grid(row=2, column=0, padx=(0, 5))
 
         feira_legenda = ctk.CTkLabel(
             legenda_frame,
@@ -66,3 +75,11 @@ class ViewMapa(ctk.CTkFrame):
             font=('system', 18, 'bold')
         )
         feira_legenda.grid(row=2, column=1, padx=5)
+
+    def buscar_feirante(self):
+        feirante = self.__controller_main.obter_feirante_por_nome(self.busca_input.get())
+        if feirante is None:
+            ViewUtils.abrir_popup_mensagem('Nenhum feirante encontrado...')
+            return
+        self.mapa.set_position(feirante.localizacao.latitude, feirante.localizacao.longitude)
+        self.mapa.set_zoom(18)

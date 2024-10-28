@@ -20,6 +20,9 @@ class DaoFeirante(DaoMain):
     def obter_feirante_por_email(self, email: str) -> dict:
         return self.find_one({'email': email})
 
+    def obter_feirante_por_nome(self, nome: str) -> dict:
+        return self.find_one({'nome_feira': {'$regex': nome, '$options': 'i'}})
+
     def inserir_feirante(self, feirante: Feirante):
         return self.insert_one(feirante.to_dict())
 
