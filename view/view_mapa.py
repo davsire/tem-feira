@@ -8,6 +8,7 @@ class ViewMapa(ctk.CTkFrame):
     def __init__(self, master, controller_main):
         super().__init__(master)
         self.__controller_main = controller_main
+        self.__modal_feira: ctk.CTkToplevel | None = None
 
         self.configure(fg_color='white', corner_radius=0)
 
@@ -41,7 +42,7 @@ class ViewMapa(ctk.CTkFrame):
             marker = self.mapa.set_marker(
                 feira['latitude'], feira['longitude'],
                 text=feira['nome_feira'], marker_color_circle='red', marker_color_outside='#bf1900',
-                command=lambda e: print(e.data),
+                command=self.abrir_acoes_feira,
             )
             marker.data = feira
 
@@ -78,9 +79,29 @@ class ViewMapa(ctk.CTkFrame):
         feira_legenda.grid(row=2, column=1, padx=5)
 
     def buscar_feirante(self):
+        if not self.busca_input.get():
+            return
         feirante = self.__controller_main.obter_feirante_por_nome(self.busca_input.get())
         if feirante is None:
-            ViewUtils.abrir_popup_mensagem('Nenhum feirante encontrado...')
+            ViewUtils.abrir_popup_mensagem('Nenhuma feira encontrada...')
             return
         self.mapa.set_position(feirante.localizacao.latitude, feirante.localizacao.longitude)
         self.mapa.set_zoom(18)
+
+    def abrir_acoes_feira(self, evento):
+        feira = evento.data
+        if self.__modal_feira is not None:
+            self.__modal_feira.destroy()
+        self.__modal_feira = ctk.CTkToplevel(self)
+        self.__modal_feira.resizable(False, False)
+        self.__modal_feira.attributes('-topmost', True)
+        self.__modal_feira.configure(fg_color='white')
+        self.__modal_feira.title(feira['nome_feira'])
+        nome_feira = ctk.CTkLabel(self.__modal_feira, text=feira['nome_feira'], font=('system', 26, 'bold'))
+        nome_feira.pack(padx=40, pady=30)
+        botao_ver_feira = ViewUtils.obter_botao(self.__modal_feira, 'Ver feira')
+        botao_ver_feira.pack(padx=40, pady=(0, 30), fill='x')
+        botao_como_chegar = ViewUtils.obter_botao(self.__modal_feira, 'Como chegar')
+        botao_como_chegar.pack(padx=40, pady=(0, 30), fill='x')
+        botao_fechar = ctk.CTkButton(self.__modal_feira, text='Fechar', fg_color='#bf1900', text_color='white', command=self.__modal_feira.destroy)
+        botao_fechar.pack(padx=40, pady=(0, 30))
