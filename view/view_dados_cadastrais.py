@@ -1,7 +1,7 @@
 import customtkinter as ctk
 from model.usuario import TipoUsuario
-from view.frame_dados_cliente import FrameDadosCliente
-from view.frame_dados_feirante import FrameDadosFeirante
+from view.frame.frame_dados_cliente import FrameDadosCliente
+from view.frame.frame_dados_feirante import FrameDadosFeirante
 from view.view_utils import ViewUtils
 
 
@@ -20,7 +20,7 @@ class DadosCadastrais(ctk.CTkFrame):
         self.label_cadastro.grid(row=0, column=0, pady=(0, 30), sticky='w')
 
         self.frame_dados: FrameDadosFeirante | FrameDadosCliente = self.obter_frame_dados()
-        self.frame_dados.grid(row=1, column=0, columnspan=2, sticky='new')
+        self.frame_dados.grid(row=1, column=0, columnspan=2, sticky='nsew')
 
         self.botao_salvar = ViewUtils.obter_botao(self, 'Salvar')
         self.botao_salvar.configure(command=self.atualizar_conta)
