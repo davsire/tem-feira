@@ -39,7 +39,6 @@ class ControllerFeirante:
         return feirante
 
     def criar_feirante(self, dados) -> Feirante:
-        print(dados)
         localizacao = Localizacao(dados['localizacao']['latitude'], dados['localizacao']['longitude'])
         localizacao.endereco = dados['localizacao'].get('endereco', None)
         dias_funcionamento = [
