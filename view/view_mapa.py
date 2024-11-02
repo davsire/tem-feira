@@ -95,6 +95,7 @@ class ViewMapa(ctk.CTkFrame):
         if self.__modal_feira is not None:
             self.__modal_feira.destroy()
         self.__modal_feira = ctk.CTkToplevel(self)
+        self.__modal_feira.wm_geometry(f"+{self.winfo_pointerx() + 20}+{self.winfo_pointery() + 20}")
         self.__modal_feira.resizable(False, False)
         self.__modal_feira.attributes('-topmost', True)
         self.__modal_feira.configure(fg_color='white')
