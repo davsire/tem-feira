@@ -72,6 +72,29 @@ class FrameNavegacao(ctk.CTkFrame):
         self.botoes[botao].configure(fg_color='#bf1900')
 
 
+class FrameCustom(ctk.CTkFrame):
+    def __init__(self, master, tela, *args):
+        super().__init__(master)
+        self.configure(fg_color='white')
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0)
+        self.grid_rowconfigure(1, weight=1)
+
+        self.botao_voltar = ctk.CTkButton(
+            self,
+            text='Voltar',
+            fg_color='white',
+            text_color="black",
+            width=20,
+            font=('system', 20, 'bold'),
+            command=lambda: master.alternar_tela(master.tela_atual)
+        )
+        self.botao_voltar.grid(row=0, column=0, sticky="w")
+
+        self.tela = tela(self, *args)
+        self.tela.grid(row=1, column=0, sticky="nsew")
+
+
 class ViewBase(ctk.CTkFrame):
 
     def __init__(self, master, controller_main):
@@ -83,6 +106,7 @@ class ViewBase(ctk.CTkFrame):
         self.grid_columnconfigure(2)
         self.grid_rowconfigure(0, weight=1)
 
+        self.tela_atual = None
         self.map_telas = {
             'home': ViewMapa if self.__controller_main.tipo_usuario_logado == TipoUsuario.CLIENTE else None,
             'usuario': DadosCadastrais,
@@ -101,11 +125,17 @@ class ViewBase(ctk.CTkFrame):
         self.tem_feira_logo_lbl.grid(column=2, row=0, padx=(0, 15), pady=15, sticky="new")
 
     def alternar_tela(self, tela: str):
+        self.tela_atual = tela
         self.frame.grid_forget()
         self.navegacao.selecionar_botao(tela)
         if self.map_telas[tela]:
             self.frame = self.map_telas[tela](self, self.__controller_main)
             self.frame.grid(column=1, row=0, padx=25, pady=25, sticky="nsew")
+
+    def abrir_tela_custom(self, tela, *args):
+        self.frame.grid_forget()
+        self.frame = FrameCustom(self, tela, *args)
+        self.frame.grid(column=1, row=0, padx=25, pady=25, sticky="nsew")
 
     def logout(self):
         self.__controller_main.logout()

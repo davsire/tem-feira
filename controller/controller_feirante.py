@@ -68,8 +68,9 @@ class ControllerFeirante:
     def excluir_feirante(self, feirante: Feirante):
         self.__dao_feirante.excluir_feirante(feirante)
 
-    def obter_localizacoes_feirantes(self):
-        return self.__dao_feirante.obter_localizacoes_feirantes()
+    def obter_feirantes(self) -> list[Feirante]:
+        feirantes_mongo = self.__dao_feirante.obter_feirantes()
+        return [self.criar_feirante(feirante) for feirante in feirantes_mongo]
 
     def obter_feirante_por_nome(self, nome: str) -> Feirante | None:
         feirante_mongo = self.__dao_feirante.obter_feirante_por_nome(nome)

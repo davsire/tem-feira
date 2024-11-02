@@ -17,6 +17,9 @@ class DaoFeirante(DaoMain):
     def obter_nome_collection(self) -> str:
         return 'feirantes'
 
+    def obter_feirantes(self):
+        return self.find({})
+
     def obter_feirante_por_email(self, email: str) -> dict:
         return self.find_one({'email': email})
 
@@ -31,20 +34,3 @@ class DaoFeirante(DaoMain):
 
     def excluir_feirante(self, feirante: Feirante):
         self.delete_one({ '_id': ObjectId(feirante.id) })
-
-    def obter_localizacoes_feirantes(self):
-        feirantes = self.find({})
-        localizacoes = []
-        for feirante in feirantes:
-            id_feira = feirante.get('_id')
-            nome_feira = feirante.get('nome_feira')
-            latitude = feirante.get('localizacao', {}).get('latitude')
-            longitude = feirante.get('localizacao', {}).get('longitude')
-            if id_feira and nome_feira and latitude and longitude:
-                localizacoes.append({
-                    'id_feira': id_feira,
-                    'nome_feira': nome_feira,
-                    'latitude': latitude,
-                    'longitude': longitude
-                })
-        return localizacoes

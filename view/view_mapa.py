@@ -1,5 +1,7 @@
 import customtkinter as ctk
 from tkintermapview import TkinterMapView
+from model.feirante import Feirante
+from view.frame.frame_detalhes_feirante import FrameDetalhesFeirante
 from view.view_utils import ViewUtils
 
 
@@ -37,14 +39,14 @@ class ViewMapa(ctk.CTkFrame):
         self.criar_legenda()
 
     def plotar_feiras(self):
-        localizacoes = self.__controller_main.obter_localizacoes_feirantes()
-        for feira in localizacoes:
+        feirantes = self.__controller_main.obter_feirantes()
+        for feirante in feirantes:
             marker = self.mapa.set_marker(
-                feira['latitude'], feira['longitude'],
-                text=feira['nome_feira'], marker_color_circle='red', marker_color_outside='#bf1900',
+                feirante.localizacao.latitude, feirante.localizacao.longitude,
+                text=feirante.nome_feira, marker_color_circle='red', marker_color_outside='#bf1900',
                 command=self.abrir_acoes_feira,
             )
-            marker.data = feira
+            marker.data = feirante
 
     def plotar_usuario_logado(self):
         localizacao_usuario = self.__controller_main.obter_localizacao_usuario_logado()
@@ -89,19 +91,28 @@ class ViewMapa(ctk.CTkFrame):
         self.mapa.set_zoom(18)
 
     def abrir_acoes_feira(self, evento):
-        feira = evento.data
+        feirante: Feirante = evento.data
         if self.__modal_feira is not None:
             self.__modal_feira.destroy()
         self.__modal_feira = ctk.CTkToplevel(self)
         self.__modal_feira.resizable(False, False)
         self.__modal_feira.attributes('-topmost', True)
         self.__modal_feira.configure(fg_color='white')
-        self.__modal_feira.title(feira['nome_feira'])
-        nome_feira = ctk.CTkLabel(self.__modal_feira, text=feira['nome_feira'], font=('system', 26, 'bold'))
+        self.__modal_feira.title(feirante.nome_feira)
+
+        nome_feira = ctk.CTkLabel(self.__modal_feira, text=feirante.nome_feira, font=('system', 26, 'bold'))
         nome_feira.pack(padx=40, pady=30)
+
         botao_ver_feira = ViewUtils.obter_botao(self.__modal_feira, 'Ver feira')
+        botao_ver_feira.configure(command=lambda: self.abrir_detalhes_feirante(feirante))
         botao_ver_feira.pack(padx=40, pady=(0, 30), fill='x')
+
         botao_como_chegar = ViewUtils.obter_botao(self.__modal_feira, 'Como chegar')
         botao_como_chegar.pack(padx=40, pady=(0, 30), fill='x')
+
         botao_fechar = ctk.CTkButton(self.__modal_feira, text='Fechar', fg_color='#bf1900', text_color='white', command=self.__modal_feira.destroy)
         botao_fechar.pack(padx=40, pady=(0, 30))
+
+    def abrir_detalhes_feirante(self, feirante: Feirante):
+        self.__modal_feira.destroy()
+        self.__controller_main.abrir_tela_custom(FrameDetalhesFeirante, feirante)

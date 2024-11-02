@@ -100,11 +100,15 @@ class ControllerMain:
             return localizacao.latitude, localizacao.longitude
         return None
 
-    def obter_localizacoes_feirantes(self):
-        return self.__controller_feirante.obter_localizacoes_feirantes()
+    def obter_feirantes(self) -> list[Feirante]:
+        return self.__controller_feirante.obter_feirantes()
 
     def obter_feirante_por_nome(self, nome: str) -> Feirante | None:
         return self.__controller_feirante.obter_feirante_por_nome(nome)
+
+    def abrir_tela_custom(self, tela, *args):
+        if self.__usuario_logado is not None:
+            self.__app.frame.abrir_tela_custom(tela, *args)
 
     def __validar_email_existente(self, email: str) -> bool:
         feirante = self.__controller_feirante.obter_feirante_por_email(email)
