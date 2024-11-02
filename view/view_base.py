@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from PIL import Image
-from view.view_dados_cadastrais import DadosCadastrais
+from view.view_dados_cadastrais import ViewDadosCadastrais
+from view.view_detalhes_feirante import ViewDetalhesFeirante
 from view.view_mapa import ViewMapa
 from model.usuario import TipoUsuario
 
@@ -23,7 +24,7 @@ class FrameNavegacao(ctk.CTkFrame):
             image=icone_home,
             text="",
             compound="left",
-            fg_color='#00bf63',
+            fg_color='#bf1900',
             width=80,
             height=80,
             command=lambda: master.alternar_tela('home')
@@ -35,7 +36,7 @@ class FrameNavegacao(ctk.CTkFrame):
             image=icone_usuario,
             text="",
             compound="left",
-            fg_color='#bf1900',
+            fg_color='#00bf63',
             width=80,
             height=80,
             command=lambda: master.alternar_tela('usuario')
@@ -73,7 +74,7 @@ class FrameNavegacao(ctk.CTkFrame):
 
 
 class FrameCustom(ctk.CTkFrame):
-    def __init__(self, master, tela, *args):
+    def __init__(self, master, controller_main, tela, *args):
         super().__init__(master)
         self.configure(fg_color='white')
         self.grid_columnconfigure(0, weight=1)
@@ -89,9 +90,9 @@ class FrameCustom(ctk.CTkFrame):
             font=('system', 20, 'bold'),
             command=lambda: master.alternar_tela(master.tela_atual)
         )
-        self.botao_voltar.grid(row=0, column=0, sticky="w")
+        self.botao_voltar.grid(row=0, column=0, pady=(0, 20), sticky="w")
 
-        self.tela = tela(self, *args)
+        self.tela = tela(self, controller_main, *args)
         self.tela.grid(row=1, column=0, sticky="nsew")
 
 
@@ -106,17 +107,17 @@ class ViewBase(ctk.CTkFrame):
         self.grid_columnconfigure(2)
         self.grid_rowconfigure(0, weight=1)
 
-        self.tela_atual = None
+        self.tela_atual = 'home'
         self.map_telas = {
-            'home': ViewMapa if self.__controller_main.tipo_usuario_logado == TipoUsuario.CLIENTE else None,
-            'usuario': DadosCadastrais,
+            'home': ViewMapa if self.__controller_main.tipo_usuario_logado == TipoUsuario.CLIENTE else ViewDetalhesFeirante,
+            'usuario': ViewDadosCadastrais,
             'cestas': None,
         }
 
         self.navegacao = FrameNavegacao(self)
         self.navegacao.grid(column=0, row=0, sticky="nsew")
 
-        self.frame = DadosCadastrais(self, self.__controller_main)
+        self.frame = self.map_telas[self.tela_atual](self, self.__controller_main)
         self.frame.grid(column=1, row=0, padx=25, pady=25, sticky="nsew")
 
         tem_feira_logo = Image.open('./assets/img/logo_tem_feira.png')
@@ -134,7 +135,7 @@ class ViewBase(ctk.CTkFrame):
 
     def abrir_tela_custom(self, tela, *args):
         self.frame.grid_forget()
-        self.frame = FrameCustom(self, tela, *args)
+        self.frame = FrameCustom(self, self.__controller_main, tela, *args)
         self.frame.grid(column=1, row=0, padx=25, pady=25, sticky="nsew")
 
     def logout(self):

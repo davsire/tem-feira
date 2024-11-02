@@ -36,6 +36,7 @@ class ControllerFeirante:
 
     def criar_feirante(self, dados) -> Feirante:
         localizacao = Localizacao(dados['localizacao']['latitude'], dados['localizacao']['longitude'])
+        localizacao.endereco = dados['localizacao']['endereco']
         dias_funcionamento = [
             DiaFuncionamento(DiaSemana[dia['dia_semana']], dia['horario_abertura'], dia['horario_fechamento'])
             for dia in dados['dias_funcionamento']

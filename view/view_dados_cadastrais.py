@@ -5,7 +5,7 @@ from view.frame.frame_dados_feirante import FrameDadosFeirante
 from view.view_utils import ViewUtils
 
 
-class DadosCadastrais(ctk.CTkFrame):
+class ViewDadosCadastrais(ctk.CTkFrame):
 
     def __init__(self, master, controller_main):
         super().__init__(master)
