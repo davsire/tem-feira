@@ -8,3 +8,4 @@ dnspython==2.6.1
 tkcalendar==1.6.1
 bcrypt==4.2.0
 requests==2.32.3
+tkinter-tooltip==3.1.0
