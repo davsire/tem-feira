@@ -110,10 +110,10 @@ class ControllerMain:
     def obter_feirante_por_nome(self, nome: str) -> Feirante | None:
         return self.__controller_feirante.obter_feirante_por_nome(nome)
 
-    def obter_produtos_feirante(self, feirante_id: str) -> list[Produto]:
+    def obter_produtos_por_feirante(self, feirante_id: str) -> list[Produto]:
         return self.__controller_produto.obter_produtos_por_feirante(feirante_id)
 
-    def obter_cestas_feirante(self, feirante_id: str) -> list[Cesta]:
+    def obter_cestas_por_feirante(self, feirante_id: str) -> list[Cesta]:
         return []
 
     def abrir_tela_custom(self, tela, *args):

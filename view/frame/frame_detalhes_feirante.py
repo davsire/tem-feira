@@ -89,8 +89,8 @@ class FrameDetalhesFeirante(ctk.CTkFrame):
         self.grid_rowconfigure(0)
         self.grid_rowconfigure(1, weight=1)
 
-        self.produtos = controller_main.obter_produtos_feirante(feirante.id)
-        self.cestas = controller_main.obter_cestas_feirante(feirante.id)
+        self.produtos = controller_main.obter_produtos_por_feirante(feirante.id)
+        self.cestas = controller_main.obter_cestas_por_feirante(feirante.id)
 
         self.informacoes = FrameInformacoes(self, feirante)
         self.informacoes.grid(row=0, column=0, sticky='nsew')
