@@ -1,7 +1,9 @@
 from controller.controller_cliente import ControllerCliente
 from controller.controller_feirante import ControllerFeirante
+from model.cesta import Cesta
 from model.cliente import Cliente
 from model.feirante import Feirante
+from model.produto import Produto
 from model.usuario import TipoUsuario
 from view.view_main import ViewMain
 from view.view_utils import ViewUtils
@@ -105,6 +107,12 @@ class ControllerMain:
 
     def obter_feirante_por_nome(self, nome: str) -> Feirante | None:
         return self.__controller_feirante.obter_feirante_por_nome(nome)
+
+    def obter_produtos_feirante(self, feirante_id: str) -> list[Produto]:
+        return []
+
+    def obter_cestas_feirante(self, feirante_id: str) -> list[Cesta]:
+        return []
 
     def abrir_tela_custom(self, tela, *args):
         if self.__usuario_logado is not None:
