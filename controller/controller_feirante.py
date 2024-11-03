@@ -46,6 +46,7 @@ class ControllerFeirante:
             for dia in dados['dias_funcionamento']
         ]
         return Feirante(
+            dados.get('_id'),
             dados['email'],
             dados['senha'],
             localizacao,
@@ -61,7 +62,6 @@ class ControllerFeirante:
             return None
         if bcrypt.checkpw(bytes(dados["senha"], 'utf-8'), feirante_mongo["senha"]):
             feirante = self.criar_feirante(feirante_mongo)
-            feirante.id = feirante_mongo['_id']
             return feirante
 
     def obter_feirante_por_email(self, email: str) -> Feirante | None:

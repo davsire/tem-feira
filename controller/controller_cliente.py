@@ -32,6 +32,7 @@ class ControllerCliente:
     def criar_cliente(self, dados) -> Cliente:
         localizacao = Localizacao(dados['localizacao']['latitude'], dados['localizacao']['longitude'])
         return Cliente(
+            dados.get('_id'),
             dados['email'],
             dados['senha'],
             localizacao,
@@ -45,7 +46,6 @@ class ControllerCliente:
             return None
         if bcrypt.checkpw(bytes(dados["senha"], 'utf-8'), cliente_mongo["senha"]):
             cliente = self.criar_cliente(cliente_mongo)
-            cliente.id = cliente_mongo['_id']
             return cliente
 
     def obter_cliente_por_email(self, email: str) -> Cliente | None:
