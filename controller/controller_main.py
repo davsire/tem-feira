@@ -1,5 +1,6 @@
 from controller.controller_cliente import ControllerCliente
 from controller.controller_feirante import ControllerFeirante
+from controller.controller_produto import ControllerProduto
 from model.cesta import Cesta
 from model.cliente import Cliente
 from model.feirante import Feirante
@@ -15,8 +16,9 @@ class ControllerMain:
     def __init__(self):
         self.__usuario_logado: Feirante | Cliente | None = None
         self.__tipo_usuario_logado: TipoUsuario | None = None
-        self.__controller_feirante = ControllerFeirante()
         self.__controller_cliente = ControllerCliente()
+        self.__controller_feirante = ControllerFeirante()
+        self.__controller_produto = ControllerProduto()
         self.__app = ViewMain(self)
 
     def __new__(cls):
@@ -109,7 +111,7 @@ class ControllerMain:
         return self.__controller_feirante.obter_feirante_por_nome(nome)
 
     def obter_produtos_feirante(self, feirante_id: str) -> list[Produto]:
-        return []
+        return self.__controller_produto.obter_produtos_por_feirante(feirante_id)
 
     def obter_cestas_feirante(self, feirante_id: str) -> list[Cesta]:
         return []

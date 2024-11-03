@@ -1,6 +1,8 @@
 import customtkinter as ctk
+from PIL import Image
 from tktooltip import ToolTip
 from model.feirante import Feirante
+from model.produto import Produto
 
 
 class FrameInformacoes(ctk.CTkFrame):
@@ -40,6 +42,45 @@ class FrameInformacoes(ctk.CTkFrame):
         self.dias_funcionamento.grid(row=1, rowspan=2, column=1, pady=(2, 10), padx=10, sticky='nw')
 
 
+class FrameProdutos(ctk.CTkScrollableFrame):
+    def __init__(self, master, produtos: list[Produto]):
+        super().__init__(master)
+        self.configure(fg_color='white')
+        self.limite_linha = 4
+        self.produtos_map = {}
+
+        if len(produtos) == 0:
+            label_sem_produtos = ctk.CTkLabel(self,
+                                              text='O feirante ainda não cadastrou produtos disponíveis...',
+                                              font=('system', 22, 'bold'))
+            label_sem_produtos.pack(pady=20, anchor='center')
+            return
+
+        self.bind_all("<Button-4>", lambda e: self._parent_canvas.yview("scroll", -1, "units"))
+        self.bind_all("<Button-5>", lambda e: self._parent_canvas.yview("scroll", 1, "units"))
+        for idx, produto in enumerate(produtos):
+            coluna = idx % self.limite_linha
+            linha = idx // self.limite_linha
+
+            produto_elm = ctk.CTkFrame(self, fg_color='white', border_width=2, border_color='black', corner_radius=5)
+
+            nome = produto.nome[:15] + ('...' if len(produto.nome) >= 15 else '')
+            nome_produto = ctk.CTkLabel(produto_elm, text=nome, width=180, font=('system', 20, 'bold'))
+            nome_produto.pack(pady=(10, 5), padx=10)
+            ToolTip(nome_produto, f'{produto.nome} - R${produto.preco} {produto.unidade.value}', bg='black', fg='white')
+
+            src = produto.imagem if produto.imagem else './assets/img/produto_default.png'
+            imagem_produto = ctk.CTkImage(light_image=Image.open(src), size=(180, 140))
+            imagem_produto_lbl = ctk.CTkLabel(produto_elm, image=imagem_produto, text='')
+            imagem_produto_lbl.pack(padx=10)
+
+            preco_produto = ctk.CTkLabel(produto_elm, text=f'R${produto.preco} {produto.unidade.value}', font=('system', 18))
+            preco_produto.pack(pady=(10, 5), padx=10)
+
+            produto_elm.grid(row=linha, column=coluna, padx=15, pady=(0, 30), sticky='nswe')
+            self.produtos_map[produto.id] = produto_elm
+
+
 class FrameDetalhesFeirante(ctk.CTkFrame):
     def __init__(self, master, controller_main, feirante: Feirante):
         super().__init__(master)
@@ -61,7 +102,10 @@ class FrameDetalhesFeirante(ctk.CTkFrame):
             segmented_button_selected_color='#00bf63',
             text_color='white',
         )
-        tabview.grid(row=1, column=0, padx=20, sticky='nsew')
+        tabview.grid(row=1, column=0, sticky='nsew')
         tabview._segmented_button.configure(font=('system', 22, 'bold'), corner_radius=20)
         tabview.add('Produtos')
         tabview.add('Cestas')
+
+        self.frame_produtos = FrameProdutos(tabview.tab('Produtos'), self.produtos)
+        self.frame_produtos.pack(fill="both", expand=True)
