@@ -16,6 +16,9 @@ class DaoCesta(DaoMain):
     def obter_nome_collection(self) -> str:
         return 'cestas'
 
+    def marcar_cesta_reservada(self, cesta_id: str, reservada: bool):
+        self.update_one({'_id': ObjectId(cesta_id)}, {'$set': {'reservada': reservada}})
+
     def obter_cestas_por_feirante(self, feirante_id: str):
         return self.aggregation([
             {

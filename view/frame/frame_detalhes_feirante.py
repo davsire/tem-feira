@@ -1,3 +1,4 @@
+from functools import partial
 import customtkinter as ctk
 from PIL import Image
 from tktooltip import ToolTip
@@ -58,8 +59,6 @@ class FrameProdutos(ctk.CTkScrollableFrame):
             label_sem_produtos.pack(pady=20, anchor='center')
             return
 
-        self.bind_all("<Button-4>", lambda e: self._parent_canvas.yview("scroll", -1, "units"))
-        self.bind_all("<Button-5>", lambda e: self._parent_canvas.yview("scroll", 1, "units"))
         for idx, produto in enumerate(produtos):
             coluna = idx % self.limite_linha
             linha = idx // self.limite_linha
@@ -84,7 +83,7 @@ class FrameProdutos(ctk.CTkScrollableFrame):
 
 
 class FrameCestas(ctk.CTkScrollableFrame):
-    def __init__(self, master, cestas: list[Cesta]):
+    def __init__(self, master, cestas: list[Cesta], frame_detalhes):
         super().__init__(master)
         self.configure(fg_color='white')
         self.cestas_map = {}
@@ -96,8 +95,6 @@ class FrameCestas(ctk.CTkScrollableFrame):
             label_sem_cestas.pack(pady=20, anchor='center')
             return
 
-        self.bind_all("<Button-4>", lambda e: self._parent_canvas.yview("scroll", -1, "units"))
-        self.bind_all("<Button-5>", lambda e: self._parent_canvas.yview("scroll", 1, "units"))
         for idx, cesta in enumerate(cestas):
             cesta_elm = ctk.CTkFrame(self, fg_color='white', border_width=2, border_color='black', corner_radius=5)
 
@@ -123,12 +120,16 @@ class FrameCestas(ctk.CTkScrollableFrame):
             cesta_elm.grid(row=idx, column=0, padx=15, pady=(0, 30), sticky='nswe')
             botao_reservar = ViewUtils.obter_botao(self, 'Reservar')
             botao_reservar.grid(row=idx, column=1)
+            acao_reserva = partial(frame_detalhes.reservar_cesta, cesta)
+            botao_reservar.configure(command=acao_reserva)
             self.cestas_map[cesta.id] = cesta_elm
 
 
 class FrameDetalhesFeirante(ctk.CTkFrame):
     def __init__(self, master, controller_main, feirante: Feirante):
         super().__init__(master)
+        self.__controller_main = controller_main
+        self.__feirante = feirante
         self.configure(fg_color='white')
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0)
@@ -140,19 +141,22 @@ class FrameDetalhesFeirante(ctk.CTkFrame):
         self.informacoes = FrameInformacoes(self, feirante)
         self.informacoes.grid(row=0, column=0, sticky='nsew')
 
-        tabview = ctk.CTkTabview(
+        self.tabview = ctk.CTkTabview(
             self,
             fg_color='white',
             segmented_button_fg_color='white',
             segmented_button_selected_color='#00bf63',
             text_color='white',
         )
-        tabview.grid(row=1, column=0, sticky='nsew')
-        tabview._segmented_button.configure(font=('system', 22, 'bold'), corner_radius=20)
-        tabview.add('Produtos')
-        tabview.add('Cestas')
+        self.tabview.grid(row=1, column=0, sticky='nsew')
+        self.tabview._segmented_button.configure(font=('system', 22, 'bold'), corner_radius=20)
+        self.tabview.add('Produtos')
+        self.tabview.add('Cestas')
 
-        self.frame_produtos = FrameProdutos(tabview.tab('Produtos'), self.produtos)
-        self.frame_cestas = FrameCestas(tabview.tab('Cestas'), self.cestas)
+        self.frame_produtos = FrameProdutos(self.tabview.tab('Produtos'), self.produtos)
+        self.frame_cestas = FrameCestas(self.tabview.tab('Cestas'), self.cestas, self)
         self.frame_produtos.pack(fill="both", expand=True)
         self.frame_cestas.pack(fill="both", expand=True)
+
+    def reservar_cesta(self, cesta: Cesta):
+        self.__controller_main.confirmar_reserva_cesta(cesta)

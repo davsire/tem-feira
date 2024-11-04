@@ -126,6 +126,20 @@ class ControllerMain:
     def obter_cestas_por_feirante(self, feirante_id: str) -> list[Cesta]:
         return self.__controller_cesta.obter_cestas_por_feirante(feirante_id)
 
+    def confirmar_reserva_cesta(self, cesta: Cesta):
+        ViewUtils.abrir_popup_confirmacao(
+            f'Reservar "{cesta.nome}"?',
+            'Reservar',
+            lambda: self.reservar_cesta(cesta),
+        )
+
+    def reservar_cesta(self, cesta: Cesta):
+        # self.__controller_reserva.cadastrar_reserva(cesta, self.__usuario_logado)
+        self.__controller_cesta.marcar_cesta_reservada(cesta.id, True)
+        for produto in cesta.produtos:
+            self.__controller_produto.decrementar_quantidade_produto(produto.produto.id, produto.quantidade)
+        ViewUtils.abrir_popup_mensagem('Cesta reservada!')
+
     def abrir_tela_custom(self, tela, *args):
         if self.__usuario_logado is not None:
             self.__app.frame.abrir_tela_custom(tela, *args)
