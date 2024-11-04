@@ -17,4 +17,4 @@ class DaoProduto(DaoMain):
         return 'produtos'
 
     def obter_produtos_por_feirante(self, feirante_id: str):
-        return self.find({'feirante': ObjectId(feirante_id)})
+        return self.find({'feirante': ObjectId(feirante_id), 'quantidade': { '$gt': 0 }})
