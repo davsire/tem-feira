@@ -35,7 +35,6 @@ class FrameDiaFuncionamento(ctk.CTkFrame):
             self.map_dias_funcionamento[dia_semana.name + '_abertura'].bind('<KeyRelease>', lambda e: self.aplicar_mascara_horario(e))
             self.map_dias_funcionamento[dia_semana.name + '_fechamento'].bind('<KeyRelease>', lambda e: self.aplicar_mascara_horario(e))
 
-
     def aplicar_mascara_horario(self, event):
         entry = event.widget
         conteudo = entry.get()

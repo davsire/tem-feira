@@ -11,6 +11,7 @@ class UnidadeProduto(Enum):
 class Produto:
     def __init__(
         self,
+        _id: str,
         nome: str,
         preco: float,
         imagem: str,
@@ -19,7 +20,7 @@ class Produto:
         feirante: Feirante
     ):
         self.__validar_campos(nome, preco, quantidade, unidade, feirante)
-        self.__id = None
+        self.__id = _id
         self.__nome = nome
         self.__preco = preco
         self.__imagem = imagem

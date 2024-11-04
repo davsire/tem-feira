@@ -1,7 +1,10 @@
 from controller.controller_cliente import ControllerCliente
 from controller.controller_feirante import ControllerFeirante
+from controller.controller_produto import ControllerProduto
+from model.cesta import Cesta
 from model.cliente import Cliente
 from model.feirante import Feirante
+from model.produto import Produto
 from model.usuario import TipoUsuario
 from view.view_main import ViewMain
 from view.view_utils import ViewUtils
@@ -13,8 +16,9 @@ class ControllerMain:
     def __init__(self):
         self.__usuario_logado: Feirante | Cliente | None = None
         self.__tipo_usuario_logado: TipoUsuario | None = None
-        self.__controller_feirante = ControllerFeirante()
         self.__controller_cliente = ControllerCliente()
+        self.__controller_feirante = ControllerFeirante()
+        self.__controller_produto = ControllerProduto()
         self.__app = ViewMain(self)
 
     def __new__(cls):
@@ -100,8 +104,21 @@ class ControllerMain:
             return localizacao.latitude, localizacao.longitude
         return None
 
-    def obter_localizacoes_feirantes(self):
-        return self.__controller_feirante.obter_localizacoes_feirantes()
+    def obter_feirantes(self) -> list[Feirante]:
+        return self.__controller_feirante.obter_feirantes()
+
+    def obter_feirante_por_nome(self, nome: str) -> Feirante | None:
+        return self.__controller_feirante.obter_feirante_por_nome(nome)
+
+    def obter_produtos_por_feirante(self, feirante_id: str) -> list[Produto]:
+        return self.__controller_produto.obter_produtos_por_feirante(feirante_id)
+
+    def obter_cestas_por_feirante(self, feirante_id: str) -> list[Cesta]:
+        return []
+
+    def abrir_tela_custom(self, tela, *args):
+        if self.__usuario_logado is not None:
+            self.__app.frame.abrir_tela_custom(tela, *args)
 
     def __validar_email_existente(self, email: str) -> bool:
         feirante = self.__controller_feirante.obter_feirante_por_email(email)

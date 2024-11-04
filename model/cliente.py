@@ -7,13 +7,14 @@ from model.localizacao import Localizacao
 class Cliente(Usuario):
     def __init__(
             self,
+            _id: str,
             email: str,
             senha: bytes,
             localizacao: Localizacao,
             nome: str,
             data_nascimento: str,
     ):
-        super().__init__(email, senha, localizacao)
+        super().__init__(_id, email, senha, localizacao)
         self.__validar_campos(email, senha, localizacao, nome, data_nascimento)
         self.__nome = nome
         self.__data_nascimento = data_nascimento

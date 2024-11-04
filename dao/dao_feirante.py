@@ -1,4 +1,5 @@
 from bson import ObjectId
+import re
 from dao.dao_main import DaoMain
 from model.feirante import Feirante
 
@@ -17,8 +18,14 @@ class DaoFeirante(DaoMain):
     def obter_nome_collection(self) -> str:
         return 'feirantes'
 
+    def obter_feirantes(self):
+        return self.find({})
+
     def obter_feirante_por_email(self, email: str) -> dict:
         return self.find_one({'email': email})
+
+    def obter_feirante_por_nome(self, nome: str) -> dict:
+        return self.find_one({'nome_feira': {'$regex': re.escape(nome), '$options': 'i'}})
 
     def inserir_feirante(self, feirante: Feirante):
         return self.insert_one(feirante.to_dict())
@@ -28,14 +35,3 @@ class DaoFeirante(DaoMain):
 
     def excluir_feirante(self, feirante: Feirante):
         self.delete_one({ '_id': ObjectId(feirante.id) })
-
-    def obter_localizacoes_feirantes(self):
-        feirantes = self.find({})
-        localizacoes = []
-        for feirante in feirantes:
-            nome_feira = feirante.get('nome_feira')
-            latitude = feirante.get('localizacao', {}).get('latitude')
-            longitude = feirante.get('localizacao', {}).get('longitude')
-            if nome_feira and latitude is not None and longitude is not None:
-                localizacoes.append((nome_feira, latitude, longitude))
-        return localizacoes

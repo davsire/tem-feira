@@ -11,8 +11,8 @@ class TipoUsuario(Enum):
 class Usuario(ABC):
     email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
 
-    def __init__(self, email: str, senha: bytes, localizacao: Localizacao):
-        self.__id = None
+    def __init__(self, _id: str, email: str, senha: bytes, localizacao: Localizacao):
+        self.__id = _id
         self.__email = email
         self.__senha = senha
         self.__localizacao = localizacao

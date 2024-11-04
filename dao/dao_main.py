@@ -36,6 +36,9 @@ class DaoMain(ABC):
     def delete_one(self, query):
         self.db.get_collection(self.obter_nome_collection()).delete_one(query)
 
+    def aggregation(self, aggregation):
+        self.db.get_collection(self.obter_nome_collection()).aggregate(aggregation)
+
     def criar_collection(self, nome_collection: str):
         with open(f'./assets/validator/{nome_collection}_validator.json') as collection_validator_file:
             collection_validator = json.load(collection_validator_file)

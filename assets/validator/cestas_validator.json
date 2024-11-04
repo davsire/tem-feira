@@ -6,6 +6,7 @@
       "produtos",
       "preco_total",
       "personalizada",
+      "reservada",
       "feirante"
     ],
     "properties": {
@@ -39,6 +40,10 @@
         "description": "must be a double and is required"
       },
       "personalizada": {
+        "bsonType": "bool",
+        "description": "must be a bool and is required"
+      },
+      "reservada": {
         "bsonType": "bool",
         "description": "must be a bool and is required"
       },

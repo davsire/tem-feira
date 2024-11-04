@@ -20,7 +20,8 @@ class ControllerFeirante:
 
     def cadastrar_feirante(self, dados) -> Feirante:
         feirante = self.criar_feirante(dados)
-        endereco = self.__service_geoapify.obter_endereco_por_lat_long(feirante.localizacao.latitude, feirante.localizacao.longitude)
+        endereco = self.__service_geoapify.obter_endereco_por_lat_long(feirante.localizacao.latitude,
+                                                                       feirante.localizacao.longitude)
         feirante.localizacao.endereco = endereco
         feirante.senha = bcrypt.hashpw(bytes(dados["senha"], 'utf-8'), bcrypt.gensalt())
         res = self.__dao_feirante.inserir_feirante(feirante)
@@ -29,6 +30,9 @@ class ControllerFeirante:
 
     def atualizar_feirante(self, id_feirante, dados) -> Feirante:
         feirante = self.criar_feirante(dados)
+        endereco = self.__service_geoapify.obter_endereco_por_lat_long(feirante.localizacao.latitude,
+                                                                       feirante.localizacao.longitude)
+        feirante.localizacao.endereco = endereco
         feirante.senha = bcrypt.hashpw(bytes(dados["senha"], 'utf-8'), bcrypt.gensalt())
         feirante.id = id_feirante
         self.__dao_feirante.atualizar_feirante(feirante)
@@ -36,11 +40,13 @@ class ControllerFeirante:
 
     def criar_feirante(self, dados) -> Feirante:
         localizacao = Localizacao(dados['localizacao']['latitude'], dados['localizacao']['longitude'])
+        localizacao.endereco = dados['localizacao'].get('endereco', None)
         dias_funcionamento = [
             DiaFuncionamento(DiaSemana[dia['dia_semana']], dia['horario_abertura'], dia['horario_fechamento'])
             for dia in dados['dias_funcionamento']
         ]
         return Feirante(
+            dados.get('_id'),
             dados['email'],
             dados['senha'],
             localizacao,
@@ -56,7 +62,6 @@ class ControllerFeirante:
             return None
         if bcrypt.checkpw(bytes(dados["senha"], 'utf-8'), feirante_mongo["senha"]):
             feirante = self.criar_feirante(feirante_mongo)
-            feirante.id = feirante_mongo['_id']
             return feirante
 
     def obter_feirante_por_email(self, email: str) -> Feirante | None:
@@ -68,5 +73,12 @@ class ControllerFeirante:
     def excluir_feirante(self, feirante: Feirante):
         self.__dao_feirante.excluir_feirante(feirante)
 
-    def obter_localizacoes_feirantes(self):
-        return self.__dao_feirante.obter_localizacoes_feirantes()
+    def obter_feirantes(self) -> list[Feirante]:
+        feirantes_mongo = self.__dao_feirante.obter_feirantes()
+        return [self.criar_feirante(feirante) for feirante in feirantes_mongo]
+
+    def obter_feirante_por_nome(self, nome: str) -> Feirante | None:
+        feirante_mongo = self.__dao_feirante.obter_feirante_por_nome(nome)
+        if feirante_mongo is None:
+            return None
+        return self.criar_feirante(feirante_mongo)

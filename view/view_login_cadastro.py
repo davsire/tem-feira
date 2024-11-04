@@ -2,9 +2,9 @@ import customtkinter as ctk
 from PIL import Image
 from model.usuario import TipoUsuario
 from view.view_utils import ViewUtils
-from view.frame_dados_feirante import FrameDadosFeirante
-from view.frame_dados_login import FrameDadosLogin
-from view.frame_dados_cliente import FrameDadosCliente
+from view.frame.frame_dados_feirante import FrameDadosFeirante
+from view.frame.frame_dados_login import FrameDadosLogin
+from view.frame.frame_dados_cliente import FrameDadosCliente
 
 
 class FrameLogin(ctk.CTkFrame):

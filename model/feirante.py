@@ -15,6 +15,7 @@ class FormaContato(Enum):
 class Feirante(Usuario):
     def __init__(
             self,
+            _id: str,
             email: str,
             senha: bytes,
             localizacao: Localizacao,
@@ -23,7 +24,7 @@ class Feirante(Usuario):
             contato: str,
             dias_funcionamento: list[DiaFuncionamento]
     ):
-        super().__init__(email, senha, localizacao)
+        super().__init__(_id, email, senha, localizacao)
         self.__validar_campos(email, senha, localizacao, nome_feira, forma_contato, contato, dias_funcionamento)
         self.__nome_feira = nome_feira
         self.__forma_contato = forma_contato
