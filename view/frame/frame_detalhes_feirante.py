@@ -1,8 +1,10 @@
 import customtkinter as ctk
 from PIL import Image
 from tktooltip import ToolTip
+from model.cesta import Cesta
 from model.feirante import Feirante
 from model.produto import Produto
+from view.view_utils import ViewUtils
 
 
 class FrameInformacoes(ctk.CTkFrame):
@@ -81,6 +83,49 @@ class FrameProdutos(ctk.CTkScrollableFrame):
             self.produtos_map[produto.id] = produto_elm
 
 
+class FrameCestas(ctk.CTkScrollableFrame):
+    def __init__(self, master, cestas: list[Cesta]):
+        super().__init__(master)
+        self.configure(fg_color='white')
+        self.cestas_map = {}
+
+        if len(cestas) == 0:
+            label_sem_cestas = ctk.CTkLabel(self,
+                                            text='O feirante ainda não cadastrou cestas disponíveis...',
+                                            font=('system', 22, 'bold'))
+            label_sem_cestas.pack(pady=20, anchor='center')
+            return
+
+        self.bind_all("<Button-4>", lambda e: self._parent_canvas.yview("scroll", -1, "units"))
+        self.bind_all("<Button-5>", lambda e: self._parent_canvas.yview("scroll", 1, "units"))
+        for idx, cesta in enumerate(cestas):
+            cesta_elm = ctk.CTkFrame(self, fg_color='white', border_width=2, border_color='black', corner_radius=5)
+
+            nome_cesta = ctk.CTkLabel(cesta_elm, text=cesta.nome, width=500, font=('system', 20, 'bold'))
+            nome_cesta.grid(row=0, column=0, columnspan=2, pady=(10, 5), padx=10)
+            ToolTip(nome_cesta, f'{cesta.nome} - R${cesta.preco_total}', bg='black', fg='white')
+
+            imagem_cesta = ctk.CTkImage(light_image=Image.open('./assets/img/cesta.jpg'), size=(180, 140))
+            imagem_cesta_lbl = ctk.CTkLabel(cesta_elm, image=imagem_cesta, text='')
+            imagem_cesta_lbl.grid(row=1, column=0, padx=10)
+
+            produtos_frame = ctk.CTkFrame(cesta_elm, fg_color='white')
+            produtos_frame.grid(row=1, column=1, sticky='w')
+            for idx_p, produto in enumerate(cesta.produtos):
+                produto = ctk.CTkLabel(produtos_frame,
+                                       text=f'{produto.quantidade} {produto.produto.unidade.value} {produto.produto.nome}',
+                                       font=('system', 16))
+                produto.grid(row=idx_p, column=0, pady=5, sticky='w')
+
+            preco_cesta = ctk.CTkLabel(cesta_elm, text=f'R${cesta.preco_total}', font=('system', 18))
+            preco_cesta.grid(row=2, column=0, columnspan=2, pady=(10, 5), padx=10)
+
+            cesta_elm.grid(row=idx, column=0, padx=15, pady=(0, 30), sticky='nswe')
+            botao_reservar = ViewUtils.obter_botao(self, 'Reservar')
+            botao_reservar.grid(row=idx, column=1)
+            self.cestas_map[cesta.id] = cesta_elm
+
+
 class FrameDetalhesFeirante(ctk.CTkFrame):
     def __init__(self, master, controller_main, feirante: Feirante):
         super().__init__(master)
@@ -108,4 +153,6 @@ class FrameDetalhesFeirante(ctk.CTkFrame):
         tabview.add('Cestas')
 
         self.frame_produtos = FrameProdutos(tabview.tab('Produtos'), self.produtos)
+        self.frame_cestas = FrameCestas(tabview.tab('Cestas'), self.cestas)
         self.frame_produtos.pack(fill="both", expand=True)
+        self.frame_cestas.pack(fill="both", expand=True)

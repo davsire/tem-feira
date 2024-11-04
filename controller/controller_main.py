@@ -1,3 +1,4 @@
+from controller.controller_cesta import ControllerCesta
 from controller.controller_cliente import ControllerCliente
 from controller.controller_feirante import ControllerFeirante
 from controller.controller_produto import ControllerProduto
@@ -16,9 +17,10 @@ class ControllerMain:
     def __init__(self):
         self.__usuario_logado: Feirante | Cliente | None = None
         self.__tipo_usuario_logado: TipoUsuario | None = None
+        self.__controller_cesta = ControllerCesta(self)
         self.__controller_cliente = ControllerCliente()
         self.__controller_feirante = ControllerFeirante()
-        self.__controller_produto = ControllerProduto()
+        self.__controller_produto = ControllerProduto(self)
         self.__app = ViewMain(self)
 
     def __new__(cls):
@@ -33,6 +35,14 @@ class ControllerMain:
     @property
     def tipo_usuario_logado(self) -> TipoUsuario:
         return self.__tipo_usuario_logado
+
+    @property
+    def controller_feirante(self) -> ControllerFeirante:
+        return self.__controller_feirante
+
+    @property
+    def controller_produto(self) -> ControllerProduto:
+        return self.__controller_produto
 
     def iniciar_app(self):
         self.__app.mainloop()
@@ -114,7 +124,7 @@ class ControllerMain:
         return self.__controller_produto.obter_produtos_por_feirante(feirante_id)
 
     def obter_cestas_por_feirante(self, feirante_id: str) -> list[Cesta]:
-        return []
+        return self.__controller_cesta.obter_cestas_por_feirante(feirante_id)
 
     def abrir_tela_custom(self, tela, *args):
         if self.__usuario_logado is not None:
