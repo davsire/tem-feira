@@ -17,4 +17,19 @@ class DaoProduto(DaoMain):
         return 'produtos'
 
     def obter_produtos_por_feirante(self, feirante_id: str):
-        return self.find({'feirante': ObjectId(feirante_id), 'quantidade': { '$gt': 0 }})
+        return self.aggregation([
+            {
+                '$match': {'feirante': ObjectId(feirante_id), 'quantidade': { '$gt': 0 }}
+            },
+            {
+                '$lookup': {
+                    'from': 'feirantes',
+                    'localField': 'feirante',
+                    'foreignField': '_id',
+                    'as': 'feirante'
+                }
+            },
+            {
+                '$unwind': '$feirante'
+            }
+        ])

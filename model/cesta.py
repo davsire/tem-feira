@@ -100,7 +100,7 @@ class Cesta:
     ):
         if not nome:
             raise CampoObrigatorioException('Nome')
-        if not produtos:
+        if produtos is None:
             raise CampoObrigatorioException('Produtos')
         if not preco_total:
             raise CampoObrigatorioException('Preço total')

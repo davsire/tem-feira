@@ -5,10 +5,11 @@ from model.produto import Produto, UnidadeProduto
 class ControllerProduto:
     __instancia = None
 
-    def __init__(self):
+    def __init__(self, controller_main):
         self.__dao_produto = DaoProduto()
+        self.__controller_main = controller_main
 
-    def __new__(cls):
+    def __new__(cls, *args):
         if ControllerProduto.__instancia is None:
             ControllerProduto.__instancia = object.__new__(cls)
         return ControllerProduto.__instancia
@@ -25,5 +26,5 @@ class ControllerProduto:
             dados['imagem'],
             dados['quantidade'],
             UnidadeProduto[dados['unidade']],
-            dados['feirante']
+            self.__controller_main.controller_feirante.criar_feirante(dados['feirante']),
         )
