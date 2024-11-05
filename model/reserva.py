@@ -18,8 +18,8 @@ class Reserva:
         cliente: Cliente,
         status: StatusReserva,
         data_reserva: datetime,
-        data_entrega: datetime,
-        data_cancelamento: datetime,
+        data_entrega: datetime | None,
+        data_cancelamento: datetime | None,
         disponivel_ate: datetime,
     ):
         self.__validar_campos(cesta, cliente, status, data_reserva, disponivel_ate)
@@ -102,10 +102,10 @@ class Reserva:
             'cesta': self.__cesta.id,
             'cliente': self.__cliente.id,
             'status': self.__status.name,
-            'data_reserva': self.__data_reserva.isoformat(),
-            'data_entrega': self.__data_entrega.isoformat(),
-            'data_cancelamento': self.__data_cancelamento.isoformat(),
-            'disponivel_ate': self.__disponivel_ate.isoformat(),
+            'data_reserva': self.__data_reserva,
+            'data_entrega': self.__data_entrega,
+            'data_cancelamento': self.__data_cancelamento,
+            'disponivel_ate': self.__disponivel_ate,
         }
 
     def __validar_campos(

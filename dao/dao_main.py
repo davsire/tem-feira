@@ -27,10 +27,7 @@ class DaoMain(ABC):
     def insert_one(self, documento):
         return self.db.get_collection(self.obter_nome_collection()).insert_one(documento)
 
-    def update_one(self, query, documento):
-        update = {
-            "$set": documento
-        }
+    def update_one(self, query, update):
         self.db.get_collection(self.obter_nome_collection()).update_one(query, update)
 
     def delete_one(self, query):

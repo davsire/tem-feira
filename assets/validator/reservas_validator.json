@@ -22,20 +22,20 @@
         "description": "must be a string and is required"
       },
       "data_reserva": {
-        "bsonType": "timestamp",
-        "description": "must be a timestamp and is required"
+        "bsonType": "date",
+        "description": "must be a date and is required"
       },
       "data_entrega": {
-        "bsonType": "timestamp",
-        "description": "must be a timestamp"
+        "bsonType": ["date", "null"],
+        "description": "must be a date"
       },
       "data_cancelamento": {
-        "bsonType": "timestamp",
-        "description": "must be a timestamp"
+        "bsonType": ["date", "null"],
+        "description": "must be a date"
       },
       "disponivel_ate": {
-        "bsonType": "timestamp",
-        "description": "must be a timestamp and is required"
+        "bsonType": "date",
+        "description": "must be a date and is required"
       }
     }
   }

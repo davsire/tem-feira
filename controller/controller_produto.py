@@ -28,3 +28,6 @@ class ControllerProduto:
             UnidadeProduto[dados['unidade']],
             self.__controller_main.controller_feirante.criar_feirante(dados['feirante']),
         )
+
+    def decrementar_quantidade_produto(self, produto_id: str, quantidade: float):
+        self.__dao_produto.decrementar_quantidade_produto(produto_id, quantidade)
