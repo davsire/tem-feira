@@ -31,7 +31,7 @@ class DaoFeirante(DaoMain):
         return self.insert_one(feirante.to_dict())
 
     def atualizar_feirante(self, feirante: Feirante):
-        self.update_one({ '_id': ObjectId(feirante.id) }, {'$set': {feirante.to_dict()}})
+        self.update_one({ '_id': ObjectId(feirante.id) }, {'$set': feirante.to_dict()})
 
     def excluir_feirante(self, feirante: Feirante):
         self.delete_one({ '_id': ObjectId(feirante.id) })

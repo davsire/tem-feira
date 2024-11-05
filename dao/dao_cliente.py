@@ -24,7 +24,7 @@ class DaoCliente(DaoMain):
         return self.insert_one(cliente.to_dict())
 
     def atualizar_cliente(self, cliente: Cliente):
-        self.update_one({ '_id': ObjectId(cliente.id) }, {'$set': {cliente.to_dict()}})
+        self.update_one({ '_id': ObjectId(cliente.id) }, {'$set': cliente.to_dict()})
 
     def excluir_cliente(self, cliente: Cliente):
         self.delete_one({ '_id': ObjectId(cliente.id) })

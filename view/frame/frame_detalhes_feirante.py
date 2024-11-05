@@ -159,4 +159,14 @@ class FrameDetalhesFeirante(ctk.CTkFrame):
         self.frame_cestas.pack(fill="both", expand=True)
 
     def reservar_cesta(self, cesta: Cesta):
-        self.__controller_main.confirmar_reserva_cesta(cesta)
+        self.__controller_main.confirmar_reserva_cesta(cesta, self.recarregar_produtos_cestas)
+
+    def recarregar_produtos_cestas(self):
+        self.produtos = self.__controller_main.obter_produtos_por_feirante(self.__feirante.id)
+        self.cestas = self.__controller_main.obter_cestas_por_feirante(self.__feirante.id)
+        self.frame_produtos.pack_forget()
+        self.frame_cestas.pack_forget()
+        self.frame_produtos = FrameProdutos(self.tabview.tab('Produtos'), self.produtos)
+        self.frame_cestas = FrameCestas(self.tabview.tab('Cestas'), self.cestas, self)
+        self.frame_produtos.pack(fill="both", expand=True)
+        self.frame_cestas.pack(fill="both", expand=True)
