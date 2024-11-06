@@ -5,6 +5,7 @@ from tktooltip import ToolTip
 from model.cesta import Cesta
 from model.feirante import Feirante
 from model.produto import Produto
+from model.usuario import TipoUsuario
 from view.view_utils import ViewUtils
 
 
@@ -118,17 +119,24 @@ class FrameCestas(ctk.CTkScrollableFrame):
             preco_cesta.grid(row=2, column=0, columnspan=2, pady=(10, 5), padx=10)
 
             cesta_elm.grid(row=idx, column=0, padx=15, pady=(0, 30), sticky='nswe')
-            botao_reservar = ViewUtils.obter_botao(self, 'Reservar')
-            botao_reservar.grid(row=idx, column=1)
-            acao_reserva = partial(frame_detalhes.reservar_cesta, cesta)
-            botao_reservar.configure(command=acao_reserva)
             self.cestas_map[cesta.id] = cesta_elm
+
+            if frame_detalhes.controller_main.tipo_usuario_logado == TipoUsuario.CLIENTE:
+                botao_reservar = ViewUtils.obter_botao(self, 'Reservar')
+                botao_reservar.grid(row=idx, column=1)
+                acao_reserva = partial(frame_detalhes.reservar_cesta, cesta)
+                botao_reservar.configure(command=acao_reserva)
+            else:
+                botao_excluir = ViewUtils.obter_botao(self, 'Excluir', '#bf1900')
+                botao_excluir.grid(row=idx, column=1)
+                #acao_excluir = partial(frame_detalhes.reservar_cesta, cesta)
+                #botao_excluir.configure(command=acao_excluir)
 
 
 class FrameDetalhesFeirante(ctk.CTkFrame):
     def __init__(self, master, controller_main, feirante: Feirante):
         super().__init__(master)
-        self.__controller_main = controller_main
+        self.controller_main = controller_main
         self.__feirante = feirante
         self.configure(fg_color='white')
         self.grid_columnconfigure(0, weight=1)
@@ -159,11 +167,11 @@ class FrameDetalhesFeirante(ctk.CTkFrame):
         self.frame_cestas.pack(fill="both", expand=True)
 
     def reservar_cesta(self, cesta: Cesta):
-        self.__controller_main.confirmar_reserva_cesta(cesta, self.recarregar_produtos_cestas)
+        self.controller_main.confirmar_reserva_cesta(cesta, self.recarregar_produtos_cestas)
 
     def recarregar_produtos_cestas(self):
-        self.produtos = self.__controller_main.obter_produtos_por_feirante(self.__feirante.id)
-        self.cestas = self.__controller_main.obter_cestas_por_feirante(self.__feirante.id)
+        self.produtos = self.controller_main.obter_produtos_por_feirante(self.__feirante.id)
+        self.cestas = self.controller_main.obter_cestas_por_feirante(self.__feirante.id)
         self.frame_produtos.pack_forget()
         self.frame_cestas.pack_forget()
         self.frame_produtos = FrameProdutos(self.tabview.tab('Produtos'), self.produtos)
