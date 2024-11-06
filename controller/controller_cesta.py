@@ -38,3 +38,6 @@ class ControllerCesta:
 
     def marcar_cesta_reservada(self, cesta_id: str, reservada: bool):
         self.__dao_cesta.marcar_cesta_reservada(cesta_id, reservada)
+
+    def excluir_cesta(self, cesta: Cesta):
+        self.__dao_cesta.excluir_cesta(cesta)

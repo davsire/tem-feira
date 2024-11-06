@@ -129,8 +129,8 @@ class FrameCestas(ctk.CTkScrollableFrame):
             else:
                 botao_excluir = ViewUtils.obter_botao(self, 'Excluir', '#bf1900')
                 botao_excluir.grid(row=idx, column=1)
-                #acao_excluir = partial(frame_detalhes.reservar_cesta, cesta)
-                #botao_excluir.configure(command=acao_excluir)
+                acao_excluir = partial(frame_detalhes.excluir_cesta, cesta)
+                botao_excluir.configure(command=acao_excluir)
 
 
 class FrameDetalhesFeirante(ctk.CTkFrame):
@@ -168,6 +168,9 @@ class FrameDetalhesFeirante(ctk.CTkFrame):
 
     def reservar_cesta(self, cesta: Cesta):
         self.controller_main.confirmar_reserva_cesta(cesta, self.recarregar_produtos_cestas)
+
+    def excluir_cesta(self, cesta: Cesta):
+        self.controller_main.confirmar_exclusao_cesta(cesta, self.recarregar_produtos_cestas)
 
     def recarregar_produtos_cestas(self):
         self.produtos = self.controller_main.obter_produtos_por_feirante(self.__feirante.id)

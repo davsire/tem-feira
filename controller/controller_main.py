@@ -141,6 +141,18 @@ class ControllerMain:
         for produto in cesta.produtos:
             self.__controller_produto.decrementar_quantidade_produto(produto.produto.id, produto.quantidade)
         ViewUtils.abrir_popup_mensagem('Cesta reservada!')
+    
+    def confirmar_exclusao_cesta(self, cesta: Cesta, callback_reserva):
+        ViewUtils.abrir_popup_confirmacao(
+            f'Excluir "{cesta.nome}"?',
+            'Excluir',
+            lambda: (self.excluir_cesta(cesta), callback_reserva()),
+            '#bf1900'
+        )
+    
+    def excluir_cesta(self, cesta: Cesta):
+        self.__controller_cesta.excluir_cesta(cesta)
+        ViewUtils.abrir_popup_mensagem('Cesta excluida!')
 
     def abrir_tela_custom(self, tela, *args):
         if self.__usuario_logado is not None:
