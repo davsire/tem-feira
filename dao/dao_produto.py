@@ -16,6 +16,9 @@ class DaoProduto(DaoMain):
     def obter_nome_collection(self) -> str:
         return 'produtos'
 
+    def obter_produto_por_id(self, produto_id: str):
+        return self.find_one({'_id': ObjectId(produto_id)})
+
     def decrementar_quantidade_produto(self, produto_id: str, quantidade: float):
         self.update_one({'_id': ObjectId(produto_id)}, {'$inc': {'quantidade': -quantidade}})
 

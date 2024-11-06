@@ -16,6 +16,9 @@ class DaoCesta(DaoMain):
     def obter_nome_collection(self) -> str:
         return 'cestas'
 
+    def obter_cesta_por_id(self, cesta_id: str) -> dict:
+        return self.find_one({'_id': ObjectId(cesta_id)})
+
     def marcar_cesta_reservada(self, cesta_id: str, reservada: bool):
         self.update_one({'_id': ObjectId(cesta_id)}, {'$set': {'reservada': reservada}})
 

@@ -9,6 +9,7 @@ class StatusReserva(Enum):
     PENDENTE = 'Pendente'
     ENTREGUE = 'Entregue'
     CANCELADA = 'Cancelada'
+    EXPIRADA = 'Expirada'
 
 
 class Reserva:

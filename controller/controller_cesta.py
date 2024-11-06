@@ -36,5 +36,8 @@ class ControllerCesta:
             self.__controller_main.controller_feirante.criar_feirante(dados['feirante']),
         )
 
+    def verificar_cesta_reservada(self, cesta_id: str) -> bool:
+        return self.__dao_cesta.obter_cesta_por_id(cesta_id).get('reservada')
+
     def marcar_cesta_reservada(self, cesta_id: str, reservada: bool):
         self.__dao_cesta.marcar_cesta_reservada(cesta_id, reservada)
