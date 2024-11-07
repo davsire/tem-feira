@@ -66,17 +66,21 @@ class FrameProdutos(ctk.CTkScrollableFrame):
 
             produto_elm = ctk.CTkFrame(self, fg_color='white', border_width=2, border_color='black', corner_radius=5)
 
+            nome_checkbox_frame = ctk.CTkFrame(produto_elm, fg_color='transparent')
+            nome_checkbox_frame.pack(pady=(10, 5), padx=10, fill='x')
+
             nome = produto.nome[:15] + ('...' if len(produto.nome) >= 15 else '')
-            nome_produto = ctk.CTkLabel(produto_elm, text=nome, width=180, font=('system', 20, 'bold'))
-            nome_produto.pack(pady=(10, 5), padx=10)
+            nome_produto = ctk.CTkLabel(nome_checkbox_frame, text=nome, font=('system', 20, 'bold'))
+            nome_produto.pack(side='left')
+            
             ToolTip(nome_produto, f'{produto.nome} - R${produto.preco} {produto.unidade.value}', bg='black', fg='white')
 
             if frame_detalhes.mostrar_checkbox:
                 var_checkbox = ctk.BooleanVar()
-                checkbox = ctk.CTkCheckBox(produto_elm, text='', variable=var_checkbox)
+                checkbox = ctk.CTkCheckBox(nome_checkbox_frame, text='', variable=var_checkbox)
                 acao_marcar = partial(frame_detalhes.selecionar_produto, produto, var_checkbox)
                 checkbox.configure(command=acao_marcar)
-                checkbox.pack(pady=5, padx=5, anchor='e')
+                checkbox.pack(side='right', padx=(5, 0))
 
             src = produto.imagem if produto.imagem else './assets/img/produto_default.png'
             imagem_produto = ctk.CTkImage(light_image=Image.open(src), size=(180, 140))
@@ -91,13 +95,15 @@ class FrameProdutos(ctk.CTkScrollableFrame):
 
             if frame_detalhes.mostrar_checkbox:
                 quantidade_frame = ctk.CTkFrame(produto_elm, fg_color='transparent')
-                quantidade_frame.pack(padx=10, pady=(5, 5), fill='x')
+                quantidade_frame.pack(padx=10, pady=(5, 15), fill='x')
+                quantidade_frame.grid_columnconfigure(0, weight=1)
+                quantidade_frame.grid_columnconfigure(1, weight=1)
 
                 entrada_quantidade = ctk.CTkEntry(quantidade_frame, width=80, placeholder_text='Quantidade')
-                entrada_quantidade.grid(row=0, column=0, padx=(5, 10), sticky='w')  # Usando grid()
+                entrada_quantidade.grid(row=0, column=0, padx=(5, 10), sticky='ew')
 
                 unidade_produto = ctk.CTkLabel(quantidade_frame, text=produto.unidade.value, font=('system', 14))
-                unidade_produto.grid(row=0, column=1, sticky='w')
+                unidade_produto.grid(row=0, column=1, sticky='ew')
 
 
             if not(frame_detalhes.mostrar_checkbox):
@@ -111,7 +117,6 @@ class FrameProdutos(ctk.CTkScrollableFrame):
                 acao_iniciar_criacao_cesta = partial(frame_detalhes.iniciar_criacao_cesta)
                 botao_criar_cesta_pronta.configure(command=acao_iniciar_criacao_cesta)
             else:
-                
                 botao_criar_cesta = ViewUtils.obter_botao(self, 'Criar cesta')
                 botao_criar_cesta.grid(column=0, row=2, sticky='w', )
                 acao_criar_cesta = partial(frame_detalhes.criar_cesta, frame_detalhes.produtos_selecionados)
