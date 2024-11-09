@@ -19,7 +19,7 @@ class ControllerMain:
         self.__usuario_logado: Feirante | Cliente | None = None
         self.__tipo_usuario_logado: TipoUsuario | None = None
         self.__controller_cesta = ControllerCesta(self)
-        self.__controller_cliente = ControllerCliente()
+        self.__controller_cliente = ControllerCliente(self)
         self.__controller_feirante = ControllerFeirante(self)
         self.__controller_produto = ControllerProduto(self)
         self.__controller_reserva = ControllerReserva()

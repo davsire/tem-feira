@@ -52,3 +52,9 @@ class ControllerReserva:
                 proximo_dia = datetime.now() + timedelta(days=dias_mais)
                 proximo_dia = proximo_dia.replace(hour=proximo_dia_hora.hour, minute=proximo_dia_hora.minute, second=0, microsecond=0)
                 return proximo_dia + timedelta(hours=2)
+
+    def excluir_reservas_por_cliente(self, cliente_id: str):
+        self.__dao_reserva.excluir_reservas_por_cliente(cliente_id)
+
+    def excluir_reserva_por_cesta(self, cesta_id: str):
+        self.__dao_reserva.excluir_reserva_por_cesta(cesta_id)
