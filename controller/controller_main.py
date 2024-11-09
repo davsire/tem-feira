@@ -79,6 +79,11 @@ class ControllerMain:
         except Exception as e:
             ViewUtils.abrir_popup_mensagem(str(e), '#bf1900')
 
+    def logout(self):
+        self.__usuario_logado = None
+        self.__tipo_usuario_logado = None
+        self.__app.alternar_telas('login_cadastro')
+
     def atualizar_usuario(self, dados):
         try:
             if self.__tipo_usuario_logado == TipoUsuario.FEIRANTE:
@@ -96,11 +101,6 @@ class ControllerMain:
             self.excluir_conta,
             '#bf1900'
         )
-
-    def logout(self):
-        self.__usuario_logado = None
-        self.__tipo_usuario_logado = None
-        self.__app.alternar_telas('login_cadastro')
 
     def excluir_conta(self):
         if self.__tipo_usuario_logado == TipoUsuario.FEIRANTE:

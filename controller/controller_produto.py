@@ -31,10 +31,10 @@ class ControllerProduto:
         )
 
     def verificar_produtos_cesta_indisponiveis(self, produtos: list[ProdutoCesta]) -> bool:
-        return any([
-            self.__dao_produto.obter_produto_por_id(produto.produto.id).get('quantidade') < produto.quantidade
-            for produto in produtos
-        ])
+        for produto in produtos:
+            if self.__dao_produto.obter_produto_por_id(produto.produto.id).get('quantidade') < produto.quantidade:
+                return True
+        return False
 
     def decrementar_quantidade_produto(self, produto_id: str, quantidade: float):
         self.__dao_produto.decrementar_quantidade_produto(produto_id, quantidade)
