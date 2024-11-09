@@ -1,3 +1,4 @@
+from bson import ObjectId
 from dao.dao_main import DaoMain
 from model.reserva import Reserva
 
@@ -18,3 +19,9 @@ class DaoReserva(DaoMain):
 
     def inserir_reserva(self, reserva: Reserva):
         return self.insert_one(reserva.to_dict())
+
+    def excluir_reservas_por_cliente(self, cliente_id: str):
+        self.delete_many({'cliente': ObjectId(cliente_id)})
+
+    def excluir_reserva_por_cesta(self, cesta_id: str):
+        self.delete_one({'cesta': ObjectId(cesta_id)})

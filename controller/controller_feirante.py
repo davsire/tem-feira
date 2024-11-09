@@ -9,11 +9,12 @@ from service.service_geoapify import ServiceGeoapify
 class ControllerFeirante:
     __instancia = None
 
-    def __init__(self):
+    def __init__(self, controller_main):
         self.__dao_feirante = DaoFeirante()
+        self.__controller_main = controller_main
         self.__service_geoapify = ServiceGeoapify()
 
-    def __new__(cls):
+    def __new__(cls, *args):
         if ControllerFeirante.__instancia is None:
             ControllerFeirante.__instancia = object.__new__(cls)
         return ControllerFeirante.__instancia
@@ -72,6 +73,8 @@ class ControllerFeirante:
 
     def excluir_feirante(self, feirante: Feirante):
         self.__dao_feirante.excluir_feirante(feirante)
+        self.__controller_main.controller_cesta.excluir_cestas_por_feirante(feirante.id)
+        self.__controller_main.controller_produto.excluir_produtos_por_feirante(feirante.id)
 
     def obter_feirantes(self) -> list[Feirante]:
         feirantes_mongo = self.__dao_feirante.obter_feirantes()

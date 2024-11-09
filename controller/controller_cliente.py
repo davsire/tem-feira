@@ -7,10 +7,11 @@ from model.cliente import Cliente
 class ControllerCliente:
     __instancia = None
 
-    def __init__(self):
+    def __init__(self, controller_main):
         self.__dao_cliente = DaoCliente()
+        self.__controller_main = controller_main
 
-    def __new__(cls):
+    def __new__(cls, *args):
         if ControllerCliente.__instancia is None:
             ControllerCliente.__instancia = object.__new__(cls)
         return ControllerCliente.__instancia
@@ -56,3 +57,4 @@ class ControllerCliente:
 
     def excluir_cliente(self, cliente: Cliente):
         self.__dao_cliente.excluir_cliente(cliente)
+        self.__controller_main.controller_reserva.excluir_reservas_por_cliente(cliente.id)
