@@ -101,6 +101,8 @@ class ViewLoginCadastro(ctk.CTkFrame):
         self.frame: FrameLogin | FrameCadastro = FrameLogin(self)
         self.frame.grid(row=0, column=0, sticky="nsew")
 
+        master.bind('<Return>', lambda e: self.logar_usuario() if isinstance(self.frame, FrameLogin) else None)
+
     def alternar_tela(self, tela: str):
         self.frame.grid_forget()
         if self.map_telas[tela]:

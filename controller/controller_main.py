@@ -19,8 +19,8 @@ class ControllerMain:
         self.__usuario_logado: Feirante | Cliente | None = None
         self.__tipo_usuario_logado: TipoUsuario | None = None
         self.__controller_cesta = ControllerCesta(self)
-        self.__controller_cliente = ControllerCliente()
-        self.__controller_feirante = ControllerFeirante()
+        self.__controller_cliente = ControllerCliente(self)
+        self.__controller_feirante = ControllerFeirante(self)
         self.__controller_produto = ControllerProduto(self)
         self.__controller_reserva = ControllerReserva()
         self.__app = ViewMain(self)
@@ -45,6 +45,14 @@ class ControllerMain:
     @property
     def controller_produto(self) -> ControllerProduto:
         return self.__controller_produto
+
+    @property
+    def controller_cesta(self) -> ControllerCesta:
+        return self.__controller_cesta
+
+    @property
+    def controller_reserva(self) -> ControllerReserva:
+        return self.__controller_reserva
 
     def iniciar_app(self):
         self.__app.mainloop()
@@ -123,7 +131,7 @@ class ControllerMain:
         return self.__controller_feirante.obter_feirante_por_nome(nome)
 
     def obter_produtos_por_feirante(self, feirante_id: str) -> list[Produto]:
-        return self.__controller_produto.obter_produtos_por_feirante(feirante_id)
+        return self.__controller_produto.obter_produtos_por_feirante(feirante_id, self.tipo_usuario_logado == TipoUsuario.CLIENTE)
 
     def obter_cestas_por_feirante(self, feirante_id: str) -> list[Cesta]:
         return self.__controller_cesta.obter_cestas_por_feirante(feirante_id)

@@ -1,3 +1,4 @@
+from bson import ObjectId
 from dao.dao_cesta import DaoCesta
 from model.cesta import Cesta
 from model.produto_cesta import ProdutoCesta
@@ -18,6 +19,12 @@ class ControllerCesta:
     def obter_cestas_por_feirante(self, feirante_id: str) -> list[Cesta]:
         cestas_mongo = self.__dao_cesta.obter_cestas_por_feirante(feirante_id)
         return [self.criar_cesta(cesta) for cesta in cestas_mongo]
+
+    def excluir_cestas_por_feirante(self, feirante_id: str):
+        cestas = self.__dao_cesta.find({'feirante': ObjectId(feirante_id)})
+        for cesta in cestas:
+            self.__controller_main.controller_reserva.excluir_reserva_por_cesta(cesta.get('_id'))
+        self.__dao_cesta.excluir_cestas_por_feirante(feirante_id)
 
     def criar_cesta(self, dados: dict) -> Cesta:
         return Cesta(

@@ -19,6 +19,9 @@ class DaoCesta(DaoMain):
     def obter_cesta_por_id(self, cesta_id: str) -> dict:
         return self.find_one({'_id': ObjectId(cesta_id)})
 
+    def excluir_cestas_por_feirante(self, feirante_id: str):
+        self.delete_many({'feirante': ObjectId(feirante_id)})
+
     def marcar_cesta_reservada(self, cesta_id: str, reservada: bool):
         self.update_one({'_id': ObjectId(cesta_id)}, {'$set': {'reservada': reservada}})
 
