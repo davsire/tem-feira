@@ -131,7 +131,7 @@ class ControllerMain:
         return self.__controller_feirante.obter_feirante_por_nome(nome)
 
     def obter_produtos_por_feirante(self, feirante_id: str) -> list[Produto]:
-        return self.__controller_produto.obter_produtos_por_feirante(feirante_id)
+        return self.__controller_produto.obter_produtos_por_feirante(feirante_id, self.tipo_usuario_logado == TipoUsuario.CLIENTE)
 
     def obter_cestas_por_feirante(self, feirante_id: str) -> list[Cesta]:
         return self.__controller_cesta.obter_cestas_por_feirante(feirante_id)

@@ -15,8 +15,8 @@ class ControllerProduto:
             ControllerProduto.__instancia = object.__new__(cls)
         return ControllerProduto.__instancia
 
-    def obter_produtos_por_feirante(self, feirante_id: str) -> list[Produto]:
-        produtos_mongo = self.__dao_produto.obter_produtos_por_feirante(feirante_id)
+    def obter_produtos_por_feirante(self, feirante_id: str, apenas_disponiveis: bool) -> list[Produto]:
+        produtos_mongo = self.__dao_produto.obter_produtos_por_feirante(feirante_id, apenas_disponiveis)
         return [self.criar_produto(produto) for produto in produtos_mongo]
 
     def excluir_produtos_por_feirante(self, feirante_id: str):

@@ -107,7 +107,7 @@ class Produto:
             raise CampoObrigatorioException('Nome')
         if not preco:
             raise CampoObrigatorioException('Preço')
-        if not quantidade:
+        if quantidade is None:
             raise CampoObrigatorioException('Quantidade')
         if not unidade:
             raise CampoObrigatorioException('Unidade')

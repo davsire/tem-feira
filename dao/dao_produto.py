@@ -25,10 +25,13 @@ class DaoProduto(DaoMain):
     def decrementar_quantidade_produto(self, produto_id: str, quantidade: float):
         self.update_one({'_id': ObjectId(produto_id)}, {'$inc': {'quantidade': -quantidade}})
 
-    def obter_produtos_por_feirante(self, feirante_id: str):
+    def obter_produtos_por_feirante(self, feirante_id: str, apenas_disponiveis: bool):
+        query = {'feirante': ObjectId(feirante_id)}
+        if apenas_disponiveis:
+            query['quantidade'] = { '$gt': 0 }
         return self.aggregation([
             {
-                '$match': {'feirante': ObjectId(feirante_id), 'quantidade': { '$gt': 0 }}
+                '$match': query
             },
             {
                 '$lookup': {
