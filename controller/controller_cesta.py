@@ -19,6 +19,9 @@ class ControllerCesta:
         cestas_mongo = self.__dao_cesta.obter_cestas_por_feirante(feirante_id)
         return [self.criar_cesta(cesta) for cesta in cestas_mongo]
 
+    def excluir_cestas_por_feirante(self, feirante_id: str):
+        self.__dao_cesta.excluir_cestas_por_feirante(feirante_id)
+
     def criar_cesta(self, dados: dict) -> Cesta:
         return Cesta(
             dados.get('_id'),

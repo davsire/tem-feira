@@ -30,6 +30,9 @@ class DaoMain(ABC):
     def update_one(self, query, update):
         self.db.get_collection(self.obter_nome_collection()).update_one(query, update)
 
+    def delete_many(self, query):
+        self.db.get_collection(self.obter_nome_collection()).delete_many(query)
+
     def delete_one(self, query):
         self.db.get_collection(self.obter_nome_collection()).delete_one(query)
 
