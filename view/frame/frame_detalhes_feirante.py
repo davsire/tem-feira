@@ -71,7 +71,7 @@ class FrameProdutos(ctk.CTkScrollableFrame):
 
             nome = produto.nome[:15] + ('...' if len(produto.nome) >= 15 else '')
             nome_produto = ctk.CTkLabel(nome_checkbox_frame, text=nome, font=('system', 20, 'bold'))
-            nome_produto.pack(side='left')
+            nome_produto.grid(row=0, column=0, padx=(5, 10), sticky='ew')
             
             ToolTip(nome_produto, f'{produto.nome} - R${produto.preco} {produto.unidade.value}', bg='black', fg='white')
 
@@ -80,7 +80,7 @@ class FrameProdutos(ctk.CTkScrollableFrame):
                 checkbox = ctk.CTkCheckBox(nome_checkbox_frame, text='', variable=var_checkbox)
                 acao_marcar = partial(frame_detalhes.selecionar_produto, produto, var_checkbox)
                 checkbox.configure(command=acao_marcar)
-                checkbox.pack(side='right', padx=(5, 0))
+                checkbox.grid(row=0, column=1, sticky='ew')
 
             src = produto.imagem if produto.imagem else './assets/img/produto_default.png'
             imagem_produto = ctk.CTkImage(light_image=Image.open(src), size=(180, 140))
@@ -91,7 +91,7 @@ class FrameProdutos(ctk.CTkScrollableFrame):
             preco_produto.pack(pady=(10, 5), padx=10)
 
             produto_elm.grid(row=linha, column=coluna, padx=15, pady=(0, 30), sticky='nswe')
-            self.produtos_map[produto.id] = produto_elm
+            self.produtos_map[produto.id] = {"frame": produto_elm, "quantidade": None}
 
             if frame_detalhes.mostrar_checkbox:
                 quantidade_frame = ctk.CTkFrame(produto_elm, fg_color='transparent')
@@ -99,12 +99,22 @@ class FrameProdutos(ctk.CTkScrollableFrame):
                 quantidade_frame.grid_columnconfigure(0, weight=1)
                 quantidade_frame.grid_columnconfigure(1, weight=1)
 
-                entrada_quantidade = ctk.CTkEntry(quantidade_frame, width=80, placeholder_text='Quantidade')
-                entrada_quantidade.grid(row=0, column=0, padx=(5, 10), sticky='ew')
+                input_quantidade = ctk.CTkEntry(quantidade_frame, width=80, placeholder_text='Quantidade')
+                input_quantidade.grid(row=0, column=0, padx=(5, 10), sticky='ew')
 
                 unidade_produto = ctk.CTkLabel(quantidade_frame, text=produto.unidade.value, font=('system', 14))
                 unidade_produto.grid(row=0, column=1, sticky='ew')
 
+                self.produtos_map[produto.id]["quantidade"] = input_quantidade
+
+            def criar_cesta(produtos_map):
+                for produto_id, produto_data in produtos_map.items():
+                    entrada_quantidade = produto_data["quantidade"]
+                    if entrada_quantidade:
+                        quantidade = entrada_quantidade.get()
+                        if produto_id in frame_detalhes.produtos_selecionados and quantidade:
+                            frame_detalhes.produtos_selecionados[produto_id]["quantidade"] = quantidade
+                frame_detalhes.criar_cesta(frame_detalhes.produtos_selecionados)
 
             if not(frame_detalhes.mostrar_checkbox):
                 botao_cadastrar_produto = ViewUtils.obter_botao(self, 'Cadastrar produto')
@@ -119,7 +129,7 @@ class FrameProdutos(ctk.CTkScrollableFrame):
             else:
                 botao_criar_cesta = ViewUtils.obter_botao(self, 'Criar cesta')
                 botao_criar_cesta.grid(column=0, row=2, sticky='w', )
-                acao_criar_cesta = partial(frame_detalhes.criar_cesta, frame_detalhes.produtos_selecionados)
+                acao_criar_cesta = partial(criar_cesta, self.produtos_map)
                 botao_criar_cesta.configure(command=acao_criar_cesta)
 
                 botao_cancelar = ViewUtils.obter_botao(self, 'Cancelar', '#bf1900')
@@ -181,7 +191,7 @@ class FrameDetalhesFeirante(ctk.CTkFrame):
     def __init__(self, master, controller_main, feirante: Feirante):
         super().__init__(master)
         self.mostrar_checkbox = False
-        self.produtos_selecionados = []
+        self.produtos_selecionados = {}
         self.controller_main = controller_main
         self.__feirante = feirante
         self.configure(fg_color='white')
@@ -245,8 +255,9 @@ class FrameDetalhesFeirante(ctk.CTkFrame):
 
     def selecionar_produto(self, produto: Produto, var_checkbox: ctk.BooleanVar):
             if var_checkbox.get():
-                if produto not in self.produtos_selecionados:
-                    self.produtos_selecionados.append(produto)
+                self.produtos_selecionados[produto.id] = {
+                    "produto": produto, 
+                    "quantidade": ""}
             else:
-                if produto in self.produtos_selecionados:
-                    self.produtos_selecionados.remove(produto)
+                if produto.id in self.produtos_selecionados:
+                    self.produtos_selecionados.pop(produto.id, None)
