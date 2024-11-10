@@ -157,7 +157,7 @@ class ControllerMain:
         ViewUtils.abrir_popup_mensagem('Cesta reservada!')
     
     def criar_cesta(self, produtos_selecionados, callback_criacao):
-        pass
+        print(produtos_selecionados)
 
     def confirmar_exclusao_cesta(self, cesta: Cesta, callback_reserva):
         ViewUtils.abrir_popup_confirmacao(
