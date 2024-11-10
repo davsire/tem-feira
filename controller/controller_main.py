@@ -156,6 +156,9 @@ class ControllerMain:
             self.__controller_produto.decrementar_quantidade_produto(produto.produto.id, produto.quantidade)
         ViewUtils.abrir_popup_mensagem('Cesta reservada!')
     
+    def criar_cesta(self, produtos_selecionados, callback_criacao):
+        pass
+
     def confirmar_exclusao_cesta(self, cesta: Cesta, callback_reserva):
         ViewUtils.abrir_popup_confirmacao(
             f'Excluir "{cesta.nome}"?',

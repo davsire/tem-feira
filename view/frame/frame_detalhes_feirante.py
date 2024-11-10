@@ -111,8 +111,17 @@ class FrameProdutos(ctk.CTkScrollableFrame):
                 for produto_id, produto_data in produtos_map.items():
                     entrada_quantidade = produto_data["quantidade"]
                     if entrada_quantidade:
-                        quantidade = entrada_quantidade.get()
-                        if produto_id in frame_detalhes.produtos_selecionados and quantidade:
+                        quantidade = entrada_quantidade.get().strip()
+                        if produto_id in frame_detalhes.produtos_selecionados:
+                            try:
+                                if not quantidade:
+                                    raise ValueError("A quantidade não pode estar vazia")
+                                quantidade = float(quantidade)
+                                if quantidade <= 0:
+                                    raise ValueError("A quantidade deve ser maior que zero")
+                            except ValueError:
+                                ViewUtils.abrir_popup_mensagem("Insira uma quantidade válida!")
+                                return
                             frame_detalhes.produtos_selecionados[produto_id]["quantidade"] = quantidade
                 frame_detalhes.criar_cesta(frame_detalhes.produtos_selecionados)
 
