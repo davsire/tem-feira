@@ -108,6 +108,10 @@ class FrameProdutos(ctk.CTkScrollableFrame):
                 self.produtos_map[produto.id]["quantidade"] = input_quantidade
 
             def criar_cesta(produtos_map):
+                if not(frame_detalhes.produtos_selecionados):
+                    ViewUtils.abrir_popup_mensagem("Não é possivel criar uma cesta vazia.")
+                    return
+
                 for produto_id, produto_data in produtos_map.items():
                     entrada_quantidade = produto_data["quantidade"]
                     if entrada_quantidade:
@@ -246,7 +250,7 @@ class FrameDetalhesFeirante(ctk.CTkFrame):
         self.controller_main.confirmar_exclusao_cesta(cesta, self.recarregar_produtos_cestas)
 
     def criar_cesta(self, produtos_selecionados):
-        self.controller_main.criar_cesta(produtos_selecionados, self.recarregar_produtos_cestas)
+        self.controller_main.confirmar_criar_cesta_pronta(produtos_selecionados, self.recarregar_produtos_cestas)
 
     def recarregar_produtos_cestas(self):
         self.produtos = self.controller_main.obter_produtos_por_feirante(self.__feirante.id)

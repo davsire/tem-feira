@@ -89,6 +89,16 @@ class Cesta:
             'feirante': self.__feirante.id
         }
 
+    def to_dict_pronto(self) -> dict:
+        return {
+            'nome': self.__nome,
+            'produtos': [produto.to_dict_pronto() for produto in self.__produtos],
+            'preco_total': self.__preco_total,
+            'personalizada': self.__personalizada,
+            'feirante': self.__feirante,
+            'reservada' : False
+        }
+
     def __validar_campos(
         self,
         nome: str,

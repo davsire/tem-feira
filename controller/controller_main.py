@@ -156,8 +156,45 @@ class ControllerMain:
             self.__controller_produto.decrementar_quantidade_produto(produto.produto.id, produto.quantidade)
         ViewUtils.abrir_popup_mensagem('Cesta reservada!')
     
-    def criar_cesta(self, produtos_selecionados, callback_criacao):
-        print(produtos_selecionados)
+    def confirmar_criar_cesta_pronta(self, produtos_selecionados, callback_criacao):
+        ViewUtils.abrir_popup_input(
+            f'Informe o nome da cesta:',
+            'Criar',
+            lambda nome_cesta: (self.criar_cesta_pronta(nome_cesta, produtos_selecionados), callback_criacao()),
+        )
+
+    def criar_cesta_pronta(self, nome_cesta, produtos_selecionados):
+
+        produtos_id = {}
+        for produto_id, produto_data in produtos_selecionados.items():
+            produtos_id[produto_id] = produto_data['quantidade']
+
+        lista_produtos = list(produtos_selecionados.values())
+        for produto in lista_produtos:
+            produto['produto'] = produto['produto'].to_dict()
+            id = str(produto['produto']['feirante'])
+            produto['produto']['feirante'] = self.__controller_feirante.obter_feirante_por_id(id).to_dict()
+
+
+        dados = {
+            'nome': nome_cesta,
+            'produtos': lista_produtos,
+            'preco_total': self.calcular_preco(lista_produtos),
+            'personalizada': False,
+            'reservada': False,
+            'feirante':  self.__usuario_logado.to_dict(),
+            'produtos_id': produtos_id,
+            'feirante_id': self.__usuario_logado.id
+            }
+        print(dados)
+        self.__controller_cesta.cadastrar_cesta_pronta(dados)
+
+    def calcular_preco(self, lista_produtos) -> float:
+        preco_total = 0
+        for produto in lista_produtos:
+            preco_total += produto['produto']['preco'] * produto['quantidade']
+
+        return preco_total
 
     def confirmar_exclusao_cesta(self, cesta: Cesta, callback_reserva):
         ViewUtils.abrir_popup_confirmacao(

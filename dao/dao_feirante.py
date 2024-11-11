@@ -23,6 +23,9 @@ class DaoFeirante(DaoMain):
 
     def obter_feirante_por_email(self, email: str) -> dict:
         return self.find_one({'email': email})
+    
+    def obter_feirante_por_id(self, produto_id: str):
+        return self.find_one({'_id': ObjectId(produto_id)})
 
     def obter_feirante_por_nome(self, nome: str) -> dict:
         return self.find_one({'nome_feira': {'$regex': re.escape(nome), '$options': 'i'}})

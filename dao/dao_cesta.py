@@ -29,6 +29,9 @@ class DaoCesta(DaoMain):
     def marcar_cesta_reservada(self, cesta_id: str, reservada: bool):
         self.update_one({'_id': ObjectId(cesta_id)}, {'$set': {'reservada': reservada}})
 
+    def inserir_cesta(self, cesta: Cesta):
+        return self.insert_one(cesta.to_dict_pronto())
+
     def obter_cestas_por_feirante(self, feirante_id: str):
         return self.aggregation([
             {
