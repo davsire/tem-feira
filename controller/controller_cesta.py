@@ -62,7 +62,6 @@ class ControllerCesta:
 
     def cadastrar_cesta_pronta(self, dados: dict):
         cesta = self.criar_cesta_pronta(dados)
-        print(cesta.reservada)
         self.__dao_cesta.inserir_cesta(cesta)
 
     def verificar_cesta_reservada(self, cesta_id: str) -> bool:

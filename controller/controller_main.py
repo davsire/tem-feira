@@ -186,7 +186,6 @@ class ControllerMain:
             'produtos_id': produtos_id,
             'feirante_id': self.__usuario_logado.id
             }
-        print(dados)
         self.__controller_cesta.cadastrar_cesta_pronta(dados)
 
     def calcular_preco(self, lista_produtos) -> float:
@@ -194,7 +193,7 @@ class ControllerMain:
         for produto in lista_produtos:
             preco_total += produto['produto']['preco'] * produto['quantidade']
 
-        return preco_total
+        return round(preco_total, 2)
 
     def confirmar_exclusao_cesta(self, cesta: Cesta, callback_reserva):
         ViewUtils.abrir_popup_confirmacao(
