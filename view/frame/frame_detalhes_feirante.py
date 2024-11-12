@@ -109,7 +109,7 @@ class FrameProdutos(ctk.CTkScrollableFrame):
 
             def criar_cesta(produtos_map):
                 if not(frame_detalhes.produtos_selecionados):
-                    ViewUtils.abrir_popup_mensagem("Não é possivel criar uma cesta vazia.")
+                    ViewUtils.abrir_popup_mensagem("Não é possivel criar uma cesta vazia.", cor_mensagem='red')
                     return
 
                 for produto_id, produto_data in produtos_map.items():
@@ -120,10 +120,10 @@ class FrameProdutos(ctk.CTkScrollableFrame):
                             try:
                                 quantidade = float(quantidade)
                             except:
-                                ViewUtils.abrir_popup_mensagem("Informe a quantidade do produto")
+                                ViewUtils.abrir_popup_mensagem("Informe a quantidade do produto", cor_mensagem='red')
                                 return
                             if quantidade <= 0:
-                                ViewUtils.abrir_popup_mensagem("Insira uma quantidade válida")
+                                ViewUtils.abrir_popup_mensagem("Insira uma quantidade válida", cor_mensagem='red')
                                 return
                             frame_detalhes.produtos_selecionados[produto_id]["quantidade"] = quantidade
                 
@@ -132,7 +132,7 @@ class FrameProdutos(ctk.CTkScrollableFrame):
                         if produto_data["quantidade"] > produto_data["produto"].quantidade:
                             raise ValueError("A quantidade inserida é maior que a disponível")
                 except ValueError as e:
-                    ViewUtils.abrir_popup_mensagem(e)
+                    ViewUtils.abrir_popup_mensagem(e, cor_mensagem='red')
                     return
                 frame_detalhes.criar_cesta(frame_detalhes.produtos_selecionados)
             
