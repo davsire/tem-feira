@@ -23,15 +23,26 @@ class ControllerProduto:
         self.__dao_produto.excluir_produtos_por_feirante(feirante_id)
 
     def criar_produto(self, dados: dict) -> Produto:
-        return Produto(
+        unidade = dados['unidade'].replace('.', '').upper()  # Remova pontos, se necessário
+        if unidade not in UnidadeProduto.__members__:
+            raise ValueError(f"Unidade '{unidade}' não é válida.")
+            
+        produto = Produto(
             dados.get('_id'),
             dados['nome'],
             dados['preco'],
-            dados['imagem'],
+            dados.get('imagem'),
             dados['quantidade'],
             UnidadeProduto[dados['unidade']],
             self.__controller_main.controller_feirante.criar_feirante(dados['feirante']),
-        )
+    )
+    
+        # Salve o produto no banco de dados
+        self.__dao_produto.salvar_produto(produto)
+        
+        return produto
+        
+        
 
     def verificar_produtos_cesta_indisponiveis(self, produtos: list[ProdutoCesta]) -> bool:
         for produto in produtos:
