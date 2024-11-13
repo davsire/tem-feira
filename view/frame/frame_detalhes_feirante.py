@@ -165,7 +165,6 @@ class FrameDetalhesFeirante(ctk.CTkFrame):
         self.frame_cestas = FrameCestas(self.tabview.tab('Cestas'), self.cestas, self)
         self.frame_produtos.pack(fill="both", expand=True)
         self.frame_cestas.pack(fill="both", expand=True)
-        
 
     def reservar_cesta(self, cesta: Cesta):
         self.controller_main.confirmar_reserva_cesta(cesta, self.recarregar_produtos_cestas)
