@@ -2,10 +2,9 @@ import customtkinter as ctk
 from PIL import Image
 from view.view_dados_cadastrais import ViewDadosCadastrais
 from view.view_detalhes_feirante import ViewDetalhesFeirante
+from view.frame.frame_cadastro_produto import FrameCadastroProduto
 from view.view_mapa import ViewMapa
 from model.usuario import TipoUsuario
-
-
 
 class FrameNavegacao(ctk.CTkFrame):
 
@@ -13,9 +12,9 @@ class FrameNavegacao(ctk.CTkFrame):
         super().__init__(master)
         self.configure(fg_color='#00bf63', corner_radius=0)
         self.grid_columnconfigure(0)
-        for i in range(4):
+        for i in range(5):  # Updated to 5 to accommodate the new button
             self.grid_rowconfigure(i)
-        self.grid_rowconfigure(3, weight=1)
+        self.grid_rowconfigure(4, weight=1)  # Updated to 4 to accommodate the new button
         self.botoes = {}
 
         icone_home = ctk.CTkImage(light_image=Image.open("./assets/img/icone_home.png"), size=(40, 40))
@@ -55,6 +54,18 @@ class FrameNavegacao(ctk.CTkFrame):
         )
         self.botoes['cestas'].grid(row=2, column=0, sticky="ew")
 
+        icone_cadastro_produto = ctk.CTkImage(light_image=Image.open("./assets/img/icone-produto.png"), size=(40, 40))
+        self.botoes['cadastro_produto'] = ctk.CTkButton(self,
+            image=icone_cadastro_produto,
+            text="",
+            compound="left",
+            fg_color='#00bf63',
+            width=80,
+            height=80,
+            command=lambda: master.alternar_tela('cadastro_produto')
+        )
+        self.botoes['cadastro_produto'].grid(row=3, column=0, sticky="ew")
+
         icone_logout = ctk.CTkImage(light_image=Image.open("./assets/img/icone_logout.png"), size=(40, 40))
         self.botoes['logout'] = ctk.CTkButton(self,
             image=icone_logout,
@@ -65,13 +76,12 @@ class FrameNavegacao(ctk.CTkFrame):
             height=80,
             command=lambda: master.logout()
         )
-        self.botoes['logout'].grid(row=3, column=0, pady=10, sticky="sew")
+        self.botoes['logout'].grid(row=4, column=0, pady=10, sticky="sew")
 
     def selecionar_botao(self, botao: str):
         for b in list(self.botoes.values()):
             b.configure(fg_color='#00bf63')
         self.botoes[botao].configure(fg_color='#bf1900')
-
 
 class FrameCustom(ctk.CTkFrame):
     def __init__(self, master, controller_main, tela, *args):
@@ -95,7 +105,6 @@ class FrameCustom(ctk.CTkFrame):
         self.tela = tela(self, controller_main, *args)
         self.tela.grid(row=1, column=0, sticky="nsew")
 
-
 class ViewBase(ctk.CTkFrame):
 
     def __init__(self, master, controller_main):
@@ -112,6 +121,7 @@ class ViewBase(ctk.CTkFrame):
             'home': ViewMapa if self.__controller_main.tipo_usuario_logado == TipoUsuario.CLIENTE else ViewDetalhesFeirante,
             'usuario': ViewDadosCadastrais,
             'cestas': None,
+            'cadastro_produto': FrameCadastroProduto,
         }
 
         self.navegacao = FrameNavegacao(self)
