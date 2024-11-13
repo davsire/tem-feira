@@ -3,6 +3,7 @@ from PIL import Image
 from view.view_dados_cadastrais import ViewDadosCadastrais
 from view.view_detalhes_feirante import ViewDetalhesFeirante
 from view.view_mapa import ViewMapa
+from view.frame.frame_cadastro_produto import FrameCadastroProduto
 from model.usuario import TipoUsuario
 
 
@@ -13,9 +14,9 @@ class FrameNavegacao(ctk.CTkFrame):
         super().__init__(master)
         self.configure(fg_color='#00bf63', corner_radius=0)
         self.grid_columnconfigure(0)
-        for i in range(4):
+        for i in range(5):
             self.grid_rowconfigure(i)
-        self.grid_rowconfigure(3, weight=1)
+        self.grid_rowconfigure(4, weight=1)
         self.botoes = {}
 
         icone_home = ctk.CTkImage(light_image=Image.open("./assets/img/icone_home.png"), size=(40, 40))
@@ -66,6 +67,18 @@ class FrameNavegacao(ctk.CTkFrame):
             command=lambda: master.logout()
         )
         self.botoes['logout'].grid(row=3, column=0, pady=10, sticky="sew")
+        
+        icone_cadastro_produto = ctk.CTkImage(light_image=Image.open("./assets/img/icone-produto.png"), size=(40, 40))
+        self.botoes['cadastro_produto'] = ctk.CTkButton(self,
+            image=icone_cadastro_produto,
+            text="",
+            compound="left",
+            fg_color='#00bf63',
+            width=80,
+            height=80,
+            command=lambda: master.alternar_tela('cadastro_produto')
+        )
+        self.botoes['cadastro_produto'].grid(row=3, column=0, sticky="ew")
 
     def selecionar_botao(self, botao: str):
         for b in list(self.botoes.values()):
@@ -112,6 +125,7 @@ class ViewBase(ctk.CTkFrame):
             'home': ViewMapa if self.__controller_main.tipo_usuario_logado == TipoUsuario.CLIENTE else ViewDetalhesFeirante,
             'usuario': ViewDadosCadastrais,
             'cestas': None,
+            'cadastro_produto': FrameCadastroProduto
         }
 
         self.navegacao = FrameNavegacao(self)
