@@ -25,7 +25,7 @@ class ControllerProduto:
         self.__dao_produto.excluir_produtos_por_feirante(feirante_id)
 
     def criar_produto(self, dados: dict) -> Produto:
-        imagem_padrao = '/home/ale-vasco/ale/UFSC/APS/tem-feira/assets/img/icone-produto.png'
+        imagem_padrao = 'assets/img/produto_default.png'
         # print('Criando produto')
         return Produto(
             dados.get('_id'),
@@ -52,12 +52,13 @@ class ControllerProduto:
         print('Produto salvo no banco de dados!')
         
     def inserir_produto(self, produto: Produto):
+        print(f'Inserindo produto {produto.nome.id} no banco de dados')
         documento = {
             "nome": produto.nome,
             "preco": produto.preco,
             "quantidade": produto.quantidade,
             "unidade": produto.unidade.name,
-            "feirante": ObjectId(produto.feirante._id)
+            "feirante": produto.feirante.id
         }
         self.__dao_produto.insert_one(documento)
 
@@ -74,6 +75,12 @@ class ControllerProduto:
         }
         self.__dao_produto.update_one(query, update)
         
-    def obter_todos_produtos(self):
+    def obter_todos_produtos(self) -> list[Produto]:
         produtos = self.__dao_produto.find({})
-        return [{'nome': produto['nome']} for produto in produtos]
+        return produtos
+
+    def obter_produto_por_nome_e_feirante(self, nome: str, feirante_id: str) -> Produto:
+        produtos = self.obter_produtos_por_feirante(feirante_id, False)
+        for produto in produtos:
+            if produto.nome == nome:
+                return self.criar_produto(produto)

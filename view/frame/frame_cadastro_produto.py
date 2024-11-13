@@ -24,7 +24,7 @@ class FrameCadastroProduto(ctk.CTkFrame):
         self.grid_rowconfigure(9)
 
         # Load and display the image using CTkImage
-        image_path = '/home/ale-vasco/ale/UFSC/APS/tem-feira/assets/img/icone-produto.png'
+        image_path = 'assets/img/produto_default.png'
         self.image = Image.open(image_path)
         self.ctk_image = ctk.CTkImage(self.image, size=(100, 100))
         self.image_label = ctk.CTkLabel(self, image=self.ctk_image, text='')
@@ -90,13 +90,14 @@ class FrameCadastroProduto(ctk.CTkFrame):
         self.botao_editar.configure(command=self.editar_produto)
         self.botao_editar.grid(row=9, column=0, pady=(20, 0), sticky='e')
 
-    def obter_nomes_produtos(self):
-        produtos = self.controller_main.controller_produto.obter_todos_produtos()
-        return [produto['nome'] for produto in produtos]
-
     def carregar_dados_produto(self, event):
         nome_produto = self.produto_combobox.get()
-        produto = self.controller_main.controller_produto.obter_produto_por_nome(nome_produto)
+        
+        feirante = self.controller_main.usuario_logado.to_dict()
+        feirante['_id'] = self.controller_main.usuario_logado.id
+        feirante_id = feirante['_id']
+        
+        produto = self.controller_main.controller_produto.obter_produto_por_nome_e_feirante(nome_produto, feirante_id)
         if produto:
             self.preco_entry_edicao.delete(0, 'end')
             self.preco_entry_edicao.insert(0, produto['preco'])
@@ -104,12 +105,61 @@ class FrameCadastroProduto(ctk.CTkFrame):
             self.quantidade_entry_edicao.insert(0, produto['quantidade'])
             self.unidade_combobox_edicao.set(produto['unidade'])
 
+    def obter_nomes_produtos(self):
+        produtos = self.controller_main.controller_produto.obter_todos_produtos()
+        return [produto['nome'] for produto in produtos]
+
+
     def cadastrar_produto(self):
         nome = self.nome_entry.get().lower()  # Converte o nome para minúsculas
         preco = float(self.preco_entry.get())
         quantidade = float(self.quantidade_entry.get())
         unidade = self.unidade_combobox.get()
+        
+        produtos_kg = [
+            'abacate', 'abacaxi', 'abobrinha', 'abóbora', 'aipo', 'alho', 'almeirão', 'ameixa', 'amora', 'aspargo',
+            'banana', 'batata', 'batata-doce', 'berinjela', 'beterraba', 'brócolis', 'caju', 'caqui', 'carambola', 'cebola',
+            'cenoura', 'cereja', 'chuchu', 'couve', 'couve-flor', 'damasco', 'ervilha', 'espinafre', 'figo', 'framboesa',
+            'gengibre', 'goiaba', 'graviola', 'inhame', 'jaca', 'jiló', 'kiwi', 'laranja', 'limão', 'maçã', 'mamão', 'manga',
+            'maracujá', 'melancia', 'melão', 'morango', 'nectarina', 'nêspera', 'pepino', 'pêssego', 'pimentão', 'quiabo',
+            'rabanete', 'repolho', 'rúcula', 'salsa', 'tangerina', 'tomate', 'uva'
+            ]# Substitua pelos nomes reais dos produtos
+
+        produtos_unidade = [
+            'pote de mel', 'garrafa de suco', 'pacote de biscoito', 'barra de chocolate', 'caixa de ovos', 'pote de geleia',
+            'garrafa de azeite', 'pote de iogurte', 'caixa de leite', 'garrafa de água'
+        ]
+
+        if nome in produtos_kg and unidade != 'KG':
+            ViewUtils.abrir_popup_mensagem('Este produto deve ser cadastrado na unidade KG.', 'red')
+            return
+
+        if nome in produtos_unidade and unidade != 'UNIDADE':
+            ViewUtils.abrir_popup_mensagem('Este produto deve ser cadastrado na unidade UNIDADE.', 'red')
+            return
+        
         feirante = self.controller_main.usuario_logado.to_dict()
+        feirante['_id'] = self.controller_main.usuario_logado.id
+        
+        dados = {
+            'nome': nome,
+            'preco': preco,
+            'quantidade': quantidade,
+            'unidade': unidade,
+            'feirante': feirante
+        }
+        
+        self.controller_main.controller_produto.salvar_produto(dados)
+        ViewUtils.abrir_popup_mensagem('Produto salvo com sucesso!', 'green')
+
+    def editar_produto(self):
+        nome = self.produto_combobox.get()  # Obtém o nome do produto selecionado no combobox
+        preco = float(self.preco_entry_edicao.get())
+        quantidade = float(self.quantidade_entry_edicao.get())
+        unidade = self.unidade_combobox_edicao.get()
+        feirante = self.controller_main.usuario_logado.to_dict()
+        feirante['_id'] = self.controller_main.usuario_logado.id
+        
         
         produtos_kg = [
             'abacate', 'abacaxi', 'abobrinha', 'abóbora', 'aipo', 'alho', 'almeirão', 'ameixa', 'amora', 'aspargo',
@@ -139,48 +189,6 @@ class FrameCadastroProduto(ctk.CTkFrame):
             'quantidade': quantidade,
             'unidade': unidade,
             'feirante': feirante
-        }
-        
-        self.controller_main.controller_produto.salvar_produto(dados)
-        ViewUtils.abrir_popup_mensagem('Produto salvo com sucesso!', 'green')
-
-    def editar_produto(self):
-        nome = self.produto_combobox.get()  # Obtém o nome do produto selecionado no combobox
-        preco = float(self.preco_entry_edicao.get())
-        quantidade = float(self.quantidade_entry_edicao.get())
-        unidade = self.unidade_combobox_edicao.get()
-        feirante = self.controller_main.usuario_logado.to_dict()
-        
-        produtos_kg = [
-            'abacate', 'abacaxi', 'abobrinha', 'abóbora', 'aipo', 'alho', 'almeirão', 'ameixa', 'amora', 'aspargo',
-            'banana', 'batata', 'batata-doce', 'berinjela', 'beterraba', 'brócolis', 'caju', 'caqui', 'carambola', 'cebola',
-            'cenoura', 'cereja', 'chuchu', 'couve', 'couve-flor', 'damasco', 'ervilha', 'espinafre', 'figo', 'framboesa',
-            'gengibre', 'goiaba', 'graviola', 'inhame', 'jaca', 'jiló', 'kiwi', 'laranja', 'limão', 'maçã', 'mamão', 'manga',
-            'maracujá', 'melancia', 'melão', 'morango', 'nectarina', 'nêspera', 'pepino', 'pêssego', 'pimentão', 'quiabo',
-            'rabanete', 'repolho', 'rúcula', 'salsa', 'tangerina', 'tomate', 'uva'
-            ]# Substitua pelos nomes reais dos produtos
-
-        produtos_unidade = [
-            'pote de mel', 'garrafa de suco', 'pacote de biscoito', 'barra de chocolate', 'caixa de ovos', 'pote de geleia',
-            'garrafa de azeite', 'pote de iogurte', 'caixa de leite', 'garrafa de água'
-        ]
-
-        if nome in produtos_kg and unidade != 'KG':
-            ViewUtils.abrir_popup_mensagem('Este produto deve ser cadastrado na unidade KG.', 'red')
-            return
-
-        if nome in produtos_unidade and unidade != 'UNIDADE':
-            ViewUtils.abrir_popup_mensagem('Este produto deve ser cadastrado na unidade UNIDADE.', 'red')
-            return
-        
-        feirante_id = feirante.get('_id')
-        
-        dados = {
-            'nome': nome,
-            'preco': preco,
-            'quantidade': quantidade,
-            'unidade': unidade,
-            'feirante': ObjectId(feirante_id )
         }
         
         self.controller_main.controller_produto.editar_produto(dados)
