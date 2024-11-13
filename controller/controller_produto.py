@@ -23,11 +23,13 @@ class ControllerProduto:
         self.__dao_produto.excluir_produtos_por_feirante(feirante_id)
 
     def criar_produto(self, dados: dict) -> Produto:
+        imagem_padrao = '/home/ale-vasco/ale/UFSC/APS/tem-feira/assets/img/icone-produto.png'
+        print('Criando produto')
         return Produto(
             dados.get('_id'),
             dados['nome'],
             dados['preco'],
-            dados['imagem'],
+            dados.get('imagem', imagem_padrao),
             dados['quantidade'],
             UnidadeProduto[dados['unidade']],
             self.__controller_main.controller_feirante.criar_feirante(dados['feirante']),
@@ -41,3 +43,14 @@ class ControllerProduto:
 
     def decrementar_quantidade_produto(self, produto_id: str, quantidade: float):
         self.__dao_produto.decrementar_quantidade_produto(produto_id, quantidade)
+
+    def salvar_produto(self, dados: dict):
+        produto = self.criar_produto(dados)
+        self.__dao_produto.inserir_produto(produto)
+        print('Produto salvo no banco de dados!')
+        
+    def obter_todos_produtos(self):
+        return list(self.__dao_produto.find({}))
+
+    def obter_produto_por_nome(self, nome: str):
+        return self.__dao_produto.find_one({'nome': nome.lower()})    

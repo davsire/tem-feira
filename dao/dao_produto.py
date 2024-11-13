@@ -1,5 +1,6 @@
 from bson import ObjectId
 from dao.dao_main import DaoMain
+from model.produto import Produto
 
 
 class DaoProduto(DaoMain):
@@ -45,3 +46,27 @@ class DaoProduto(DaoMain):
                 '$unwind': '$feirante'
             }
         ])
+
+    def inserir_produto(self, produto: Produto):
+        produto_dict = {
+            '_id': ObjectId(produto.id) if produto.id else ObjectId(),
+            'nome': produto.nome,
+            'preco': produto.preco,
+            'imagem': produto.imagem,
+            'quantidade': produto.quantidade,
+            'unidade': produto.unidade.name,
+            'feirante': ObjectId(produto.feirante.id),
+        }
+        # Verifique se um produto com o mesmo nome já existe no banco de dados
+        produto_existente = self.find_one({'nome': produto.nome.lower()})
+        
+        if produto_existente:
+            # Remova o campo '_id' do dicionário do produto existente
+            produto_dict.pop('_id', None)
+            # Atualize o documento existente
+            self.update_one({'_id': produto_existente['_id']}, {'$set': produto_dict})
+            print('Produto atualizado no banco de dados!')
+        else:
+            # Insira um novo documento
+            self.insert_one(produto_dict)
+            print('Novo produto inserido no banco de dados!')
