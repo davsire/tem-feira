@@ -170,11 +170,6 @@ class ControllerMain:
             produtos_id[produto_id] = produto_data['quantidade']
 
         lista_produtos = list(produtos_selecionados.values())
-        for produto in lista_produtos:
-            produto['produto'] = produto['produto'].to_dict()
-            id = str(produto['produto']['feirante'])
-            produto['produto']['feirante'] = self.__controller_feirante.obter_feirante_por_id(id).to_dict()
-
 
         dados = {
             'nome': nome_cesta,
@@ -182,7 +177,6 @@ class ControllerMain:
             'preco_total': self.calcular_preco(lista_produtos),
             'personalizada': False,
             'reservada': False,
-            'feirante':  self.__usuario_logado.to_dict(),
             'produtos_id': produtos_id,
             'feirante_id': self.__usuario_logado.id
             }
@@ -192,7 +186,7 @@ class ControllerMain:
     def calcular_preco(self, lista_produtos) -> float:
         preco_total = 0
         for produto in lista_produtos:
-            preco_total += produto['produto']['preco'] * produto['quantidade']
+            preco_total += produto['produto'].preco * produto['quantidade']
 
         return round(preco_total, 2)
 
