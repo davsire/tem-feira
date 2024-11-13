@@ -45,31 +45,12 @@ class FrameCadastroProduto(ctk.CTkFrame):
         self.botao_cadastrar.grid(row=8, column=0, columnspan=2, pady=(20, 0))
 
     def cadastrar_produto(self):
-        try:
-            dados = {
-                'nome': self.nome_entry.get(),
-                'preco': float(self.preco_entry.get()),
-                'quantidade': float(self.quantidade_entry.get()),
-                'unidade': self.unidade_combobox.get(),
-                'feirante': self.controller_main.usuario_logado.to_dict()
-            }
-
-            # Verifique se a unidade é válida e mapeie para o enum UnidadeProduto
-            unidade_map = {
-                'Un.': 'UNIDADE',
-                'Kg.': 'KG',
-                # Adicione outras unidades conforme necessário
-            }
-
-            unidade = dados['unidade']
-            if unidade not in unidade_map:
-                raise ValueError(f"Unidade '{unidade}' não é válida.")
-
-            dados['unidade'] = unidade_map[unidade]
-
-            self.controller_main.controller_produto.criar_produto(dados)
-            ViewUtils.abrir_popup_mensagem('Produto cadastrado com sucesso!', 'green')
-        except ValueError as e:
-            ViewUtils.abrir_popup_mensagem(f"Erro ao cadastrar produto: {e}", 'red')
-        except Exception as e:
-            ViewUtils.abrir_popup_mensagem(f"Ocorreu um erro: {e}", 'red')
+        dados = {
+            'nome': self.nome_entry.get(),
+            'preco': float(self.preco_entry.get()),
+            'quantidade': float(self.quantidade_entry.get()),
+            'unidade': self.unidade_combobox.get(),
+            'feirante': self.controller_main.usuario_logado.to_dict()
+        }
+        self.controller_main.controller_produto.criar_produto(dados)
+        ViewUtils.abrir_popup_mensagem('Produto cadastrado com sucesso!', 'green')
