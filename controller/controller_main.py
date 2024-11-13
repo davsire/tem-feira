@@ -179,7 +179,8 @@ class ControllerMain:
             'reservada': False,
             'produtos_id': produtos_id,
             'feirante_id': self.__usuario_logado.id
-            }
+        }
+
         self.__controller_cesta.cadastrar_cesta_pronta(dados)
         ViewUtils.abrir_popup_mensagem('Cesta criada com sucesso!')
 
