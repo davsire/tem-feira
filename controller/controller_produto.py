@@ -1,6 +1,8 @@
 from dao.dao_produto import DaoProduto
 from model.produto import Produto, UnidadeProduto
 from model.produto_cesta import ProdutoCesta
+from bson import ObjectId
+
 
 
 class ControllerProduto:
@@ -24,7 +26,7 @@ class ControllerProduto:
 
     def criar_produto(self, dados: dict) -> Produto:
         imagem_padrao = '/home/ale-vasco/ale/UFSC/APS/tem-feira/assets/img/icone-produto.png'
-        print('Criando produto')
+        # print('Criando produto')
         return Produto(
             dados.get('_id'),
             dados['nome'],
@@ -49,8 +51,29 @@ class ControllerProduto:
         self.__dao_produto.inserir_produto(produto)
         print('Produto salvo no banco de dados!')
         
-    def obter_todos_produtos(self):
-        return list(self.__dao_produto.find({}))
+    def inserir_produto(self, produto: Produto):
+        documento = {
+            "nome": produto.nome,
+            "preco": produto.preco,
+            "quantidade": produto.quantidade,
+            "unidade": produto.unidade.name,
+            "feirante": ObjectId(produto.feirante._id)
+        }
+        self.__dao_produto.insert_one(documento)
 
-    def obter_produto_por_nome(self, nome: str):
-        return self.__dao_produto.find_one({'nome': nome.lower()})    
+    def editar_produto(self, dados):
+        query = {"nome": dados['nome']}
+        feirante_id = dados.get('feirante')
+        update = {
+            "$set": {
+                "preco": dados['preco'],
+                "quantidade": dados['quantidade'],
+                "unidade": dados['unidade'],
+                "feirante": ObjectId(feirante_id)
+            }
+        }
+        self.__dao_produto.update_one(query, update)
+        
+    def obter_todos_produtos(self):
+        produtos = self.__dao_produto.find({})
+        return [{'nome': produto['nome']} for produto in produtos]
