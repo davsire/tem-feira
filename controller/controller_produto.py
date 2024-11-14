@@ -62,15 +62,17 @@ class ControllerProduto:
         }
         self.__dao_produto.insert_one(documento)
 
-    def editar_produto(self, dados):
-        query = {"nome": dados['nome']}
-        feirante_id = dados.get('feirante')
+    def editar_produto(self, dados: dict):
+        produto = self.criar_produto(dados)
+        query = {
+            "nome": produto.nome.lower(),
+            "feirante": ObjectId(produto.feirante.id)
+        }
         update = {
             "$set": {
-                "preco": dados['preco'],
-                "quantidade": dados['quantidade'],
-                "unidade": dados['unidade'],
-                "feirante": ObjectId(feirante_id)
+                "preco": produto.preco,
+                "quantidade": produto.quantidade,
+                "unidade": produto.unidade.name
             }
         }
         self.__dao_produto.update_one(query, update)
@@ -82,5 +84,10 @@ class ControllerProduto:
     def obter_produto_por_nome_e_feirante(self, nome: str, feirante_id: str) -> Produto:
         produtos = self.obter_produtos_por_feirante(feirante_id, False)
         for produto in produtos:
-            if produto.nome == nome:
-                return self.criar_produto(produto)
+            if produto.nome.lower() == nome.lower():
+                return produto
+        return None
+
+    def excluir_produto(self, produto_id: str):
+        """Exclui um produto do banco de dados"""
+        self.__dao_produto.delete_one({'_id': ObjectId(produto_id)})

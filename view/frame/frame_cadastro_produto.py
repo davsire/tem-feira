@@ -86,9 +86,30 @@ class FrameCadastroProduto(ctk.CTkFrame):
         self.unidade_label_edicao.grid(row=7, column=0, columnspan=2, sticky='w')
         self.unidade_combobox_edicao.grid(row=8, column=0, columnspan=2, sticky='new')
 
-        self.botao_editar = ViewUtils.obter_botao(tab, 'Editar Produto')
+        # Frame para os botões
+        frame_botoes = ctk.CTkFrame(tab, fg_color='transparent')
+        frame_botoes.grid(row=9, column=0, columnspan=2, pady=(20, 0), sticky='e')
+        
+        # Botão Excluir (vermelho)
+        self.botao_excluir = ViewUtils.obter_botao(
+            frame_botoes, 
+            'Excluir', 
+            fg_color='#bf1900',
+            text_color='white'
+        )
+        self.botao_excluir.configure(command=self.excluir_produto)
+        self.botao_excluir.pack(side='left', padx=(0, 10))
+        
+        # Botão Editar (verde)
+        self.botao_editar = ViewUtils.obter_botao(
+            frame_botoes, 
+            'Editar',
+            fg_color='#00bf63',
+            text_color='white'
+        )
         self.botao_editar.configure(command=self.editar_produto)
-        self.botao_editar.grid(row=9, column=0, pady=(20, 0), sticky='e')
+        self.botao_editar.pack(side='left')
+        
 
     def carregar_dados_produto(self, event):
         nome_produto = self.produto_combobox.get()
@@ -106,9 +127,10 @@ class FrameCadastroProduto(ctk.CTkFrame):
             self.unidade_combobox_edicao.set(produto['unidade'])
 
     def obter_nomes_produtos(self):
-        produtos = self.controller_main.controller_produto.obter_todos_produtos()
-        return [produto['nome'] for produto in produtos]
-
+        # Obter apenas os produtos do feirante logado
+        feirante_id = self.controller_main.usuario_logado.id
+        produtos = self.controller_main.controller_produto.obter_produtos_por_feirante(feirante_id, False)
+        return [produto.nome for produto in produtos]
 
     def cadastrar_produto(self):
         nome = self.nome_entry.get().lower()  # Converte o nome para minúsculas
@@ -193,3 +215,31 @@ class FrameCadastroProduto(ctk.CTkFrame):
         
         self.controller_main.controller_produto.editar_produto(dados)
         ViewUtils.abrir_popup_mensagem('Produto editado com sucesso!', 'green')
+        
+    def excluir_produto(self):
+        """Exclui o produto selecionado após confirmação"""
+        nome = self.produto_combobox.get()
+        if not nome:
+            ViewUtils.abrir_popup_mensagem('Selecione um produto para excluir!', 'red')
+            return
+            
+        feirante_id = self.controller_main.usuario_logado.id
+        produto = self.controller_main.controller_produto.obter_produto_por_nome_e_feirante(nome, feirante_id)
+        
+        if produto:
+            def confirmar_exclusao():
+                self.controller_main.controller_produto.excluir_produto(produto.id)
+                # Atualiza a lista de produtos
+                self.produto_combobox.configure(values=self.obter_nomes_produtos())
+                # Limpa os campos
+                self.produto_combobox.set('')
+                self.preco_entry_edicao.delete(0, 'end')
+                self.quantidade_entry_edicao.delete(0, 'end')
+                ViewUtils.abrir_popup_mensagem('Produto excluído com sucesso!', 'green')
+                
+            ViewUtils.abrir_popup_confirmacao(
+                'Tem certeza que deseja excluir este produto?',
+                'Excluir',
+                confirmar_exclusao,
+                '#bf1900'
+            )
