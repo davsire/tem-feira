@@ -125,7 +125,7 @@ class ViewBase(ctk.CTkFrame):
             'home': ViewMapa if self.__controller_main.tipo_usuario_logado == TipoUsuario.CLIENTE else ViewDetalhesFeirante,
             'usuario': ViewDadosCadastrais,
             'cestas': None,
-            'cadastro_produto': FrameCadastroProduto
+            'cadastro_produto': FrameCadastroProduto if self.__controller_main.tipo_usuario_logado == TipoUsuario.FEIRANTE else None
         }
 
         self.navegacao = FrameNavegacao(self)

@@ -30,8 +30,14 @@ class FrameCadastroProduto(ctk.CTkFrame):
         self.image_label = ctk.CTkLabel(self, image=self.ctk_image, text='')
         self.image_label.grid(row=0, column=0, columnspan=2, pady=(10, 20))
 
-        self.tabview = ctk.CTkTabview(self)
-        self.tabview.grid(row=1, column=0, columnspan=2, sticky='nsew')
+        self.tabview = ctk.CTkTabview(self,
+            fg_color='white',
+            segmented_button_fg_color='white',
+            segmented_button_selected_color='#00bf63',
+            text_color='white')
+        
+        self.tabview.grid(row=1, column=0, columnspan=2, padx=20, pady=(20, 20), sticky='nsew')
+        self.tabview._segmented_button.configure(font=('system', 22, 'bold'), corner_radius=20)
         self.tabview.add("Cadastro")
         self.tabview.add("Edição")
 
@@ -69,7 +75,7 @@ class FrameCadastroProduto(ctk.CTkFrame):
         
         self.produto_combobox = ctk.CTkComboBox(tab, values=self.obter_nomes_produtos(), height=30)
         self.produto_combobox.grid(row=0, column=0, columnspan=2, sticky='new')
-        self.produto_combobox.bind("<<ComboboxSelected>>", self.carregar_dados_produto)
+        self.produto_combobox.bind("<<Selecione o produto>>", self.carregar_dados_produto)
 
         self.preco_label_edicao = ctk.CTkLabel(tab, text='Preço *', font=('system', 16))
         self.preco_entry_edicao = ctk.CTkEntry(tab, height=30, placeholder_text='Digite o preço do produto')
@@ -145,7 +151,7 @@ class FrameCadastroProduto(ctk.CTkFrame):
             'gengibre', 'goiaba', 'graviola', 'inhame', 'jaca', 'jiló', 'kiwi', 'laranja', 'limão', 'maçã', 'mamão', 'manga',
             'maracujá', 'melancia', 'melão', 'morango', 'nectarina', 'nêspera', 'pepino', 'pêssego', 'pimentão', 'quiabo',
             'rabanete', 'repolho', 'rúcula', 'salsa', 'tangerina', 'tomate', 'uva'
-            ]# Substitua pelos nomes reais dos produtos
+        ]
 
         produtos_unidade = [
             'pote de mel', 'garrafa de suco', 'pacote de biscoito', 'barra de chocolate', 'caixa de ovos', 'pote de geleia',
@@ -163,6 +169,12 @@ class FrameCadastroProduto(ctk.CTkFrame):
         feirante = self.controller_main.usuario_logado.to_dict()
         feirante['_id'] = self.controller_main.usuario_logado.id
         
+        # Verificar se o produto já existe
+        produto_existente = self.controller_main.controller_produto.obter_produto_por_nome_e_feirante(nome, feirante['_id'])
+        if produto_existente:
+            ViewUtils.abrir_popup_mensagem('Este produto já existe no seu catálogo!', 'red')
+            return
+        
         dados = {
             'nome': nome,
             'preco': preco,
@@ -173,6 +185,19 @@ class FrameCadastroProduto(ctk.CTkFrame):
         
         self.controller_main.controller_produto.salvar_produto(dados)
         ViewUtils.abrir_popup_mensagem('Produto salvo com sucesso!', 'green')
+        def upload_imagem_produto(self):
+            file_path = ctk.filedialog.askopenfilename(
+                filetypes=[("Image files", "*.jpg *.jpeg *.png *.gif")]
+            )
+            if file_path:
+                self.image = Image.open(file_path)
+                self.ctk_image = ctk.CTkImage(self.image, size=(100, 100))
+                self.image_label.configure(image=self.ctk_image)
+                self.image_path = file_path
+
+        self.botao_upload_imagem = ViewUtils.obter_botao(self, 'Upload Imagem')
+        self.botao_upload_imagem.configure(command=self.upload_imagem_produto)
+        self.botao_upload_imagem.grid(row=10, column=0, pady=(20, 0), sticky='e')
 
     def editar_produto(self):
         nome = self.produto_combobox.get()  # Obtém o nome do produto selecionado no combobox
