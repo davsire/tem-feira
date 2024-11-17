@@ -107,55 +107,58 @@ class FrameProdutos(ctk.CTkScrollableFrame):
 
                 self.produtos_map[produto.id]["quantidade"] = input_quantidade
 
-            def criar_cesta(produtos_map):
-                if not(frame_detalhes.produtos_selecionados):
-                    ViewUtils.abrir_popup_mensagem("Não é possivel criar uma cesta vazia.", cor_mensagem='red')
-                    return
+        botao_frame = ctk.CTkFrame(self, fg_color='transparent')
+        botao_frame.grid(row=10, column=0, padx=10, pady=(10, 5), sticky='ew')
 
-                for produto_id, produto_data in produtos_map.items():
-                    entrada_quantidade = produto_data["quantidade"]
-                    if entrada_quantidade:
-                        quantidade = entrada_quantidade.get().strip()
-                        if produto_id in frame_detalhes.produtos_selecionados:
-                            try:
-                                quantidade = float(quantidade)
-                            except:
-                                ViewUtils.abrir_popup_mensagem("Informe a quantidade do produto", cor_mensagem='red')
-                                return
-                            if quantidade <= 0:
-                                ViewUtils.abrir_popup_mensagem("Insira uma quantidade válida", cor_mensagem='red')
-                                return
-                            frame_detalhes.produtos_selecionados[produto_id]["quantidade"] = quantidade
+        if not(frame_detalhes.mostrar_checkbox):
+            botao_cadastrar_produto = ViewUtils.obter_botao(botao_frame, 'Cadastrar produto')
+            botao_cadastrar_produto.grid(column=0, row=2, sticky='w')
+            #acao_cadastrar_produto = partial(frame_detalhes.cadastrar_produto)
+            #botao_cadastrar_produto.configure(command=acao_cadastrar_produto)
+
+            botao_criar_cesta_pronta = ViewUtils.obter_botao(botao_frame, 'Criar cesta pronta')
+            botao_criar_cesta_pronta.grid(column=1, row=2, padx=(15,0), pady=20, sticky='w')
+            acao_iniciar_criacao_cesta = partial(frame_detalhes.iniciar_criacao_cesta)
+            botao_criar_cesta_pronta.configure(command=acao_iniciar_criacao_cesta)
+        else:
+            botao_criar_cesta = ViewUtils.obter_botao(botao_frame, 'Criar cesta')
+            botao_criar_cesta.grid(column=0, row=2, sticky='w', )
+            acao_criar_cesta = partial(self.criar_cesta, self.produtos_map, frame_detalhes)
+            botao_criar_cesta.configure(command=acao_criar_cesta)
+
+            botao_cancelar = ViewUtils.obter_botao(botao_frame, 'Cancelar', '#bf1900')
+            botao_cancelar.grid(column=1, row=2, padx=(15,0), pady=20, sticky='w')
+            acao_cancelar = partial(frame_detalhes.cancelar_criacao)
+            botao_cancelar.configure(command=acao_cancelar)
+    
+    def criar_cesta(produtos_map, frame_detalhes):
+            if not(frame_detalhes.produtos_selecionados):
+                ViewUtils.abrir_popup_mensagem("Não é possivel criar uma cesta vazia.", cor_mensagem='red')
+                return
+
+            for produto_id, produto_data in produtos_map.items():
+                entrada_quantidade = produto_data["quantidade"]
+                if entrada_quantidade:
+                    quantidade = entrada_quantidade.get().strip()
+                    if produto_id in frame_detalhes.produtos_selecionados:
+                        try:
+                            quantidade = float(quantidade)
+                        except:
+                            ViewUtils.abrir_popup_mensagem("Informe a quantidade do produto", cor_mensagem='red')
+                            return
+                        if quantidade <= 0:
+                            ViewUtils.abrir_popup_mensagem("Insira uma quantidade válida", cor_mensagem='red')
+                            return
+                        frame_detalhes.produtos_selecionados[produto_id]["quantidade"] = quantidade
                 
-                try:
-                    for produto_id, produto_data in frame_detalhes.produtos_selecionados.items():
-                        if produto_data["quantidade"] > produto_data["produto"].quantidade:
-                            raise ValueError("A quantidade inserida é maior que a disponível")
-                except ValueError as e:
-                    ViewUtils.abrir_popup_mensagem(e, cor_mensagem='red')
-                    return
-                frame_detalhes.criar_cesta(frame_detalhes.produtos_selecionados)
-            
-            if not(frame_detalhes.mostrar_checkbox):
-                botao_cadastrar_produto = ViewUtils.obter_botao(self, 'Cadastrar produto')
-                botao_cadastrar_produto.grid(column=0, row=2, sticky='w')
-                #acao_cadastrar_produto = partial(frame_detalhes.cadastrar_produto)
-                #botao_cadastrar_produto.configure(command=acao_cadastrar_produto)
-
-                botao_criar_cesta_pronta = ViewUtils.obter_botao(self, 'Criar cesta pronta')
-                botao_criar_cesta_pronta.grid(column=0, row=2, padx=(140,0), pady=20, sticky='w')
-                acao_iniciar_criacao_cesta = partial(frame_detalhes.iniciar_criacao_cesta)
-                botao_criar_cesta_pronta.configure(command=acao_iniciar_criacao_cesta)
-            else:
-                botao_criar_cesta = ViewUtils.obter_botao(self, 'Criar cesta')
-                botao_criar_cesta.grid(column=0, row=2, sticky='w', )
-                acao_criar_cesta = partial(criar_cesta, self.produtos_map)
-                botao_criar_cesta.configure(command=acao_criar_cesta)
-
-                botao_cancelar = ViewUtils.obter_botao(self, 'Cancelar', '#bf1900')
-                botao_cancelar.grid(column=0, row=2, padx=(140,0), pady=20, sticky='w')
-                acao_cancelar = partial(frame_detalhes.cancelar_criacao)
-                botao_cancelar.configure(command=acao_cancelar)
+            try:
+                for produto_id, produto_data in frame_detalhes.produtos_selecionados.items():
+                    if produto_data["quantidade"] > produto_data["produto"].quantidade:
+                        raise ValueError("A quantidade inserida é maior que a disponível")
+            except ValueError as e:
+                ViewUtils.abrir_popup_mensagem(e, cor_mensagem='red')
+                return
+            frame_detalhes.criar_cesta(frame_detalhes.produtos_selecionados)
 
 class FrameCestas(ctk.CTkScrollableFrame):
     def __init__(self, master, cestas: list[Cesta], frame_detalhes):
