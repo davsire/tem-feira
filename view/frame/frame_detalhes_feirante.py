@@ -46,7 +46,7 @@ class FrameInformacoes(ctk.CTkFrame):
         self.dias_funcionamento.grid(row=1, rowspan=2, column=1, pady=(2, 10), padx=10, sticky='nw')
 
 
-class FrameProdutos(ctk.CTkScrollableFrame):
+class FrameProdutos(ctk.CTkFrame):
     def __init__(self, master, produtos: list[Produto], frame_detalhes):
         super().__init__(master)
         self.configure(fg_color='white')
@@ -60,11 +60,18 @@ class FrameProdutos(ctk.CTkScrollableFrame):
             label_sem_produtos.pack(pady=20, anchor='center')
             return
 
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_rowconfigure(1, weight=0)
+        self.grid_columnconfigure(0, weight=1)
+
+        listagem_produtos = ctk.CTkScrollableFrame(self, fg_color='transparent')
+        listagem_produtos.grid(row=0, column=0, padx=10, pady=(10, 0), sticky='nsew')
+
         for idx, produto in enumerate(produtos):
             coluna = idx % self.limite_linha
             linha = idx // self.limite_linha
 
-            produto_elm = ctk.CTkFrame(self, fg_color='white', border_width=2, border_color='black', corner_radius=5)
+            produto_elm = ctk.CTkFrame(listagem_produtos, fg_color='white', border_width=2, border_color='black', corner_radius=5)
 
             nome_checkbox_frame = ctk.CTkFrame(produto_elm, fg_color='transparent')
             nome_checkbox_frame.pack(pady=(10, 5), padx=10, fill='x')
@@ -108,7 +115,7 @@ class FrameProdutos(ctk.CTkScrollableFrame):
                 self.produtos_map[produto.id]["quantidade"] = input_quantidade
 
         botao_frame = ctk.CTkFrame(self, fg_color='transparent')
-        botao_frame.grid(row=10, column=0, padx=10, pady=(10, 5), sticky='ew')
+        botao_frame.grid(row=1, column=0, padx=10, sticky='ew')
 
         if not(frame_detalhes.mostrar_checkbox):
             botao_cadastrar_produto = ViewUtils.obter_botao(botao_frame, 'Cadastrar produto')
@@ -131,7 +138,7 @@ class FrameProdutos(ctk.CTkScrollableFrame):
             acao_cancelar = partial(frame_detalhes.cancelar_criacao)
             botao_cancelar.configure(command=acao_cancelar)
     
-    def criar_cesta(produtos_map, frame_detalhes):
+    def criar_cesta(self, produtos_map, frame_detalhes):
             if not(frame_detalhes.produtos_selecionados):
                 ViewUtils.abrir_popup_mensagem("Não é possivel criar uma cesta vazia.", cor_mensagem='red')
                 return
