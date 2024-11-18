@@ -69,7 +69,7 @@ class DaoProduto(DaoMain):
         else:
             # Insira um novo documento
             self.insert_one(produto_dict)
-            print('Novo produto inserido no banco de dados!')
+            # print('Novo produto inserido no banco de dados!')
             
         def excluir_produto(self, produto_id: str):
             """Exclui um produto do banco de dados"""

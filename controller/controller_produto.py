@@ -49,7 +49,7 @@ class ControllerProduto:
     def salvar_produto(self, dados: dict):
         produto = self.criar_produto(dados)
         self.__dao_produto.inserir_produto(produto)
-        print('Produto salvo no banco de dados!')
+        # print('Produto salvo no banco de dados!')
         
     def inserir_produto(self, produto: Produto):
         print(f'Inserindo produto {produto.nome.id} no banco de dados')
@@ -65,14 +65,15 @@ class ControllerProduto:
     def editar_produto(self, dados: dict):
         produto = self.criar_produto(dados)
         query = {
-            "nome": produto.nome.lower(),
+            "nome": produto.nome,
             "feirante": ObjectId(produto.feirante.id)
         }
         update = {
             "$set": {
                 "preco": produto.preco,
                 "quantidade": produto.quantidade,
-                "unidade": produto.unidade.name
+                "unidade": produto.unidade.name,
+                "imagem": produto.imagem
             }
         }
         self.__dao_produto.update_one(query, update)

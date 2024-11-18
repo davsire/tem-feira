@@ -28,12 +28,11 @@ class FrameCadastroProduto(ctk.CTkFrame):
         self.grid_rowconfigure(9)
 
         # Load and display the image using CTkImage
-        image_path = 'assets/img/produto_default.png'
+        image_path = 'assets/img/feira-foto.png'
         self.image = Image.open(image_path)
-        self.ctk_image = ctk.CTkImage(self.image, size=(100, 100))
+        self.ctk_image = ctk.CTkImage(self.image, size=(150, 100))
         self.image_label = ctk.CTkLabel(self, image=self.ctk_image, text='')
-        self.image_label.grid(row=0, column=0, columnspan=2, pady=(10, 20))
-
+        self.image_label.grid(row=0, column=0, columnspan=2, pady=(10, 2))
         self.tabview = ctk.CTkTabview(self,
             fg_color='white',
             segmented_button_fg_color='white',
@@ -257,14 +256,26 @@ class FrameCadastroProduto(ctk.CTkFrame):
         return [produto.nome for produto in produtos]
 
     def cadastrar_produto(self):
-        nome = self.nome_entry.get().lower()
+        nome = self.nome_entry.get()
+        
+        # Verificar se o nome começa com letra maiúscula
+        if not nome or not nome[0].isupper():
+            ViewUtils.abrir_popup_mensagem('O nome do produto deve começar com letra maiúscula.', 'red')
+            return
+        
+        # Verificar se todos os campos estão preenchidos
+        if not nome or not self.preco_entry.get() or not self.quantidade_entry.get() or not self.unidade_combobox.get():
+            ViewUtils.abrir_popup_mensagem('Todos os campos devem ser preenchidos.', 'red')
+            return
+        
         preco_str = self.preco_entry.get().replace(',', '.')  # Substitui vírgula por ponto
+        
         try:
             preco = float(preco_str)
         except ValueError:
             ViewUtils.abrir_popup_mensagem('Preço inválido! Por favor, insira um número válido.', 'red')
             return
-    
+        
         quantidade_str = self.quantidade_entry.get()
         
         try:
@@ -272,7 +283,7 @@ class FrameCadastroProduto(ctk.CTkFrame):
         except ValueError:
             ViewUtils.abrir_popup_mensagem('Quantidade inválida! Por favor, insira um número válido.', 'red')
             return
-        quantidade = float(self.quantidade_entry.get())
+        
         unidade = self.unidade_combobox.get()
         
         produtos_kg = [
@@ -289,11 +300,11 @@ class FrameCadastroProduto(ctk.CTkFrame):
             'garrafa de azeite', 'pote de iogurte', 'caixa de leite', 'garrafa de água'
         ]
 
-        if nome in produtos_kg and unidade != 'KG':
+        if nome.lower() in produtos_kg and unidade != 'KG':
             ViewUtils.abrir_popup_mensagem('Este produto deve ser cadastrado na unidade KG.', 'red')
             return
 
-        if nome in produtos_unidade and unidade != 'UNIDADE':
+        if nome.lower() in produtos_unidade and unidade != 'UNIDADE':
             ViewUtils.abrir_popup_mensagem('Este produto deve ser cadastrado na unidade UNIDADE.', 'red')
             return
         
@@ -301,7 +312,7 @@ class FrameCadastroProduto(ctk.CTkFrame):
         feirante['_id'] = self.controller_main.usuario_logado.id
         
         # Verificar se o produto já existe
-        produto_existente = self.controller_main.controller_produto.obter_produto_por_nome_e_feirante(nome, feirante['_id'])
+        produto_existente = self.controller_main.controller_produto.obter_produto_por_nome_e_feirante(nome.lower(), feirante['_id'])
         if produto_existente:
             ViewUtils.abrir_popup_mensagem('Este produto já existe no seu catálogo!', 'red')
             return
@@ -321,13 +332,37 @@ class FrameCadastroProduto(ctk.CTkFrame):
         # Reset image selection
         self.imagem_path = None
         self.label_imagem.configure(text='Nenhuma imagem selecionada')
-            
+                
 
     def editar_produto(self):
         nome = self.produto_combobox.get()  # Obtém o nome do produto selecionado no combobox
+        
+        # Verificar se o nome começa com letra maiúscula
+        if not nome or not nome[0].isupper():
+            ViewUtils.abrir_popup_mensagem('O nome do produto deve começar com letra maiúscula.', 'red')
+            return
+        
+        # Verificar se todos os campos estão preenchidos
+        if not nome or not self.preco_entry_edicao.get() or not self.quantidade_entry_edicao.get() or not self.unidade_combobox_edicao.get():
+            ViewUtils.abrir_popup_mensagem('Todos os campos devem ser preenchidos.', 'red')
+            return
+        
         preco_str = self.preco_entry_edicao.get().replace(',', '.')  # Substitui vírgula por ponto
-        preco = float(preco_str)
-        quantidade = float(self.quantidade_entry_edicao.get())
+        
+        try:
+            preco = float(preco_str)
+        except ValueError:
+            ViewUtils.abrir_popup_mensagem('Preço inválido! Por favor, insira um número válido.', 'red')
+            return
+        
+        quantidade_str = self.quantidade_entry_edicao.get()
+        
+        try:
+            quantidade = float(quantidade_str)
+        except ValueError:
+            ViewUtils.abrir_popup_mensagem('Quantidade inválida! Por favor, insira um número válido.', 'red')
+            return
+        
         unidade = self.unidade_combobox_edicao.get()
         feirante = self.controller_main.usuario_logado.to_dict()
         feirante['_id'] = self.controller_main.usuario_logado.id
@@ -346,26 +381,26 @@ class FrameCadastroProduto(ctk.CTkFrame):
             'garrafa de azeite', 'pote de iogurte', 'caixa de leite', 'garrafa de água'
         ]
 
-        if nome in produtos_kg and unidade != 'KG':
+        if nome.lower() in produtos_kg and unidade != 'KG':
             ViewUtils.abrir_popup_mensagem('Este produto deve ser cadastrado na unidade KG.', 'red')
             return
 
-        if nome in produtos_unidade and unidade != 'UNIDADE':
+        if nome.lower() in produtos_unidade and unidade != 'UNIDADE':
             ViewUtils.abrir_popup_mensagem('Este produto deve ser cadastrado na unidade UNIDADE.', 'red')
             return
-        
+
         dados = {
             'nome': nome,
             'preco': preco,
             'quantidade': quantidade,
             'unidade': unidade,
             'feirante': feirante,
-            'imagem': self.imagem_path_edicao if hasattr(self, 'imagem_path_edicao') and self.imagem_path_edicao else './assets/img/produto_default.png'
+            'imagem': self.imagem_path_edicao if self.imagem_path_edicao else './assets/img/produto_default.png'
         }
-        
+
         self.controller_main.controller_produto.editar_produto(dados)
         ViewUtils.abrir_popup_mensagem('Produto editado com sucesso!', 'green')
-    
+
         # Reset image selection
         self.imagem_path_edicao = None
         self.label_imagem_edicao.configure(text='Nenhuma imagem selecionada')

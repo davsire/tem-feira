@@ -76,8 +76,13 @@ class FrameProdutos(ctk.CTkScrollableFrame):
             imagem_produto_lbl = ctk.CTkLabel(produto_elm, image=imagem_produto, text='')
             imagem_produto_lbl.pack(padx=10)
 
-            preco_produto = ctk.CTkLabel(produto_elm, text=f'R${produto.preco} {produto.unidade.value}', font=('system', 18))
+            preco_produto = ctk.CTkLabel(produto_elm, text=f'R${produto.preco}', font=('system', 18))
             preco_produto.pack(pady=(10, 5), padx=10)
+            
+            # Adiciona a quantidade do produto
+            quantidade_texto = f'Qtd: {int(produto.quantidade)} {produto.unidade.value}'
+            quantidade_produto = ctk.CTkLabel(produto_elm, text=quantidade_texto, font=('system', 18))
+            quantidade_produto.pack(pady=(10, 5), padx=10)
 
             produto_elm.grid(row=linha, column=coluna, padx=15, pady=(0, 30), sticky='nswe')
             self.produtos_map[produto.id] = produto_elm
