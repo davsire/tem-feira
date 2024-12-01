@@ -25,6 +25,7 @@ class ViewMain(ctk.CTk):
         self.frame.grid(sticky='nsew')
 
     def alternar_telas(self, tela: str):
+        self.unbind('<Return>')
         self.frame.grid_forget()
         if self.map_telas[tela]:
             self.frame = self.map_telas[tela](self, self.__controller_main)

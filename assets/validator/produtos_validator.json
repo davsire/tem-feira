@@ -27,7 +27,8 @@
       },
       "unidade": {
         "bsonType": "string",
-        "description": "must be a string and is required"
+        "enum": ["UNIDADE", "KG"],
+        "description": "must be 'UNIDADE' or 'KG' and is required"
       },
       "feirante": {
         "bsonType": "objectId",

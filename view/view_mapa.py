@@ -109,6 +109,7 @@ class ViewMapa(ctk.CTkFrame):
         botao_ver_feira.pack(padx=40, pady=(0, 30), fill='x')
 
         botao_como_chegar = ViewUtils.obter_botao(self.__modal_feira, 'Como chegar')
+        botao_como_chegar.configure(command=lambda: self.ver_como_chegar_feirante(feirante))
         botao_como_chegar.pack(padx=40, pady=(0, 30), fill='x')
 
         botao_fechar = ctk.CTkButton(self.__modal_feira, text='Fechar', fg_color='#bf1900', text_color='white', command=self.__modal_feira.destroy)
@@ -117,3 +118,6 @@ class ViewMapa(ctk.CTkFrame):
     def abrir_detalhes_feirante(self, feirante: Feirante):
         self.__modal_feira.destroy()
         self.__controller_main.abrir_tela_custom(FrameDetalhesFeirante, feirante)
+
+    def ver_como_chegar_feirante(self, feirante: Feirante):
+        pass
