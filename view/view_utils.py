@@ -51,7 +51,7 @@ class ViewUtils:
 
 
     @staticmethod
-    def abrir_popup_input(mensagem: str, texto_acao: str, acao, cor_botao_acao: str = '#00bf63'):
+    def abrir_popup_input(mensagem: str, texto_acao: str, acao, mensagem_erro, cor_botao_acao: str = '#00bf63'):
         popup = ctk.CTkToplevel()
         popup.attributes('-topmost', True)
         popup.configure(fg_color='white')
@@ -75,7 +75,7 @@ class ViewUtils:
         def acao_com_input():
             valor_input = input.get().strip()
             if not valor_input:
-                ViewUtils.abrir_popup_mensagem("O nome da cesta não pode ser vazio!", cor_mensagem='red')
+                ViewUtils.abrir_popup_mensagem(mensagem_erro, cor_mensagem='red')
             else:
                 acao(valor_input)
                 popup.destroy()

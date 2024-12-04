@@ -161,6 +161,7 @@ class ControllerMain:
             f'Informe o nome da cesta:',
             'Criar',
             lambda nome_cesta: (self.criar_cesta_pronta(nome_cesta, produtos_selecionados), callback_criacao()),
+            "O nome da cesta não pode ser vazio!"
         )
 
     def criar_cesta_pronta(self, nome_cesta, produtos_selecionados):
@@ -191,11 +192,11 @@ class ControllerMain:
 
         return round(preco_total, 2)
 
-    def confirmar_exclusao_cesta(self, cesta: Cesta, callback_reserva):
+    def confirmar_exclusao_cesta(self, cesta: Cesta, callback_excluir):
         ViewUtils.abrir_popup_confirmacao(
             f'Excluir "{cesta.nome}"?',
             'Excluir',
-            lambda: (self.excluir_cesta(cesta), callback_reserva()),
+            lambda: (self.excluir_cesta(cesta), callback_excluir()),
             '#bf1900'
         )
     

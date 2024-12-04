@@ -129,7 +129,7 @@ class FrameProdutos(ctk.CTkFrame):
             botao_criar_cesta_pronta.configure(command=acao_iniciar_criacao_cesta)
         else:
             botao_criar_cesta = ViewUtils.obter_botao(botao_frame, 'Criar cesta')
-            botao_criar_cesta.grid(column=0, row=2, sticky='w', )
+            botao_criar_cesta.grid(column=0, row=2, sticky='w')
             acao_criar_cesta = partial(self.criar_cesta, self.produtos_map, frame_detalhes)
             botao_criar_cesta.configure(command=acao_criar_cesta)
 
