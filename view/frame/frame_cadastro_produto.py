@@ -150,50 +150,7 @@ class FrameCadastroProduto(ctk.CTkFrame):
         self.botao_cadastrar = ViewUtils.obter_botao(tab, 'Cadastrar Produto')
         self.botao_cadastrar.configure(command=self.cadastrar_produto)
         self.botao_cadastrar.grid(row=10, column=0, columnspan=2, pady=(20, 0))
-        
-        
-    def editar_produto(self):
-        nome = self.produto_combobox.get()  # Obtém o nome do produto selecionado no combobox
-        preco_str = self.preco_entry.get().replace(',', '.')  # Substitui vírgula por ponto
-        preco = float(preco_str)
-        unidade = self.unidade_combobox_edicao.get()
-        feirante = self.controller_main.usuario_logado.to_dict()
-        feirante['_id'] = self.controller_main.usuario_logado.id
-        
-        
-        produtos_kg = [
-            'abacate', 'abacaxi', 'abobrinha', 'abóbora', 'aipo', 'alho', 'almeirão', 'ameixa', 'amora', 'aspargo',
-            'banana', 'batata', 'batata-doce', 'berinjela', 'beterraba', 'brócolis', 'caju', 'caqui', 'carambola', 'cebola',
-            'cenoura', 'cereja', 'chuchu', 'couve', 'couve-flor', 'damasco', 'ervilha', 'espinafre', 'figo', 'framboesa',
-            'gengibre', 'goiaba', 'graviola', 'inhame', 'jaca', 'jiló', 'kiwi', 'laranja', 'limão', 'maçã', 'mamão', 'manga',
-            'maracujá', 'melancia', 'melão', 'morango', 'nectarina', 'nêspera', 'pepino', 'pêssego', 'pimentão', 'quiabo',
-            'rabanete', 'repolho', 'rúcula', 'salsa', 'tangerina', 'tomate', 'uva'
-            ]# Substitua pelos nomes reais dos produtos
-
-        produtos_unidade = [
-            'pote de mel', 'garrafa de suco', 'pacote de biscoito', 'barra de chocolate', 'caixa de ovos', 'pote de geleia',
-            'garrafa de azeite', 'pote de iogurte', 'caixa de leite', 'garrafa de água'
-        ]
-
-        if nome in produtos_kg and unidade != 'KG':
-            ViewUtils.abrir_popup_mensagem('Este produto deve ser cadastrado na unidade KG.', 'red')
-            return
-
-        if nome in produtos_unidade and unidade != 'UNIDADE':
-            ViewUtils.abrir_popup_mensagem('Este produto deve ser cadastrado na unidade UNIDADE.', 'red')
-            return
-        
-        dados = {
-            'nome': nome,
-            'preco': preco,
-            'quantidade': quantidade,
-            'unidade': unidade,
-            'feirante': feirante
-        }
-        
-        self.controller_main.controller_produto.editar_produto(dados)
-        ViewUtils.abrir_popup_mensagem('Produto editado com sucesso!', 'green')
-        
+    
     def escolher_imagem_edicao(self):
         """Abre diálogo para escolher imagem e salva o caminho"""
         filetypes = (
@@ -257,65 +214,12 @@ class FrameCadastroProduto(ctk.CTkFrame):
 
     def cadastrar_produto(self):
         nome = self.nome_entry.get()
-        
-        # Verificar se o nome começa com letra maiúscula
-        if not nome or not nome[0].isupper():
-            ViewUtils.abrir_popup_mensagem('O nome do produto deve começar com letra maiúscula.', 'red')
-            return
-        
-        # Verificar se todos os campos estão preenchidos
-        if not nome or not self.preco_entry.get() or not self.quantidade_entry.get() or not self.unidade_combobox.get():
-            ViewUtils.abrir_popup_mensagem('Todos os campos devem ser preenchidos.', 'red')
-            return
-        
-        preco_str = self.preco_entry.get().replace(',', '.')  # Substitui vírgula por ponto
-        
-        try:
-            preco = float(preco_str)
-        except ValueError:
-            ViewUtils.abrir_popup_mensagem('Preço inválido! Por favor, insira um número válido.', 'red')
-            return
-        
-        quantidade_str = self.quantidade_entry.get()
-        
-        try:
-            quantidade = float(quantidade_str)
-        except ValueError:
-            ViewUtils.abrir_popup_mensagem('Quantidade inválida! Por favor, insira um número válido.', 'red')
-            return
-        
+        preco = self.preco_entry.get().replace(',', '.')
+        quantidade = self.quantidade_entry.get()
         unidade = self.unidade_combobox.get()
-        
-        produtos_kg = [
-            'abacate', 'abacaxi', 'abobrinha', 'abóbora', 'aipo', 'alho', 'almeirão', 'ameixa', 'amora', 'aspargo',
-            'banana', 'batata', 'batata-doce', 'berinjela', 'beterraba', 'brócolis', 'caju', 'caqui', 'carambola', 'cebola',
-            'cenoura', 'cereja', 'chuchu', 'couve', 'couve-flor', 'damasco', 'ervilha', 'espinafre', 'figo', 'framboesa',
-            'gengibre', 'goiaba', 'graviola', 'inhame', 'jaca', 'jiló', 'kiwi', 'laranja', 'limão', 'maçã', 'mamão', 'manga',
-            'maracujá', 'melancia', 'melão', 'morango', 'nectarina', 'nêspera', 'pepino', 'pêssego', 'pimentão', 'quiabo',
-            'rabanete', 'repolho', 'rúcula', 'salsa', 'tangerina', 'tomate', 'uva'
-        ]
-
-        produtos_unidade = [
-            'pote de mel', 'garrafa de suco', 'pacote de biscoito', 'barra de chocolate', 'caixa de ovos', 'pote de geleia',
-            'garrafa de azeite', 'pote de iogurte', 'caixa de leite', 'garrafa de água'
-        ]
-
-        if nome.lower() in produtos_kg and unidade != 'KG':
-            ViewUtils.abrir_popup_mensagem('Este produto deve ser cadastrado na unidade KG.', 'red')
-            return
-
-        if nome.lower() in produtos_unidade and unidade != 'UNIDADE':
-            ViewUtils.abrir_popup_mensagem('Este produto deve ser cadastrado na unidade UNIDADE.', 'red')
-            return
-        
         feirante = self.controller_main.usuario_logado.to_dict()
         feirante['_id'] = self.controller_main.usuario_logado.id
-        
-        # Verificar se o produto já existe
-        produto_existente = self.controller_main.controller_produto.obter_produto_por_nome_e_feirante(nome.lower(), feirante['_id'])
-        if produto_existente:
-            ViewUtils.abrir_popup_mensagem('Este produto já existe no seu catálogo!', 'red')
-            return
+        imagem = self.imagem_path if self.imagem_path else './assets/img/produto_default.png'
         
         dados = {
             'nome': nome,
@@ -323,109 +227,59 @@ class FrameCadastroProduto(ctk.CTkFrame):
             'quantidade': quantidade,
             'unidade': unidade,
             'feirante': feirante,
-            'imagem': self.imagem_path if self.imagem_path else './assets/img/produto_default.png'
+            'imagem': imagem
         }
         
-        self.controller_main.controller_produto.salvar_produto(dados)
-        ViewUtils.abrir_popup_mensagem('Produto salvo com sucesso!', 'green')
+        mensagem = self.controller_main.controller_produto.salvar_produto(dados)
+        ViewUtils.abrir_popup_mensagem(mensagem, 'green' if 'sucesso' in mensagem else 'red')
         
-        # Reset image selection
-        self.imagem_path = None
-        self.label_imagem.configure(text='Nenhuma imagem selecionada')
+        if 'sucesso' in mensagem:
+            self.imagem_path = None
+            self.label_imagem.configure(text='Nenhuma imagem selecionada')
                 
 
     def editar_produto(self):
-        nome = self.produto_combobox.get()  # Obtém o nome do produto selecionado no combobox
-        
-        # Verificar se o nome começa com letra maiúscula
-        if not nome or not nome[0].isupper():
-            ViewUtils.abrir_popup_mensagem('O nome do produto deve começar com letra maiúscula.', 'red')
-            return
-        
-        # Verificar se todos os campos estão preenchidos
-        if not nome or not self.preco_entry_edicao.get() or not self.quantidade_entry_edicao.get() or not self.unidade_combobox_edicao.get():
-            ViewUtils.abrir_popup_mensagem('Todos os campos devem ser preenchidos.', 'red')
-            return
-        
-        preco_str = self.preco_entry_edicao.get().replace(',', '.')  # Substitui vírgula por ponto
-        
-        try:
-            preco = float(preco_str)
-        except ValueError:
-            ViewUtils.abrir_popup_mensagem('Preço inválido! Por favor, insira um número válido.', 'red')
-            return
-        
-        quantidade_str = self.quantidade_entry_edicao.get()
-        
-        try:
-            quantidade = float(quantidade_str)
-        except ValueError:
-            ViewUtils.abrir_popup_mensagem('Quantidade inválida! Por favor, insira um número válido.', 'red')
-            return
-        
+        nome = self.produto_combobox.get()
+        preco = self.preco_entry_edicao.get().replace(',', '.')
+        quantidade = self.quantidade_entry_edicao.get()
         unidade = self.unidade_combobox_edicao.get()
         feirante = self.controller_main.usuario_logado.to_dict()
         feirante['_id'] = self.controller_main.usuario_logado.id
+        imagem = self.imagem_path_edicao if self.imagem_path_edicao else './assets/img/produto_default.png'
         
-        produtos_kg = [
-            'abacate', 'abacaxi', 'abobrinha', 'abóbora', 'aipo', 'alho', 'almeirão', 'ameixa', 'amora', 'aspargo',
-            'banana', 'batata', 'batata-doce', 'berinjela', 'beterraba', 'brócolis', 'caju', 'caqui', 'carambola', 'cebola',
-            'cenoura', 'cereja', 'chuchu', 'couve', 'couve-flor', 'damasco', 'ervilha', 'espinafre', 'figo', 'framboesa',
-            'gengibre', 'goiaba', 'graviola', 'inhame', 'jaca', 'jiló', 'kiwi', 'laranja', 'limão', 'maçã', 'mamão', 'manga',
-            'maracujá', 'melancia', 'melão', 'morango', 'nectarina', 'nêspera', 'pepino', 'pêssego', 'pimentão', 'quiabo',
-            'rabanete', 'repolho', 'rúcula', 'salsa', 'tangerina', 'tomate', 'uva'
-        ]
-
-        produtos_unidade = [
-            'pote de mel', 'garrafa de suco', 'pacote de biscoito', 'barra de chocolate', 'caixa de ovos', 'pote de geleia',
-            'garrafa de azeite', 'pote de iogurte', 'caixa de leite', 'garrafa de água'
-        ]
-
-        if nome.lower() in produtos_kg and unidade != 'KG':
-            ViewUtils.abrir_popup_mensagem('Este produto deve ser cadastrado na unidade KG.', 'red')
-            return
-
-        if nome.lower() in produtos_unidade and unidade != 'UNIDADE':
-            ViewUtils.abrir_popup_mensagem('Este produto deve ser cadastrado na unidade UNIDADE.', 'red')
-            return
-
         dados = {
             'nome': nome,
             'preco': preco,
             'quantidade': quantidade,
             'unidade': unidade,
             'feirante': feirante,
-            'imagem': self.imagem_path_edicao if self.imagem_path_edicao else './assets/img/produto_default.png'
+            'imagem': imagem
         }
+        
+        mensagem = self.controller_main.controller_produto.editar_produto(dados)
+        ViewUtils.abrir_popup_mensagem(mensagem, 'green' if 'sucesso' in mensagem else 'red')
+        
+        if 'sucesso' in mensagem:
+            self.imagem_path_edicao = None
+            self.label_imagem_edicao.configure(text='Nenhuma imagem selecionada')
 
-        self.controller_main.controller_produto.editar_produto(dados)
-        ViewUtils.abrir_popup_mensagem('Produto editado com sucesso!', 'green')
-
-        # Reset image selection
-        self.imagem_path_edicao = None
-        self.label_imagem_edicao.configure(text='Nenhuma imagem selecionada')
         
     def excluir_produto(self):
-        """Exclui o produto selecionado após confirmação"""
         nome = self.produto_combobox.get()
         if not nome:
             ViewUtils.abrir_popup_mensagem('Selecione um produto para excluir!', 'red')
             return
-            
         feirante_id = self.controller_main.usuario_logado.id
         produto = self.controller_main.controller_produto.obter_produto_por_nome_e_feirante(nome, feirante_id)
-        
         if produto:
             def confirmar_exclusao():
-                self.controller_main.controller_produto.excluir_produto(produto.id)
-                # Atualiza a lista de produtos
-                self.produto_combobox.configure(values=self.obter_nomes_produtos())
-                # Limpa os campos
-                self.produto_combobox.set('')
-                self.preco_entry_edicao.delete(0, 'end')
-                self.quantidade_entry_edicao.delete(0, 'end')
-                ViewUtils.abrir_popup_mensagem('Produto excluído com sucesso!', 'green')
-                
+                mensagem = self.controller_main.controller_produto.excluir_produto(nome, feirante_id)
+                if 'sucesso' in mensagem:
+                    self.produto_combobox.configure(values=self.obter_nomes_produtos())
+                    self.produto_combobox.set('')
+                    self.preco_entry_edicao.delete(0, 'end')
+                    self.quantidade_entry_edicao.delete(0, 'end')
+                ViewUtils.abrir_popup_mensagem(mensagem, 'green' if 'sucesso' in mensagem else 'red')
             ViewUtils.abrir_popup_confirmacao(
                 'Tem certeza que deseja excluir este produto?',
                 'Excluir',
