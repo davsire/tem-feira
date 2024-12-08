@@ -155,6 +155,86 @@ class ControllerMain:
         for produto in cesta.produtos:
             self.__controller_produto.decrementar_quantidade_produto(produto.produto.id, produto.quantidade)
         ViewUtils.abrir_popup_mensagem('Cesta reservada!')
+    
+    def confirmar_criar_cesta_pronta(self, produtos_selecionados, produtos_map, callback_criacao):
+        if self.valida_criacao_cesta(produtos_selecionados, produtos_map) and self.valida_quantidades(produtos_selecionados):
+            ViewUtils.abrir_popup_input(
+                f'Informe o nome da cesta:',
+                'Criar',
+                lambda nome_cesta: (self.criar_cesta_pronta(nome_cesta, produtos_selecionados), callback_criacao()),
+                "O nome da cesta não pode ser vazio!"
+            )
+
+    def criar_cesta_pronta(self, nome_cesta, produtos_selecionados):
+
+        produtos_id = {}
+        for produto_id, produto_data in produtos_selecionados.items():
+            produtos_id[produto_id] = produto_data['quantidade']
+
+        lista_produtos = list(produtos_selecionados.values())
+
+        dados = {
+            'nome': nome_cesta,
+            'produtos': lista_produtos,
+            'preco_total': self.calcular_preco(lista_produtos),
+            'personalizada': False,
+            'reservada': False,
+            'produtos_id': produtos_id,
+            'feirante_id': self.__usuario_logado.id
+        }
+
+        self.__controller_cesta.cadastrar_cesta_pronta(dados)
+        ViewUtils.abrir_popup_mensagem('Cesta criada com sucesso!')
+
+    def calcular_preco(self, lista_produtos) -> float:
+        preco_total = 0
+        for produto in lista_produtos:
+            preco_total += produto['produto'].preco * produto['quantidade']
+
+        return round(preco_total, 2)
+
+    def valida_criacao_cesta(self, produtos_selecionados, produtos_map):
+        if not(produtos_selecionados):
+            ViewUtils.abrir_popup_mensagem("Não é possivel criar uma cesta vazia.", cor_mensagem='red')
+            return
+        
+        for produto_id, produto_data in produtos_map.items():
+            entrada_quantidade = produto_data["quantidade"]
+            if entrada_quantidade:
+                quantidade = entrada_quantidade.get().strip()
+                if produto_id in produtos_selecionados:
+                    try:
+                        quantidade = float(quantidade)
+                    except:
+                        ViewUtils.abrir_popup_mensagem("Informe a quantidade do produto", cor_mensagem='red')
+                        return
+                    if quantidade <= 0:
+                        ViewUtils.abrir_popup_mensagem("Insira uma quantidade válida", cor_mensagem='red')
+                        return
+                    produtos_selecionados[produto_id]["quantidade"] = quantidade
+        return True
+
+    def valida_quantidades(self, produtos_selecionados):
+        try:
+            for produto_id, produto_data in produtos_selecionados.items():
+                if produto_data["quantidade"] > produto_data["produto"].quantidade:
+                    raise ValueError("A quantidade inserida é maior que a disponível")
+        except ValueError as e:
+            ViewUtils.abrir_popup_mensagem(e, cor_mensagem='red')
+            return
+        return True
+
+    def confirmar_exclusao_cesta(self, cesta: Cesta, callback_excluir):
+        ViewUtils.abrir_popup_confirmacao(
+            f'Excluir "{cesta.nome}"?',
+            'Excluir',
+            lambda: (self.excluir_cesta(cesta), callback_excluir()),
+            '#bf1900'
+        )
+
+    def excluir_cesta(self, cesta: Cesta):
+        self.__controller_cesta.excluir_cesta(cesta)
+        ViewUtils.abrir_popup_mensagem('Cesta excluida!')
 
     def abrir_tela_custom(self, tela, *args):
         if self.__usuario_logado is not None:

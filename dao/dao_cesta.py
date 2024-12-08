@@ -1,5 +1,6 @@
 from bson import ObjectId
 from dao.dao_main import DaoMain
+from model.cesta import Cesta
 
 
 class DaoCesta(DaoMain):
@@ -19,11 +20,17 @@ class DaoCesta(DaoMain):
     def obter_cesta_por_id(self, cesta_id: str) -> dict:
         return self.find_one({'_id': ObjectId(cesta_id)})
 
+    def excluir_cesta(self, cesta: Cesta):
+        self.delete_one({ '_id': ObjectId(cesta.id) })
+
     def excluir_cestas_por_feirante(self, feirante_id: str):
         self.delete_many({'feirante': ObjectId(feirante_id)})
 
     def marcar_cesta_reservada(self, cesta_id: str, reservada: bool):
         self.update_one({'_id': ObjectId(cesta_id)}, {'$set': {'reservada': reservada}})
+
+    def inserir_cesta(self, cesta: Cesta):
+        return self.insert_one(cesta.to_dict_pronto())
 
     def obter_cestas_por_feirante(self, feirante_id: str):
         return self.aggregation([

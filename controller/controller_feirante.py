@@ -70,6 +70,12 @@ class ControllerFeirante:
         if feirante_mongo is None:
             return None
         return self.criar_feirante(feirante_mongo)
+    
+    def obter_feirante_por_id(self, id: str) -> Feirante | None:
+        feirante_mongo = self.__dao_feirante.obter_feirante_por_id(id)
+        if feirante_mongo is None:
+            return None
+        return self.criar_feirante(feirante_mongo)
 
     def excluir_feirante(self, feirante: Feirante):
         self.__dao_feirante.excluir_feirante(feirante)

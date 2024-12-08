@@ -48,3 +48,37 @@ class ViewUtils:
         )
         botao_cancelar.pack(side="left", padx=(50, 0), pady=(0, 30))
         botao_acao.pack(side="right", padx=(0, 50), pady=(0, 30))
+
+
+    @staticmethod
+    def abrir_popup_input(mensagem: str, texto_acao: str, acao, mensagem_erro, cor_botao_acao: str = '#00bf63'):
+        popup = ctk.CTkToplevel()
+        popup.attributes('-topmost', True)
+        popup.configure(fg_color='white')
+        popup.title("Input")
+        
+        label_mensagem = ctk.CTkLabel(popup, text=mensagem, text_color='black', font=('system', 20))
+        label_mensagem.pack(padx=40, pady=(20, 10))
+        
+        input = ctk.CTkEntry(popup, width=250)
+        input.pack(padx=40, pady=(0, 20))
+        
+        botao_cancelar = ctk.CTkButton(
+            popup, text='Cancelar', fg_color='white', text_color='#00bf63',
+            command=popup.destroy
+        )
+        botao_confirmar = ctk.CTkButton(
+            popup, text=texto_acao, fg_color=cor_botao_acao, text_color='white',
+            command=lambda: (acao_com_input())
+        )
+
+        def acao_com_input():
+            valor_input = input.get().strip()
+            if not valor_input:
+                ViewUtils.abrir_popup_mensagem(mensagem_erro, cor_mensagem='red')
+            else:
+                acao(valor_input)
+                popup.destroy()
+        
+        botao_cancelar.pack(side="left", padx=(50, 0), pady=(0, 30))
+        botao_confirmar.pack(side="right", padx=(0, 50), pady=(0, 30))
