@@ -156,13 +156,14 @@ class ControllerMain:
             self.__controller_produto.decrementar_quantidade_produto(produto.produto.id, produto.quantidade)
         ViewUtils.abrir_popup_mensagem('Cesta reservada!')
     
-    def confirmar_criar_cesta_pronta(self, produtos_selecionados, callback_criacao):
-        ViewUtils.abrir_popup_input(
-            f'Informe o nome da cesta:',
-            'Criar',
-            lambda nome_cesta: (self.criar_cesta_pronta(nome_cesta, produtos_selecionados), callback_criacao()),
-            "O nome da cesta não pode ser vazio!"
-        )
+    def confirmar_criar_cesta_pronta(self, produtos_selecionados, produtos_map, callback_criacao):
+        if self.valida_criacao_cesta(produtos_selecionados, produtos_map) and self.valida_quantidades(produtos_selecionados):
+            ViewUtils.abrir_popup_input(
+                f'Informe o nome da cesta:',
+                'Criar',
+                lambda nome_cesta: (self.criar_cesta_pronta(nome_cesta, produtos_selecionados), callback_criacao()),
+                "O nome da cesta não pode ser vazio!"
+            )
 
     def criar_cesta_pronta(self, nome_cesta, produtos_selecionados):
 
@@ -211,7 +212,8 @@ class ControllerMain:
                         ViewUtils.abrir_popup_mensagem("Insira uma quantidade válida", cor_mensagem='red')
                         return
                     produtos_selecionados[produto_id]["quantidade"] = quantidade
-    
+        return True
+
     def valida_quantidades(self, produtos_selecionados):
         try:
             for produto_id, produto_data in produtos_selecionados.items():
@@ -220,6 +222,7 @@ class ControllerMain:
         except ValueError as e:
             ViewUtils.abrir_popup_mensagem(e, cor_mensagem='red')
             return
+        return True
 
     def confirmar_exclusao_cesta(self, cesta: Cesta, callback_excluir):
         ViewUtils.abrir_popup_confirmacao(

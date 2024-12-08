@@ -130,18 +130,13 @@ class FrameProdutos(ctk.CTkFrame):
         else:
             botao_criar_cesta = ViewUtils.obter_botao(botao_frame, 'Criar cesta')
             botao_criar_cesta.grid(column=0, row=2, sticky='w')
-            acao_criar_cesta = partial(self.criar_cesta, self.produtos_map, frame_detalhes)
+            acao_criar_cesta = partial(frame_detalhes.criar_cesta, self.produtos_map)
             botao_criar_cesta.configure(command=acao_criar_cesta)
 
             botao_cancelar = ViewUtils.obter_botao(botao_frame, 'Cancelar', '#bf1900')
             botao_cancelar.grid(column=1, row=2, padx=(15,0), pady=20, sticky='w')
             acao_cancelar = partial(frame_detalhes.cancelar_criacao)
             botao_cancelar.configure(command=acao_cancelar)
-    
-    def criar_cesta(self, produtos_map, frame_detalhes):
-            frame_detalhes.valida_criacao_cesta(produtos_map)
-            frame_detalhes.valida_quantidades()
-            frame_detalhes.criar_cesta(frame_detalhes.produtos_selecionados)
 
 class FrameCestas(ctk.CTkScrollableFrame):
     def __init__(self, master, cestas: list[Cesta], frame_detalhes):
@@ -234,8 +229,8 @@ class FrameDetalhesFeirante(ctk.CTkFrame):
     def excluir_cesta(self, cesta: Cesta):
         self.controller_main.confirmar_exclusao_cesta(cesta, self.recarregar_produtos_cestas)
 
-    def criar_cesta(self, produtos_selecionados):
-        self.controller_main.confirmar_criar_cesta_pronta(produtos_selecionados, self.recarregar_produtos_cestas)
+    def criar_cesta(self, produtos_map):
+        self.controller_main.confirmar_criar_cesta_pronta(self.produtos_selecionados, produtos_map, self.recarregar_produtos_cestas)
 
     def recarregar_produtos_cestas(self):
         self.produtos = self.controller_main.obter_produtos_por_feirante(self.__feirante.id)
@@ -268,10 +263,4 @@ class FrameDetalhesFeirante(ctk.CTkFrame):
             else:
                 if produto.id in self.produtos_selecionados:
                     self.produtos_selecionados.pop(produto.id, None)
-    
-    def valida_criacao_cesta(self, produtos_map):
-        self.controller_main.valida_criacao_cesta(self.produtos_selecionados, produtos_map)
-
-    def valida_quantidades(self):
-        self.controller_main.valida_quantidades(self.produtos_selecionados)
 
