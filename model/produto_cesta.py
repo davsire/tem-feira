@@ -29,6 +29,12 @@ class ProdutoCesta:
             'produto': self.__produto.id,
             'quantidade': self.__quantidade
         }
+    
+    def to_dict_pronto(self) -> dict:
+        return {
+            'produto': self.__produto,
+            'quantidade': self.__quantidade
+        }
 
     def __validar_campos(self, produto: Produto, quantidade: float):
         if not produto:
