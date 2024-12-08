@@ -139,32 +139,8 @@ class FrameProdutos(ctk.CTkFrame):
             botao_cancelar.configure(command=acao_cancelar)
     
     def criar_cesta(self, produtos_map, frame_detalhes):
-            if not(frame_detalhes.produtos_selecionados):
-                ViewUtils.abrir_popup_mensagem("Não é possivel criar uma cesta vazia.", cor_mensagem='red')
-                return
-
-            for produto_id, produto_data in produtos_map.items():
-                entrada_quantidade = produto_data["quantidade"]
-                if entrada_quantidade:
-                    quantidade = entrada_quantidade.get().strip()
-                    if produto_id in frame_detalhes.produtos_selecionados:
-                        try:
-                            quantidade = float(quantidade)
-                        except:
-                            ViewUtils.abrir_popup_mensagem("Informe a quantidade do produto", cor_mensagem='red')
-                            return
-                        if quantidade <= 0:
-                            ViewUtils.abrir_popup_mensagem("Insira uma quantidade válida", cor_mensagem='red')
-                            return
-                        frame_detalhes.produtos_selecionados[produto_id]["quantidade"] = quantidade
-                
-            try:
-                for produto_id, produto_data in frame_detalhes.produtos_selecionados.items():
-                    if produto_data["quantidade"] > produto_data["produto"].quantidade:
-                        raise ValueError("A quantidade inserida é maior que a disponível")
-            except ValueError as e:
-                ViewUtils.abrir_popup_mensagem(e, cor_mensagem='red')
-                return
+            frame_detalhes.valida_criacao_cesta(produtos_map)
+            frame_detalhes.valida_quantidades()
             frame_detalhes.criar_cesta(frame_detalhes.produtos_selecionados)
 
 class FrameCestas(ctk.CTkScrollableFrame):
@@ -292,3 +268,10 @@ class FrameDetalhesFeirante(ctk.CTkFrame):
             else:
                 if produto.id in self.produtos_selecionados:
                     self.produtos_selecionados.pop(produto.id, None)
+    
+    def valida_criacao_cesta(self, produtos_map):
+        self.controller_main.valida_criacao_cesta(self.produtos_selecionados, produtos_map)
+
+    def valida_quantidades(self):
+        self.controller_main.valida_quantidades(self.produtos_selecionados)
+

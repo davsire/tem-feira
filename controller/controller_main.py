@@ -192,6 +192,35 @@ class ControllerMain:
 
         return round(preco_total, 2)
 
+    def valida_criacao_cesta(self, produtos_selecionados, produtos_map):
+        if not(produtos_selecionados):
+            ViewUtils.abrir_popup_mensagem("Não é possivel criar uma cesta vazia.", cor_mensagem='red')
+            return
+        
+        for produto_id, produto_data in produtos_map.items():
+            entrada_quantidade = produto_data["quantidade"]
+            if entrada_quantidade:
+                quantidade = entrada_quantidade.get().strip()
+                if produto_id in produtos_selecionados:
+                    try:
+                        quantidade = float(quantidade)
+                    except:
+                        ViewUtils.abrir_popup_mensagem("Informe a quantidade do produto", cor_mensagem='red')
+                        return
+                    if quantidade <= 0:
+                        ViewUtils.abrir_popup_mensagem("Insira uma quantidade válida", cor_mensagem='red')
+                        return
+                    produtos_selecionados[produto_id]["quantidade"] = quantidade
+    
+    def valida_quantidades(self, produtos_selecionados):
+        try:
+            for produto_id, produto_data in produtos_selecionados.items():
+                if produto_data["quantidade"] > produto_data["produto"].quantidade:
+                    raise ValueError("A quantidade inserida é maior que a disponível")
+        except ValueError as e:
+            ViewUtils.abrir_popup_mensagem(e, cor_mensagem='red')
+            return
+
     def confirmar_exclusao_cesta(self, cesta: Cesta, callback_excluir):
         ViewUtils.abrir_popup_confirmacao(
             f'Excluir "{cesta.nome}"?',
@@ -199,7 +228,7 @@ class ControllerMain:
             lambda: (self.excluir_cesta(cesta), callback_excluir()),
             '#bf1900'
         )
-    
+
     def excluir_cesta(self, cesta: Cesta):
         self.__controller_cesta.excluir_cesta(cesta)
         ViewUtils.abrir_popup_mensagem('Cesta excluida!')
