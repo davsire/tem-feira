@@ -111,7 +111,7 @@ class ViewBase(ctk.CTkFrame):
         self.map_telas = {
             'home': ViewMapa if self.__controller_main.tipo_usuario_logado == TipoUsuario.CLIENTE else ViewDetalhesFeirante,
             'usuario': ViewDadosCadastrais,
-            'cestas': None
+            'cestas': None,
         }
 
         self.navegacao = FrameNavegacao(self)
