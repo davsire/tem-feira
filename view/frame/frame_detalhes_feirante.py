@@ -6,6 +6,7 @@ from model.cesta import Cesta
 from model.feirante import Feirante
 from model.produto import Produto
 from model.usuario import TipoUsuario
+from view.frame.frame_cadastro_produto import FrameCadastroProduto
 from view.view_utils import ViewUtils
 
 
@@ -94,11 +95,10 @@ class FrameProdutos(ctk.CTkFrame):
             imagem_produto_lbl = ctk.CTkLabel(produto_elm, image=imagem_produto, text='')
             imagem_produto_lbl.pack(padx=10)
 
-            preco_produto = ctk.CTkLabel(produto_elm, text=f'R${produto.preco}', font=('system', 18))
+            preco_produto = ctk.CTkLabel(produto_elm, text=f'R${produto.preco} {produto.unidade.value}', font=('system', 18))
             preco_produto.pack(pady=(10, 5), padx=10)
-            
-            # Adiciona a quantidade do produto
-            quantidade_texto = f'Qtd: {int(produto.quantidade)} {produto.unidade.value}'
+
+            quantidade_texto = f'Disp.: {produto.quantidade} {produto.unidade.value}'
             quantidade_produto = ctk.CTkLabel(produto_elm, text=quantidade_texto, font=('system', 18))
             quantidade_produto.pack(pady=(10, 5), padx=10)
 
@@ -119,14 +119,16 @@ class FrameProdutos(ctk.CTkFrame):
 
                 self.produtos_map[produto.id]["quantidade"] = input_quantidade
 
+        if frame_detalhes.controller_main.tipo_usuario_logado == TipoUsuario.CLIENTE:
+            return
+
         botao_frame = ctk.CTkFrame(self, fg_color='transparent')
         botao_frame.grid(row=1, column=0, padx=10, sticky='ew')
 
         if not(frame_detalhes.mostrar_checkbox):
-            botao_cadastrar_produto = ViewUtils.obter_botao(botao_frame, 'Cadastrar produto')
+            botao_cadastrar_produto = ViewUtils.obter_botao(botao_frame, 'Cadastrar/editar produto')
             botao_cadastrar_produto.grid(column=0, row=2, sticky='w')
-            #acao_cadastrar_produto = partial(frame_detalhes.cadastrar_produto)
-            #botao_cadastrar_produto.configure(command=acao_cadastrar_produto)
+            botao_cadastrar_produto.configure(command=frame_detalhes.abrir_cadastro_produto)
 
             botao_criar_cesta_pronta = ViewUtils.obter_botao(botao_frame, 'Criar cesta pronta')
             botao_criar_cesta_pronta.grid(column=1, row=2, padx=(15,0), pady=20, sticky='w')
@@ -269,3 +271,5 @@ class FrameDetalhesFeirante(ctk.CTkFrame):
                 if produto.id in self.produtos_selecionados:
                     self.produtos_selecionados.pop(produto.id, None)
 
+    def abrir_cadastro_produto(self):
+        self.controller_main.abrir_tela_custom(FrameCadastroProduto)
