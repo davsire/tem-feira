@@ -43,7 +43,7 @@ class FrameCadastroProduto(ctk.CTkFrame):
         self.produto_combobox.set("")
         self.produto_label.grid(row=0, column=0, sticky='w')
         self.produto_combobox.grid(row=1, column=0, sticky='new', pady=(0, 10))
-        self.produto_combobox.bind("<<ComboboxSelected>>", self.carregar_dados_produto)
+        self.produto_combobox.configure(command=lambda e: self.carregar_dados_produto())
         
         self.preco_label_edicao = ctk.CTkLabel(tab, text='Preço *', font=('system', 16))
         self.preco_entry_edicao = ctk.CTkEntry(tab, height=40, placeholder_text='Digite o preço do produto')
@@ -161,7 +161,7 @@ class FrameCadastroProduto(ctk.CTkFrame):
             self.imagem_path = filename
             self.label_imagem.configure(text=os.path.basename(filename))
 
-    def carregar_dados_produto(self, event):
+    def carregar_dados_produto(self):
         nome_produto = self.produto_combobox.get()
         feirante_id = self.controller_main.usuario_logado.id
         produto = self.controller_main.controller_produto.obter_produto_por_nome_e_feirante(nome_produto, feirante_id)
@@ -170,9 +170,10 @@ class FrameCadastroProduto(ctk.CTkFrame):
             self.preco_entry_edicao.insert(0, produto.preco)
             self.quantidade_entry_edicao.delete(0, 'end')
             self.quantidade_entry_edicao.insert(0, produto.quantidade)
-            self.unidade_combobox_edicao.set(produto.unidade)
-            self.imagem_path_edicao = produto.imagem
-            self.label_imagem_edicao.configure(text=os.path.basename(produto.imagem))
+            self.unidade_combobox_edicao.set(produto.unidade.name)
+            if produto.imagem:
+                self.imagem_path_edicao = produto.imagem
+                self.label_imagem_edicao.configure(text=os.path.basename(produto.imagem))
 
     def obter_nomes_produtos(self):
         feirante_id = self.controller_main.usuario_logado.id
@@ -186,7 +187,7 @@ class FrameCadastroProduto(ctk.CTkFrame):
         unidade = self.unidade_combobox.get()
         feirante = self.controller_main.usuario_logado.to_dict()
         feirante['_id'] = self.controller_main.usuario_logado.id
-        imagem = self.imagem_path if self.imagem_path else './assets/img/produto_default.png'
+        imagem = self.imagem_path
         
         dados = {
             'nome': nome,
@@ -211,7 +212,7 @@ class FrameCadastroProduto(ctk.CTkFrame):
         unidade = self.unidade_combobox_edicao.get()
         feirante = self.controller_main.usuario_logado.to_dict()
         feirante['_id'] = self.controller_main.usuario_logado.id
-        imagem = self.imagem_path_edicao if self.imagem_path_edicao else './assets/img/produto_default.png'
+        imagem = self.imagem_path_edicao
         
         dados = {
             'nome': nome,
