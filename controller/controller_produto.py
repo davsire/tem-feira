@@ -4,7 +4,6 @@ from model.produto_cesta import ProdutoCesta
 from bson import ObjectId
 
 
-
 class ControllerProduto:
     __instancia = None
 
@@ -25,13 +24,11 @@ class ControllerProduto:
         self.__dao_produto.excluir_produtos_por_feirante(feirante_id)
 
     def criar_produto(self, dados: dict) -> Produto:
-        imagem_padrao = 'assets/img/produto_default.png'
-        # print('Criando produto')
         return Produto(
             dados.get('_id'),
             dados['nome'],
             dados['preco'],
-            dados.get('imagem', imagem_padrao),
+            dados.get('imagem'),
             dados['quantidade'],
             UnidadeProduto[dados['unidade']],
             self.__controller_main.controller_feirante.criar_feirante(dados['feirante']),
@@ -125,10 +122,6 @@ class ControllerProduto:
         }
         self.__dao_produto.update_one(query, update)
         return 'Produto editado com sucesso!'
-        
-    def obter_todos_produtos(self) -> list[Produto]:
-        produtos = self.__dao_produto.find({})
-        return produtos
 
     def obter_produto_por_nome_e_feirante(self, nome: str, feirante_id: str) -> Produto:
         produtos = self.obter_produtos_por_feirante(feirante_id, False)
