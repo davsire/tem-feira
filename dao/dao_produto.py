@@ -48,29 +48,11 @@ class DaoProduto(DaoMain):
         ])
 
     def inserir_produto(self, produto: Produto):
-        produto_dict = {
-            '_id': ObjectId(produto.id) if produto.id else ObjectId(),
-            'nome': produto.nome,
-            'preco': produto.preco,
-            'imagem': produto.imagem,
-            'quantidade': produto.quantidade,
-            'unidade': produto.unidade.name,
-            'feirante': ObjectId(produto.feirante.id),
-        }
-        # Verifique se um produto com o mesmo nome já existe no banco de dados
-        produto_existente = self.find_one({'nome': produto.nome.lower()})
-        
+        produto_existente = self.find_one({'_id': ObjectId(produto.id) if produto.id else None})
         if produto_existente:
-            # Remova o campo '_id' do dicionário do produto existente
-            produto_dict.pop('_id', None)
-            # Atualize o documento existente
-            self.update_one({'_id': produto_existente['_id']}, {'$set': produto_dict})
-            print('Produto atualizado no banco de dados!')
+            self.update_one({'_id': produto_existente['_id']}, {'$set': produto.to_dict()})
         else:
-            # Insira um novo documento
-            self.insert_one(produto_dict)
-            # print('Novo produto inserido no banco de dados!')
-            
-        def excluir_produto(self, produto_id: str):
-            """Exclui um produto do banco de dados"""
-            self.__dao_produto.delete_one({'_id': ObjectId(produto_id)})
+            self.insert_one(produto.to_dict())
+
+    def excluir_produto(self, produto_id: str):
+        self.delete_one({'_id': ObjectId(produto_id)})
