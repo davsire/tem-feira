@@ -54,70 +54,69 @@ class FrameProdutos(ctk.CTkFrame):
         self.limite_linha = 4
         self.produtos_map = {}
 
-        if len(produtos) == 0:
-            label_sem_produtos = ctk.CTkLabel(self,
-                                              text='O feirante ainda não cadastrou produtos disponíveis...',
-                                              font=('system', 22, 'bold'))
-            label_sem_produtos.pack(pady=20, anchor='center')
-            return
-
         self.grid_rowconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=0)
         self.grid_columnconfigure(0, weight=1)
 
-        listagem_produtos = ctk.CTkScrollableFrame(self, fg_color='transparent')
-        listagem_produtos.grid(row=0, column=0, padx=10, pady=(10, 0), sticky='nsew')
+        if len(produtos) == 0:
+            label_sem_produtos = ctk.CTkLabel(self,
+                                              text='O feirante ainda não cadastrou produtos disponíveis...',
+                                              font=('system', 22, 'bold'))
+            label_sem_produtos.grid(row=0, column=0, pady=20, sticky='nsew')
+        else:
+            listagem_produtos = ctk.CTkScrollableFrame(self, fg_color='transparent')
+            listagem_produtos.grid(row=0, column=0, padx=10, pady=(10, 0), sticky='nsew')
 
-        for idx, produto in enumerate(produtos):
-            coluna = idx % self.limite_linha
-            linha = idx // self.limite_linha
+            for idx, produto in enumerate(produtos):
+                coluna = idx % self.limite_linha
+                linha = idx // self.limite_linha
 
-            produto_elm = ctk.CTkFrame(listagem_produtos, fg_color='white', border_width=2, border_color='black', corner_radius=5)
+                produto_elm = ctk.CTkFrame(listagem_produtos, fg_color='white', border_width=2, border_color='black', corner_radius=5)
 
-            nome_checkbox_frame = ctk.CTkFrame(produto_elm, fg_color='transparent')
-            nome_checkbox_frame.pack(pady=(10, 5), padx=10, fill='x')
+                nome_checkbox_frame = ctk.CTkFrame(produto_elm, fg_color='transparent')
+                nome_checkbox_frame.pack(pady=(10, 5), padx=10, fill='x')
 
-            nome = produto.nome[:15] + ('...' if len(produto.nome) >= 15 else '')
-            nome_produto = ctk.CTkLabel(nome_checkbox_frame, text=nome, font=('system', 20, 'bold'))
-            nome_produto.grid(row=0, column=0, padx=(5, 10), sticky='ew')
-            
-            ToolTip(nome_produto, f'{produto.nome} - R${produto.preco} {produto.unidade.value}', bg='black', fg='white')
+                nome = produto.nome[:15] + ('...' if len(produto.nome) >= 15 else '')
+                nome_produto = ctk.CTkLabel(nome_checkbox_frame, text=nome, font=('system', 20, 'bold'))
+                nome_produto.grid(row=0, column=0, padx=(5, 10), sticky='ew')
 
-            if frame_detalhes.mostrar_checkbox:
-                var_checkbox = ctk.BooleanVar()
-                checkbox = ctk.CTkCheckBox(nome_checkbox_frame, text='', variable=var_checkbox)
-                acao_marcar = partial(frame_detalhes.selecionar_produto, produto, var_checkbox)
-                checkbox.configure(command=acao_marcar)
-                checkbox.grid(row=0, column=1, sticky='ew')
+                ToolTip(nome_produto, f'{produto.nome} - R${produto.preco} {produto.unidade.value}', bg='black', fg='white')
 
-            src = produto.imagem if produto.imagem else './assets/img/produto_default.png'
-            imagem_produto = ctk.CTkImage(light_image=Image.open(src), size=(180, 140))
-            imagem_produto_lbl = ctk.CTkLabel(produto_elm, image=imagem_produto, text='')
-            imagem_produto_lbl.pack(padx=10)
+                if frame_detalhes.mostrar_checkbox:
+                    var_checkbox = ctk.BooleanVar()
+                    checkbox = ctk.CTkCheckBox(nome_checkbox_frame, text='', variable=var_checkbox)
+                    acao_marcar = partial(frame_detalhes.selecionar_produto, produto, var_checkbox)
+                    checkbox.configure(command=acao_marcar)
+                    checkbox.grid(row=0, column=1, sticky='ew')
 
-            preco_produto = ctk.CTkLabel(produto_elm, text=f'R${produto.preco} {produto.unidade.value}', font=('system', 18))
-            preco_produto.pack(pady=(10, 5), padx=10)
+                src = produto.imagem if produto.imagem else './assets/img/produto_default.png'
+                imagem_produto = ctk.CTkImage(light_image=Image.open(src), size=(180, 140))
+                imagem_produto_lbl = ctk.CTkLabel(produto_elm, image=imagem_produto, text='')
+                imagem_produto_lbl.pack(padx=10)
 
-            quantidade_texto = f'Disp.: {produto.quantidade} {produto.unidade.value}'
-            quantidade_produto = ctk.CTkLabel(produto_elm, text=quantidade_texto, font=('system', 18))
-            quantidade_produto.pack(pady=(10, 5), padx=10)
+                preco_produto = ctk.CTkLabel(produto_elm, text=f'R${produto.preco} {produto.unidade.value}', font=('system', 18))
+                preco_produto.pack(pady=(10, 5), padx=10)
 
-            produto_elm.grid(row=linha, column=coluna, padx=15, pady=(0, 30), sticky='nswe')
-            self.produtos_map[produto.id] = {"frame": produto_elm, "quantidade": None}
+                quantidade_texto = f'Disp.: {produto.quantidade} {produto.unidade.value}'
+                quantidade_produto = ctk.CTkLabel(produto_elm, text=quantidade_texto, font=('system', 18))
+                quantidade_produto.pack(pady=(10, 5), padx=10)
 
-            if frame_detalhes.mostrar_checkbox:
-                quantidade_frame = ctk.CTkFrame(produto_elm, fg_color='transparent')
-                quantidade_frame.pack(padx=10, pady=(5, 15), fill='x')
-                quantidade_frame.grid_columnconfigure(0, weight=1)
-                quantidade_frame.grid_columnconfigure(1, weight=1)
+                produto_elm.grid(row=linha, column=coluna, padx=15, pady=(0, 30), sticky='nswe')
+                self.produtos_map[produto.id] = {"frame": produto_elm, "quantidade": None}
 
-                input_quantidade = ctk.CTkEntry(quantidade_frame, width=80, placeholder_text='Quantidade')
-                input_quantidade.grid(row=0, column=0, padx=(5, 10), sticky='ew')
+                if frame_detalhes.mostrar_checkbox:
+                    quantidade_frame = ctk.CTkFrame(produto_elm, fg_color='transparent')
+                    quantidade_frame.pack(padx=10, pady=(5, 15), fill='x')
+                    quantidade_frame.grid_columnconfigure(0, weight=1)
+                    quantidade_frame.grid_columnconfigure(1, weight=1)
 
-                unidade_produto = ctk.CTkLabel(quantidade_frame, text=produto.unidade.value, font=('system', 14))
-                unidade_produto.grid(row=0, column=1, sticky='ew')
+                    input_quantidade = ctk.CTkEntry(quantidade_frame, width=80, placeholder_text='Quantidade')
+                    input_quantidade.grid(row=0, column=0, padx=(5, 10), sticky='ew')
 
-                self.produtos_map[produto.id]["quantidade"] = input_quantidade
+                    unidade_produto = ctk.CTkLabel(quantidade_frame, text=produto.unidade.value, font=('system', 14))
+                    unidade_produto.grid(row=0, column=1, sticky='ew')
+
+                    self.produtos_map[produto.id]["quantidade"] = input_quantidade
 
         if frame_detalhes.controller_main.tipo_usuario_logado == TipoUsuario.CLIENTE:
             return
