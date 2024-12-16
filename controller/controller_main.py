@@ -198,7 +198,9 @@ class ControllerMain:
             ViewUtils.abrir_popup_mensagem("Não é possivel criar uma cesta vazia.", cor_mensagem='red')
             return
         
-        for produto_id, produto_data in produtos_map.items():
+        mapa_produtos = produtos_map.items()
+
+        for produto_id, produto_data in mapa_produtos:
             entrada_quantidade = produto_data["quantidade"]
             if entrada_quantidade:
                 quantidade = entrada_quantidade.get().strip()
@@ -215,9 +217,13 @@ class ControllerMain:
         return True
 
     def valida_quantidades(self, produtos_selecionados):
+        mapa_selecionados = produtos_selecionados.items()
+
         try:
-            for produto_id, produto_data in produtos_selecionados.items():
-                if produto_data["quantidade"] > produto_data["produto"].quantidade:
+            for produto_id, produto_data in mapa_selecionados:
+                input_quantidade = produto_data["quantidade"]
+                quantidade_produto = produto_data["produto"].quantidade
+                if input_quantidade > quantidade_produto:
                     raise ValueError("A quantidade inserida é maior que a disponível")
         except ValueError as e:
             ViewUtils.abrir_popup_mensagem(e, cor_mensagem='red')

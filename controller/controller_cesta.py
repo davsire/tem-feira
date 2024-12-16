@@ -44,6 +44,8 @@ class ControllerCesta:
         )
 
     def criar_cesta_pronta(self, dados: dict) -> Cesta:
+        mapa_produtos = dados['produtos_id'].items()
+
         return Cesta(
             dados.get('_id'),
             dados['nome'],
@@ -52,7 +54,7 @@ class ControllerCesta:
                     chave,
                     valor
                 )
-                for chave, valor in dados['produtos_id'].items()
+                for chave, valor in mapa_produtos
             ],
             dados['preco_total'],
             dados['personalizada'],
